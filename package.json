@@ -1,0 +1,25 @@
+{
+  "name": "wf-bot-2.0",
+  "version": "2.0.0",
+  "description": "warframe discord bot redone",
+  "main": "run.js",
+  "dependencies": {
+    "discord.js": "^11.0.0",
+    "request": "^2.79.0",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rei2hu/wf-bot-2.0.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rei2hu/wf-bot-2.0/issues"
+  },
+  "homepage": "https://github.com/rei2hu/wf-bot-2.0#readme"
+}
