@@ -1,6 +1,6 @@
 const RSSFeed = require("../rss/RSSFeed");
 const rss = new RSSFeed();
-setTimeout(function(){rss.updateFeed()}, 5000);
+setTimeout(function(){rss.updateFeed(false)}, 30000); // 30 second startup delay and no broadcast
 
 module.exports = {
   rssFeed: () => {

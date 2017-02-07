@@ -43,7 +43,11 @@ class RSSFeed {
     }
   }
 
-  updateFeed() {
+  /**
+   * update the RSS feed stored in memory
+   * @param {boolean} broadcast whether or not to broadcast
+   */
+  updateFeed(broadcast = true) {
     request({uri: "http://content.warframe.com/dynamic/rss.php"}, (err, response, body) => {
       if (err) return console.error(err);
       if (response.statusCode != 200) return console.error(response);
@@ -51,6 +55,7 @@ class RSSFeed {
         if (err) return console.error(err);
         let events = result.rss.channel[0].item; // an array of alert/invasion events
         let newFeed = new RSSFeed();
+        let newEventCount = 0;
         for (let idx = 0; idx < events.length; idx++) {
           // author - invasion/alert/outbreak
           // guid - guid
@@ -67,11 +72,13 @@ class RSSFeed {
             newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], event.pubDate[0]);
           }
           newFeed.addEvent(newEvent);
-          if (this.addEvent(newEvent)) { // returns false if its already in the feed!
+          if (this.addEvent(newEvent) && broadcast) { // returns false if its already in the feed!
             newEvent.broadcast();
+            newEventCount++;
           }
         }
         this.events = newFeed.events;
+        console.log(`Updated RSSFeed. ${newEventCount} new events.`)
       })
     })
   }

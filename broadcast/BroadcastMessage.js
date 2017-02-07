@@ -43,13 +43,22 @@ class BroadcastMessage {
   startTimeout() {
     if (!this.timeout_delay || !this.func) return false;
     let obj = this;
-    if (this.func === "delete") return this.message.delete(this.timeout_delay);
-    this.timeout = setTimeout(function(){
-      this.func(this);
-    }, this.timeout_delay);
+    if (this.func === "delete") {
+      this.timeout = setTimeout(function(){
+        obj.message.delete()
+      }, obj.timeout_delay);
+    } else {
+      obj.timeout = setTimeout(function(){
+        obj.func(this);
+      }, obj.timeout_delay);
+    }
     return this.timeout;
   }
 
+  /**
+   * actually send out a message
+   * @param {string} content the content of the message
+   */
   broadcast(content) {
     let bm = this;
     for (let guild in channels) {

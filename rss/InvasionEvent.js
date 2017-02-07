@@ -14,8 +14,10 @@ function updateInvasions() {
     if (err) return console.error(err);
     if (response.statusCode != 200) return console.error(response);
     invasions = JSON.parse(body).Invasions;
+    console.log(`Updated ws_invasions information.`);
   });
 }
+
 updateInvasions();
 setInterval(updateInvasions, 9 * 1000 * 60);
 
@@ -80,6 +82,7 @@ class InvasionEvent extends RSSEvent{
     }
     // if we couldnt match the guid then delete the message
     // and stop the interval
+    console.log(`Deleting invasions event with guid: ${obj.guid}`)
     bm.message.delete();
     bm.stopInterval();
   }

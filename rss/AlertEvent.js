@@ -9,7 +9,10 @@ class AlertEvent extends RSSEvent{
     this.expiry = wfexpiry;
   }
 
-  // TODO update broadcast message
+  /**
+   * create a new BroadcastMessage for this event
+   * @param {Object} data the params to set up the BroadcastMessage with
+   */
   broadcast(data = {timeout: 10, func: "delete", event: this}) {
     let title = this.title.split(" - ");
     // second to last in title is the location
