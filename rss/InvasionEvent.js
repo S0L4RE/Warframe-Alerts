@@ -59,6 +59,7 @@ class InvasionEvent extends RSSEvent{
     let factions = location[0].split(" VS. ");
     location = location[1];
     content += `+ [${obj.type}]`
+    content += "\n";
     content += `+ [Location]: ${location}`;
     content += "\n";
     // at least 1 faction but can't guarantee 2
