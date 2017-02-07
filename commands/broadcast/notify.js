@@ -3,7 +3,7 @@ const roles = require("./allowed_roles.json").roles;
 module.exports = {
   name: "notify",
   run: (bot, message, args) => {
-    if (args.length == 0) return message.reply(`Allowed roles are \`\`\`json\n${JSON.stringify(roles, null, 2)}\`\`\``);
+    if (args.length === 0) return message.reply(`Allowed roles are \`\`\`json\n${JSON.stringify(roles, null, 2)}\`\`\``);
     let gRoles = message.guild.roles;
     let gMember = message.member;
     let jlRoles = [];
