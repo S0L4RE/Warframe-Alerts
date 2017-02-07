@@ -1,9 +1,10 @@
-const token = require("./token.js").token;
 const fs = require("fs");
+const token = require("./token").token;
+const tasks = require("./autotasks/Auto");
 const Discord = require("discord.js");
-const recent_commanders = [];
-const prefix = "?";
+const config = require("./config");
 
+const recent_commanders = new Set();
 bot = new Discord.Client(); // :eyes:
 
 /**
@@ -14,7 +15,7 @@ function walk(dir) {
 	dir += "/";
 	// console.log("dir " + dir);
 	fs.readdir(dir, (err, files) => {
-	  if(err) console.log(err);
+	  if(err) console.err(err);
 	  files.forEach(file => {
 			fs.stat(dir + file, (err, stats) => {
 				if (stats && stats.isDirectory()) {
@@ -30,40 +31,39 @@ function walk(dir) {
 walk("./commands");
 
 function command_cooldown(user_id) {
-	recent_commanders.push(user_id);
-	setTimeout(function(){recent_commanders.splice(recent_commanders.indexOf(user_id), 1)},config.bot_command_cooldown)
+	recent_commanders.add(user_id);
+	setTimeout(function(){recent_commanders.delete(user_id)}, config.cooldown)
 }
 
-bot.on("ready", () => {
+bot.once("ready", () => {
+	bot.user.setGame(config.game);
+	// tasks.rssFeed();
 	console.log("Loaded bot");
 });
 
 bot.on("message", message => {
-	if (message.content.startsWith(prefix)) {
-
-		if (recent_commanders.includes(message.author.id)) {
-			return message.reply("Wait a bit for another command");
-		}
+	if (message.content.startsWith(config.prefix)) {
+		if (recent_commanders.has(message.author.id))	return message.reply("Wait a bit for another command");
 
 		let args = message.content.split(" ");
-		let command = args[0].slice(prefix.length);
+		let command = args[0].slice(config.prefix.length);
 		args = args.slice(1);
 
 		if (command === "test") {
-			require("./rss/GetFeed");
-			delete require.cache[require.resolve("./rss/GetFeed")];
+			// require("./rss/GetFeed");
+			// delete require.cache[require.resolve("./rss/GetFeed")];
 		}
 		if(commands.has(command)) {
 			command_cooldown(message.author.id);
     	commands.get(command).run(bot, message, args);
   	} else {
-			message.reply("nonexistant");
+			message.reply("Can't find that command buddy.");
 		}
 	}
 });
 
 process.on("unhandledRejection", uR => {
-	console.log(uR);
+	console.error(uR);
 });
 
 bot.login(token);

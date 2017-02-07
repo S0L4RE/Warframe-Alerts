@@ -28,7 +28,7 @@ class InvasionEvent extends RSSEvent{
    * broadcast the message
    * @param {Object} data default arguments that will be passed to the BroadcastMessage constructor
    */
-  broadcast(data = {interval: 0.1, event: this, func: this.update}) {
+  broadcast(data = {interval: 10, event: this, func: this.update}) {
     let bm = new BroadcastMessage(data);
     // TODO update broadcast message
     let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
@@ -56,11 +56,13 @@ class InvasionEvent extends RSSEvent{
     let location = obj.title.split(" - ");
     let factions = location[0].split(" VS. ");
     location = location[1];
+    content += `+ [${obj.type}]`
     content += `+ [Location]: ${location}`;
     content += "\n";
     // at least 1 faction but can't guarantee 2
     let second_length = factions[1] ? factions[1].length : 0;
-    content += `--- ${factions[0]}${" ".repeat(width - factions[0].length - second_length - 9)}${factions[1] ? factions[1]:""} ---`
+    // math abs to avoid negative numbers that are off by like 1 xd
+    content += `--- ${factions[0]}${" ".repeat(Math.abs(width - factions[0].length - second_length - 8))}${factions[1] ? factions[1]:""} ---`
     content += "\n";
     for (let idx = 0; idx < invasions.length; idx++) {
       if (invasions[idx]["_id"]["$id"] === obj.guid) {
