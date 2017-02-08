@@ -78,7 +78,9 @@ class BroadcastMessage {
         setTimeout(() => {
           channel.sendMessage(content + mentions)
             .then((msg) => {
-              bm.message = msg;
+              // and here
+              let copy = Object.assign({}, bm);
+              copy.message = msg;
               if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
               if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
             })
@@ -102,9 +104,12 @@ class BroadcastMessage {
         setTimeout(() => {
           channel.sendMessage(content + mentions)
             .then((msg) => {
-              bm.message = msg;
-              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
+              // looks like it fails here because bm.message keeps changing
+              // so let me try copying it here
+              let copy = Object.assign({}, bm);
+              copy.message = msg;
+              if (copy.startTimeout()) console.log(`Started Timeout ${copy.event.guid}, ${copy.timeout_delay}`);
+              if (copy.startInterval()) console.log(`Started Interval ${copy.event.guid}, ${copy.interval_delay}`);
             })
             .catch((e) => {
               console.error(e);
@@ -122,7 +127,8 @@ class BroadcastMessage {
    */
   static getMentions(guild, content) {
     let mentions = [];
-    for (let idx = 0; idx < roles; idx++) {
+    // i forgot .length :oooo
+    for (let idx = 0; idx < roles.length; idx++) {
       let x = guild.roles.find((role) => {
         let lname = role.name.toLowerCase();
         let lsearch = roles[idx].toLowerCase();
