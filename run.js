@@ -36,6 +36,7 @@ function command_cooldown(user_id) {
 }
 
 bot.once("ready", () => {
+	bot.user.setUsername("im not a shit bot");
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	console.log("Loaded bot");
