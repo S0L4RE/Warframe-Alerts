@@ -4,6 +4,7 @@ const roles = require("../commands/broadcast/allowed_roles.json").roles;
 class BroadcastMessage {
   constructor(bot, data = {}) {
     this.Client = bot;
+    this.message = [];
     if (typeof data.type === "string")
       this.type = data.type;
     if (typeof data.timeout === "number" || typeof data.timeout === "string")
@@ -48,11 +49,11 @@ class BroadcastMessage {
     let bm = this;
     if (bm.func === "delete") {
       this.timeout = setTimeout(() => {
-        bm.message.delete().then((msg) => {
+        bm.message.forEach((msg) => {msg.delete().then((msg) => {
           console.log("Deleted a timeout message.");
         }).catch((e) => {
           console.error(e);
-        })
+        })})
       }, bm.timeout_delay);
     } else {
       bm.timeout = setTimeout(() => {
@@ -77,10 +78,8 @@ class BroadcastMessage {
       if (channel) {
         setTimeout(() => {
           channel.sendMessage(content + mentions)
-            .then((msg) => {
-              // and here
-              let copy = Object.assign({}, bm);
-              copy.message = msg;
+          .then((msg) => {
+              bm.message.push(msg);
               if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
               if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
             })
@@ -105,9 +104,9 @@ class BroadcastMessage {
           channel.sendMessage(content + mentions)
             .then((msg) => {
               // looks like it fails here because bm.message keeps changing
-              // so let me try copying it here
-              let copy = Object.assign({}, bm);
-              copy.message = msg;
+              // so let me try copying it here - edit did not work probably just push messages to array
+              // and then delete all
+              bm.message.push(msg);
               if (copy.startTimeout()) console.log(`Started Timeout ${copy.event.guid}, ${copy.timeout_delay}`);
               if (copy.startInterval()) console.log(`Started Interval ${copy.event.guid}, ${copy.interval_delay}`);
             })

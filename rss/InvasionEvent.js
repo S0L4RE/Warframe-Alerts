@@ -78,11 +78,12 @@ class InvasionEvent extends RSSEvent{
         content += `-${" ".repeat(Math.abs(width-somenum - 1)) + "#".repeat(somenum)}`;
         content += "```";
         // timestamp message
-        return bm.message.edit(new Date(Date.now()).toUTCString() + content)
-        .then((msg) => {
-          console.log("Edited an invasion message.");
-        }).catch((e) => {
-          console.error(e);
+        return bm.message.forEach((msg) => {msg.edit(new Date(Date.now()).toUTCString() + content)
+          .then((msg) => {
+            console.log("Edited an invasion message.");
+          }).catch((e) => {
+            console.error(e);
+          });
         });
       }
     }
