@@ -123,17 +123,16 @@ class BroadcastMessage {
   static getMentions(guild, content) {
     let mentions = [];
     for (let idx = 0; idx < roles; idx++) {
-      let x = false;
-      // whoops
-      // still doesnt work :thinking:
-      // wait its because i was passing a number probably but then it should have throw an error? idk
-      if (content.toLowerCase().includes(roles[idx].toLowerCase()) && (x = guild.roles.find((role) => {
+      let x = guild.roles.find((role) => {
         let lname = role.name.toLowerCase();
         let lsearch = roles[idx].toLowerCase();
         // doing lowercase multiple times oh well
         return lname === lsearch;
-      }))) {
-        // weird indentation but if you're in here the role matches and exists
+      });
+      // whoops
+      // still doesnt work :thinking:
+      // wait its because i was passing a number probably but then it should have throw an error? idk
+      if (content.toLowerCase().includes(roles[idx].toLowerCase()) && x) {
         mentions.push(x);
       }
     }
