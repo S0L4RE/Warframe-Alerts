@@ -107,8 +107,8 @@ class BroadcastMessage {
               // so let me try copying it here - edit did not work probably just push messages to array
               // and then delete all
               bm.message.push(msg);
-              if (copy.startTimeout()) console.log(`Started Timeout ${copy.event.guid}, ${copy.timeout_delay}`);
-              if (copy.startInterval()) console.log(`Started Interval ${copy.event.guid}, ${copy.interval_delay}`);
+              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
             })
             .catch((e) => {
               console.error(e);
