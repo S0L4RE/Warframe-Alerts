@@ -1,4 +1,5 @@
 const channels = require("./channels.json");
+const roles = require("../commands/broadcast/allowed_roles.json").roles;
 
 class BroadcastMessage {
   constructor(bot, data = {}) {
@@ -68,22 +69,68 @@ class BroadcastMessage {
   broadcast(content) {
     let bm = this;
     let bot = bm.Client;
+    // look for an WF Alerts channel and broadcast to it
+    bot.guilds.forEach((guild) => {
+      let mentions = BroadcastMessage.getMentions(guild, content);
+      let channel = guild.channels.find("name", "wf_alerts");
+      if (channel) {
+        setTimeout(() => {
+          channel.sendMessage(content + mentions)
+            .then((msg) => {
+              bm.message = msg;
+              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
+            })
+            .catch((e) => {
+              console.error(e);
+            })
+        }, Math.random() * 10000);
+      }
+    })
+    // if you have your channel in the channels file
+    // however, heroku doesn't save local files so they'll
+    // just disappear so the solution is the above one
+    // leaving this in so people can tell me what to add i guess
     for (let guild in channels) {
       if (!bot.guilds.get(guild)) continue;
+      let mentions = BroadcastMessage.getMentions(guild, content);
       let channel = bot.guilds.get(guild).channels.get(channels[guild].Channel);
       // try to prevent sendMessage spam so put a random up to 10 second delay
-      setTimeout(() => {
-        channel.sendMessage(content)
-          .then((msg) => {
-            bm.message = msg;
-            if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-            if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
-          })
-          .catch((e) => {
-            console.error(e);
-          })
-      }, Math.random() * 10000);
+      if (channel) {
+        setTimeout(() => {
+          channel.sendMessage(content + mentions)
+            .then((msg) => {
+              bm.message = msg;
+              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
+            })
+            .catch((e) => {
+              console.error(e);
+            })
+        }, Math.random() * 10000);
+      }
     }
+  }
+
+  /**
+   * adds mentions to a message based on whats in it look at
+   * look at bm.event.type - only add mentions if its alerts and stuff? well the allowed roles filter it out anyways
+   * @param {Guild} guild the guild that the content is being sent to, looking at the roles of THIS guild
+   * @param {string} content the content to look at
+   */
+  static getMentions(guild, content) {
+    let mentions = [];
+    for (let idx = 0; idx < roles; idx++) {
+      let x = false;
+      if (content.toLowerCase().includes(roles[idx].toLowerCase()) && (x = guild.roles.find((role) => {
+        let lname = role.name.toLowerCase();
+        return roles.includes(lname) && args.includes(lname);
+      }))) {
+        // weird indentation but if you're in here the role matches and exists
+        mentions.push(x);
+      }
+    }
+    return mentions;
   }
 }
 
