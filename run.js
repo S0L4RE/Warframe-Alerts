@@ -21,8 +21,10 @@ function walk(dir) {
 				if (stats && stats.isDirectory()) {
 					walk(dir + file)
 				} else {
-					let cmd = require(dir + file);
-			    commands.set(cmd.name, cmd);
+					if (file.substr(-2) === "js") {
+						let cmd = require(dir + file);
+			    	commands.set(cmd.name, cmd);
+					}
 				}
 			})
 	  });
@@ -52,7 +54,7 @@ bot.on("message", message => {
 
 		if(commands.has(command)) {
 			command_cooldown(message.author.id);
-    	commands.get(command).run(bot, message, args);
+    	commands.get(command).run(bot, message, args, commands);
   	} else {
 			message.reply("Can't find that command buddy.");
 		}

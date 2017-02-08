@@ -1,5 +1,7 @@
 module.exports = {
-  name: "broadcast",
+  name: "channel",
+  desc: "does nothing",
+  example: "channel",
   run: (bot, message, args) => {
     let channels = require("../../broadcast/channels.json");
     let id = message.guild.id;

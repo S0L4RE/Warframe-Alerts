@@ -2,6 +2,8 @@ const roles = require("./allowed_roles.json").roles;
 
 module.exports = {
   name: "notify",
+  desc: "add or join roles",
+  example: "notify, notify j forma, notify l kavat, notify forma",
   run: (bot, message, args) => {
     if (args.length === 0) return message.reply(`Allowed roles are \`\`\`json\n${JSON.stringify(roles, null, 2)}\`\`\``);
     let gRoles = message.guild.roles;
