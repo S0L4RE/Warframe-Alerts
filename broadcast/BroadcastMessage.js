@@ -94,7 +94,7 @@ class BroadcastMessage {
     // leaving this in so people can tell me what to add i guess
     for (let guild in channels) {
       if (!bot.guilds.get(guild)) continue;
-      let mentions = BroadcastMessage.getMentions(guild, content);
+      let mentions = BroadcastMessage.getMentions(bot.guilds.get(guild), content);
       console.log(mentions);
       let channel = bot.guilds.get(guild).channels.get(channels[guild].Channel);
       // try to prevent sendMessage spam so put a random up to 10 second delay
@@ -125,6 +125,8 @@ class BroadcastMessage {
     for (let idx = 0; idx < roles; idx++) {
       let x = false;
       // whoops
+      // still doesnt work :thinking:
+      // wait its because i was passing a number probably but then it should have throw an error? idk
       if (content.toLowerCase().includes(roles[idx].toLowerCase()) && (x = guild.roles.find((role) => {
         let lname = role.name.toLowerCase();
         let lsearch = roles[idx].toLowerCase();
