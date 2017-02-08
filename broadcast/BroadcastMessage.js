@@ -72,6 +72,7 @@ class BroadcastMessage {
     // look for an WF Alerts channel and broadcast to it
     bot.guilds.forEach((guild) => {
       let mentions = BroadcastMessage.getMentions(guild, content);
+      console.log(mentions);
       let channel = guild.channels.find("name", "wf_alerts");
       if (channel) {
         setTimeout(() => {
@@ -94,6 +95,7 @@ class BroadcastMessage {
     for (let guild in channels) {
       if (!bot.guilds.get(guild)) continue;
       let mentions = BroadcastMessage.getMentions(guild, content);
+      console.log(mentions);
       let channel = bot.guilds.get(guild).channels.get(channels[guild].Channel);
       // try to prevent sendMessage spam so put a random up to 10 second delay
       if (channel) {
@@ -122,9 +124,12 @@ class BroadcastMessage {
     let mentions = [];
     for (let idx = 0; idx < roles; idx++) {
       let x = false;
+      // whoops
       if (content.toLowerCase().includes(roles[idx].toLowerCase()) && (x = guild.roles.find((role) => {
         let lname = role.name.toLowerCase();
-        return roles.includes(lname) && args.includes(lname);
+        let lsearch = roles[idx].toLowerCase();
+        // doing lowercase multiple times oh well
+        return lname === lsearch;
       }))) {
         // weird indentation but if you're in here the role matches and exists
         mentions.push(x);
