@@ -68,7 +68,7 @@ class InvasionEvent extends RSSEvent{
     content += `--- ${factions[0]}${" ".repeat(Math.abs(width - factions[0].length - second_length - 8))}${factions[1] ? factions[1]:""} ---`
     content += "\n";
     for (let idx = 0; idx < invasions.length; idx++) {
-      if (invasions[idx]["_id"]["$id"] === obj.guid) {
+      if (invasions[idx]["_id"]["$oid"] === obj.guid) {
         let info = invasions[idx];
         if (info.Completed) break; // if its completed, delete message and stop interval
         let pct = (info.Goal - info.Count) / (info.Goal * 2);
