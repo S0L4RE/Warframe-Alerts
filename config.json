@@ -1,6 +1,6 @@
 {
   "nickname": "",
-  "game": "<>search",
-  "prefix": "<>",
+  "game": ">help",
+  "prefix": ">",
   "cooldown": 1000
 }
