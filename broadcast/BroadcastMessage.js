@@ -10,7 +10,7 @@ class BroadcastMessage {
       this.timeout_delay = data.timeout * 1000 * 60;
     if (typeof data.interval === "number" || typeof data.interval === "string")
       this.interval_delay = data.interval * 1000 * 60;
-    if (typeof data.func === "function")
+    if (typeof data.func === "function" || data.func === "delete")
       this.func = data.func;
       this.event = data.event;
   }
