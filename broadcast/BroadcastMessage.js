@@ -80,13 +80,13 @@ class BroadcastMessage {
           channel.sendMessage(content + mentions)
           .then((msg) => {
               bm.message.push(msg);
-              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
             })
             .catch((e) => {
               console.error(e);
             })
         }, Math.random() * 10000);
+        if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+        if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
       }
     })
     // if you have your channel in the channels file
@@ -107,13 +107,13 @@ class BroadcastMessage {
               // so let me try copying it here - edit did not work probably just push messages to array
               // and then delete all
               bm.message.push(msg);
-              if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-              if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
             })
             .catch((e) => {
               console.error(e);
             })
         }, Math.random() * 10000);
+        if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+        if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
       }
     }
   }
