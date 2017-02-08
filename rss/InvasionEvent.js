@@ -30,8 +30,8 @@ class InvasionEvent extends RSSEvent{
    * broadcast the message
    * @param {Object} data default arguments that will be passed to the BroadcastMessage constructor
    */
-  broadcast(data = {interval: 10, event: this, func: this.update}) {
-    let bm = new BroadcastMessage(data);
+  broadcast(bot, data = {interval: 10, event: this, func: this.update}) {
+    let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
     let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
     // timestamp broadcast
@@ -43,8 +43,7 @@ class InvasionEvent extends RSSEvent{
    * @param {BroadcastMessage} bm the BroadcastMessage that will be updated
    * @param {InvasionEvent} obj the InvasionEvent that holds the data
    */
-  update(bm, obj) {
-    console.log(`updating ${obj.guid}`);
+  update(bm) {
     // console.log("this" + JSON.stringify(this, null, 2));
     // console.log(`updating ${event.guid}`);
     // example titles:
@@ -53,6 +52,7 @@ class InvasionEvent extends RSSEvent{
     // looks like location is always after -
     // rewards are always before -
     // this is an invasions so always vs
+    let obj = bm.event;
     let width = 80;
     let content = "```diff\n";
     let location = obj.title.split(" - ");
@@ -73,18 +73,26 @@ class InvasionEvent extends RSSEvent{
         if (info.Completed) break; // if its completed, delete message and stop interval
         let pct = (info.Goal - info.Count) / (info.Goal * 2);
         let somenum = width * pct;
-        content += `+${"#".repeat(width - somenum - 1)}`;
+        content += `+${"#".repeat(Math.abs(width - somenum - 1))}`;
         content += "\n";
-        content += `-${" ".repeat(width-somenum - 1) + "#".repeat(somenum)}`;
+        content += `-${" ".repeat(Math.abs(width-somenum - 1)) + "#".repeat(somenum)}`;
         content += "```";
         // timestamp message
-        return bm.message.edit(new Date(Date.now()).toUTCString() + content);
+        return bm.message.edit(new Date(Date.now()).toUTCString() + content)
+        .then((msg) => {
+          console.log("Edited an invasion message.");
+        }).catch((e) => {
+          console.error(e);
+        });
       }
     }
     // if we couldnt match the guid then delete the message
     // and stop the interval
-    console.log(`Deleting invasions event with guid: ${obj.guid}`)
-    bm.message.delete();
+    bm.message.delete().then((msg) => {
+      console.log("Deleted an invasion message.");
+    }).catch((e) => {
+      console.error(e);
+    });
     bm.stopInterval();
   }
 }

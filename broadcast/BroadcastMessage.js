@@ -1,7 +1,8 @@
 const channels = require("./channels.json");
 
 class BroadcastMessage {
-  constructor(data = {}) {
+  constructor(bot, data = {}) {
+    this.Client = bot;
     if (typeof data.type === "string")
       this.type = data.type;
     if (typeof data.timeout === "number" || typeof data.timeout === "string")
@@ -20,10 +21,11 @@ class BroadcastMessage {
    */
   startInterval() {
     if (!this.interval_delay || !this.event) return false;
-    let obj = this;
-    this.interval = setInterval(function(){
-      obj.event.update(obj, obj.event);
-    }, this.interval_delay);
+    let bm = this;
+    this.interval = setInterval(() => {
+      console.log(`Updating ${bm.event.guid}`);
+      bm.event.update(bm);
+    }, bm.interval_delay);
     return this.interval;
   }
 
@@ -42,15 +44,19 @@ class BroadcastMessage {
    */
   startTimeout() {
     if (!this.timeout_delay || !this.func) return false;
-    let obj = this;
-    if (this.func === "delete") {
-      this.timeout = setTimeout(function(){
-        obj.message.delete()
-      }, obj.timeout_delay);
+    let bm = this;
+    if (bm.func === "delete") {
+      this.timeout = setTimeout(() => {
+        bm.message.delete().then((msg) => {
+          console.log("Deleted a timeout message.");
+        }).catch((e) => {
+          console.error(e);
+        })
+      }, bm.timeout_delay);
     } else {
-      obj.timeout = setTimeout(function(){
-        obj.func(this);
-      }, obj.timeout_delay);
+      bm.timeout = setTimeout(() => {
+        bm.func(this);
+      }, bm.timeout_delay);
     }
     return this.timeout;
   }
@@ -61,16 +67,22 @@ class BroadcastMessage {
    */
   broadcast(content) {
     let bm = this;
+    let bot = bm.Client;
     for (let guild in channels) {
       if (!bot.guilds.get(guild)) continue;
       let channel = bot.guilds.get(guild).channels.get(channels[guild].Channel);
-      channel.sendMessage(content)
-        .then((msg) => {
-          console.log(`${bm.event.guid} recieved ${bm.timeout_delay} ${bm.interval_delay}`);
-          bm.message = msg;
-          bm.startTimeout();
-          bm.startInterval();
-        })
+      // try to prevent sendMessage spam so put a random up to 10 second delay
+      setTimeout(() => {
+        channel.sendMessage(content)
+          .then((msg) => {
+            bm.message = msg;
+            if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+            if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
+          })
+          .catch((e) => {
+            console.error(e);
+          })
+      }, Math.random() * 10000);
     }
   }
 }

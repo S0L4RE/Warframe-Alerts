@@ -13,7 +13,7 @@ class AlertEvent extends RSSEvent{
    * create a new BroadcastMessage for this event
    * @param {Object} data the params to set up the BroadcastMessage with
    */
-  broadcast(data = {timeout: 10, func: "delete", event: this}) {
+  broadcast(bot, data = {timeout: 10, func: "delete", event: this}) {
     let title = this.title.split(" - ");
     // second to last in title is the location
     // last is the duration
@@ -27,7 +27,7 @@ class AlertEvent extends RSSEvent{
     // add the time left
     content += `+ [Duration]: ${title[title.length - 1]}\`\`\``;
     data.timeout = title[title.length - 1].replace("m", "");
-    let bm = new BroadcastMessage(data);
+    let bm = new BroadcastMessage(bot, data);
     // timestamp broadcast
     bm.broadcast(new Date(Date.now()).toUTCString() + content);
   }

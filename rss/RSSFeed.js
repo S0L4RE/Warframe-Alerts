@@ -47,7 +47,7 @@ class RSSFeed {
    * update the RSS feed stored in memory
    * @param {boolean} broadcast whether or not to broadcast
    */
-  updateFeed(broadcast = true) {
+  updateFeed(bot, broadcast = true) {
     request({uri: "http://content.warframe.com/dynamic/rss.php"}, (err, response, body) => {
       if (err) return console.error(err);
       if (response.statusCode != 200) return console.error(response);
@@ -73,12 +73,11 @@ class RSSFeed {
           }
           newFeed.addEvent(newEvent);
           if (this.addEvent(newEvent) && broadcast) { // returns false if its already in the feed!
-            newEvent.broadcast();
+            newEvent.broadcast(bot);
             newEventCount++;
           }
         }
         this.events = newFeed.events;
-        console.log(`Updated RSSFeed. ${newEventCount} new events.`)
       })
     })
   }

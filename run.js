@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 const config = require("./config");
 
 const recent_commanders = new Set();
-bot = new Discord.Client(); // :eyes:
+const bot = new Discord.Client(); // :eyes:
 
 /**
  * load commands
@@ -32,12 +32,12 @@ walk("./commands");
 
 function command_cooldown(user_id) {
 	recent_commanders.add(user_id);
-	setTimeout(function(){recent_commanders.delete(user_id)}, config.cooldown)
+	setTimeout(() => {recent_commanders.delete(user_id)}, config.cooldown)
 }
 
 bot.once("ready", () => {
 	bot.user.setGame(config.game);
-	tasks.rssFeed();
+	tasks.rssFeed(bot);
 	console.log("Loaded bot");
 });
 
