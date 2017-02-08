@@ -52,7 +52,21 @@ bot.on("message", message => {
 		let command = args[0].slice(config.prefix.length);
 		args = args.slice(1);
 
-		if(commands.has(command)) {
+		// eval command
+		if (command === "eval" && message.author.id === "84678516477534208") {
+			try {
+				let code = args.join(" ");
+				let ev = eval(code);
+				if (typeof ev !== "string") ev = require("util").inspect(ev);
+				message.reply(ev).catch((e) => {
+					message.reply("probably too long");
+				});
+			}
+			catch(e) {
+				message.reply(e);
+			}
+		}
+		else if(commands.has(command)) {
 			command_cooldown(message.author.id);
     	commands.get(command).run(bot, message, args, commands);
   	} else {
