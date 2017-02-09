@@ -89,10 +89,12 @@ class InvasionEvent extends RSSEvent{
     }
     // if we couldnt match the guid then delete the message
     // and stop the interval
-    bm.message.delete().then((msg) => {
-      console.log("Deleted an invasion message.");
-    }).catch((e) => {
-      console.error(e);
+    bm.message.forEach((msg) => {msg.delete()
+      .then((msg) => {
+        console.log("Deleted an invasion message.");
+      }).catch((e) => {
+        console.error(e);
+      })
     });
     bm.stopInterval();
   }
