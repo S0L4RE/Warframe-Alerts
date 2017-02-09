@@ -73,7 +73,6 @@ class BroadcastMessage {
     // look for an WF Alerts channel and broadcast to it
     bot.guilds.forEach((guild) => {
       let mentions = BroadcastMessage.getMentions(guild, content);
-      console.log(mentions);
       let channel = guild.channels.find("name", "wf_alerts");
       if (channel) {
         setTimeout(() => {
@@ -96,7 +95,6 @@ class BroadcastMessage {
     for (let guild in channels) {
       if (!bot.guilds.get(guild)) continue;
       let mentions = BroadcastMessage.getMentions(bot.guilds.get(guild), content);
-      console.log(mentions);
       let channel = bot.guilds.get(guild).channels.get(channels[guild].Channel);
       // try to prevent sendMessage spam so put a random up to 10 second delay
       if (channel) {
