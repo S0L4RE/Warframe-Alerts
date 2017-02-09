@@ -45,6 +45,8 @@ bot.once("ready", () => {
 });
 
 bot.on("message", message => {
+	if (message.author.bot) return;
+	if (!message.guild) return;
 	if (message.content.startsWith(config.prefix)) {
 		if (recent_commanders.has(message.author.id))	return message.reply("Wait a bit for another command");
 
@@ -70,7 +72,7 @@ bot.on("message", message => {
 			command_cooldown(message.author.id);
     	commands.get(command).run(bot, message, args, commands);
   	} else {
-			message.reply("Can't find that command buddy.");
+			// message.reply("Can't find that command buddy.");
 		}
 	}
 });
