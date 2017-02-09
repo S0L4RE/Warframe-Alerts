@@ -84,8 +84,6 @@ class BroadcastMessage {
               console.error(e);
             })
         }, Math.random() * 10000);
-        if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-        if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
       }
     })
     // if you have your channel in the channels file
@@ -110,10 +108,10 @@ class BroadcastMessage {
               console.error(e);
             })
         }, Math.random() * 10000);
-        if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
-        if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
       }
     }
+    if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
+    if (bm.startInterval()) console.log(`Started Interval ${bm.event.guid}, ${bm.interval_delay}`);
   }
 
   /**

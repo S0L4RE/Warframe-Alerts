@@ -1,6 +1,7 @@
 module.exports = {
   name: "about",
-  descn: "about the bot",
+  desc: "about the bot",
+  example: "about",
   run: (bot, message, args, commands) => {
     let author = message.channel.members.get("84678516477534208").user;
     message.channel.sendMessage("", {embed:{

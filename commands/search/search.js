@@ -61,7 +61,7 @@ module.exports = {
   run: (bot, message, args) => {
 		if (args.length === 0) return message.reply(`Loaded files are ${jsons.get("_KEYS")}.`);
     let key = args[0]; // the file name
-    let value = args[1] || ""; // the search term
+    let value = args.slice(1).join(" ") || ""; // the search term
     let f = jsons.get("_KEYS").filter((e) => {
       return e.toLowerCase().startsWith(key.toLowerCase());
     });
