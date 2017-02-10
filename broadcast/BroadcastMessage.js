@@ -135,7 +135,6 @@ class BroadcastMessage {
       // wait its because i was passing a number probably but then it should have throw an error? idk
       let regx = new RegExp("\\[Reward\\]:.*?"+roles[idx], "ig");
       let regx2 = new RegExp("\\[Title\\]:.*?"+roles[idx], "ig"); // for invasions where i dont change tht title
-      console.log(regx.test(content));
       if (x && (regx.test(content) || regx2.test(content))) {
         mentions.push(x);
       }
