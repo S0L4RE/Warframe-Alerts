@@ -13,7 +13,7 @@ class InvasionEvent extends RSSEvent{
    * broadcast the message
    * @param {Object} data default arguments that will be passed to the BroadcastMessage constructor
    */
-  broadcast(bot, data = {interval: 0.1, event: this, func: this.update}) {
+  broadcast(bot, data = {interval: 11, event: this, func: this.update}) {
     let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
     let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;

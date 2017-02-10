@@ -18,7 +18,10 @@ module.exports = {
     let currentTime = state.Time;
     let sorties = state.Sorties[0];
     let expire = sorties.Expiry["$date"]["$numberLong"];
-    let timeLeftSeconds = (expire - currentTime) * 1000;
+    let timeLeftTotalSeconds = (expire - currentTime * 1000) / 1000;
+    let timeLeftHours = Math.floor(timeLeftTotalSeconds / 3600);
+    let timeLeftMinutes = Math.floor((timeLeftTotalSeconds - (timeLeftHours * 3600)) / 60);
+    // let timeLeftSeconds = timeLeftTotalSeconds - (timeLeftHours * 3600) - (timeLeftMinutes * 60);
     let sortieBoss = removeUnderscorePrefixes(sorties.Boss);
     let missions = sorties.Variants;
     let deets = `\`\`\`haskell\n${" ".repeat(18)}boss:     ${sortieBoss}\n`; // nice spacing!!
@@ -30,7 +33,7 @@ module.exports = {
       deets += `mission type: ${stringThings.padRight(removeUnderscorePrefixes(missions[idx].missionType), 20)} \n`;
       // deets += `${removeUnderscorePrefixes(missions[idx].node)} \n`
     }
-    deets += `\`\`\``;
+    deets += `${timeLeftHours}h ${timeLeftMinutes}m remaining\`\`\``;
     message.reply(deets);
   }
 }
