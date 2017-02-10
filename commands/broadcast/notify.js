@@ -18,7 +18,7 @@ module.exports = {
     if (args[0] === "l") {
       type = "Left";
       gMember.removeRoles(matching_roles).then(() => {
-        message.reply(`${type} ${matching_roles.array().map((role) => r.name)}.`)
+        message.reply(`${type} ${matching_roles.array().map((role) => role.name)}.`)
       }).catch((e) => {
         console.error(e);
         message.reply(`Sorry, we hit an error`);
