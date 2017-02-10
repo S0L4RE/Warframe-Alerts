@@ -48,6 +48,10 @@ class RSSFeed {
    * @param {boolean} broadcast whether or not to broadcast
    */
   updateFeed(bot, broadcast = true) {
+    if (!broadcast) {
+      let bm = require("../broadcast/BroadcastMessage.js");
+      new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+    }
     request({uri: "http://content.warframe.com/dynamic/rss.php"}, (err, response, body) => {
       if (err) return console.error(err);
       if (response.statusCode != 200) return console.error(response);
@@ -62,9 +66,8 @@ class RSSFeed {
           // title - rewards/factions
           // pubDate - when published
           // not really interested in anything else
-          let event = events[idx];
+          let event = events[idx];          // console.log(event);
           let newEvent;
-          // console.log(event);
           if (event.author[0] === "Alert") { // whats with the arrays? idk
             newEvent = new AlertEvent(event.guid[0], event.author[0], event.title[0], event.pubDate[0],
               event.description[0], event["wf:faction"][0], event["wf:expiry"][0]);
@@ -74,7 +77,6 @@ class RSSFeed {
           newFeed.addEvent(newEvent);
           if (this.addEvent(newEvent) && broadcast) { // returns false if its already in the feed!
             newEvent.broadcast(bot);
-            newEventCount++;
           }
         }
         this.events = newFeed.events;
