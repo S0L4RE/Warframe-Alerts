@@ -6,7 +6,7 @@ let bot;
 module.exports = {
   rssFeed: (b) => {
     bot = b;
-    setTimeout(function(){rss.updateFeed(bot, true)}, 10000); // 10 second startup delay and no broadcast
+    setTimeout(function(){rss.updateFeed(bot, false)}, 10000); // 10 second startup delay and no broadcast
     setInterval(function(){rss.updateFeed(bot)}, 10 * 1000 * 60);
   },
   worldState: () => {
