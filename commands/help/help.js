@@ -1,7 +1,4 @@
-function padRight(string = "", length) {
-  // assume string length is less than length
-  return string + " ".repeat(length - string.length);
-}
+const stringThings = require("../../util/stringThings");
 
 module.exports = {
   name: "help",
@@ -12,7 +9,7 @@ module.exports = {
     let help_message = "Add the prefix yourself \n";
     commands.forEach((cmd) => {
       if (!cmd.name) return;
-      help_message += (`${padRight(cmd.name, 10)}${padRight(cmd.desc, 35)}${cmd.example}\n`);
+      help_message += (`${stringThings.padRight(cmd.name, 10)}${stringThings.padRight(cmd.desc, 35)}${cmd.example}\n`);
     })
     // help_message += "Put the prefix in yourself\n" + help_message;
     message.reply(`\`\`\`\n${help_message}\`\`\``);

@@ -1,25 +1,8 @@
 const RSSEvent = require("./RSSEvent");
-const request = require("request");
+const ws = require("../ws/ws");
 // is required in event so i dont know why its needed here
 // probably no super or something??
 const BroadcastMessage = require("../broadcast/BroadcastMessage");
-
-let invasions = {};
-
-/**
- * update the invasions information from the WorldState
- */
-function updateInvasions() {
-  request({uri: "http://content.warframe.com/dynamic/worldState.php"}, (err, response, body) => {
-    if (err) return console.error(err);
-    if (response.statusCode != 200) return console.error(response);
-    invasions = JSON.parse(body).Invasions;
-    console.log(`Updated ws_invasions information.`);
-  });
-}
-
-updateInvasions();
-setInterval(updateInvasions, 9 * 1000 * 60);
 
 class InvasionEvent extends RSSEvent{
   constructor(guid, author, title, pubDate) {
@@ -30,7 +13,7 @@ class InvasionEvent extends RSSEvent{
    * broadcast the message
    * @param {Object} data default arguments that will be passed to the BroadcastMessage constructor
    */
-  broadcast(bot, data = {interval: 10, event: this, func: this.update}) {
+  broadcast(bot, data = {interval: 0.1, event: this, func: this.update}) {
     let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
     let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
@@ -52,6 +35,7 @@ class InvasionEvent extends RSSEvent{
     // looks like location is always after -
     // rewards are always before -
     // this is an invasions so always vs
+    let invasions = ws.getWs().Invasions;
     let obj = bm.event;
     let width = 80;
     let content = "```diff\n";

@@ -41,6 +41,7 @@ bot.once("ready", () => {
 	bot.user.setUsername("im not a shit bot");
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
+	tasks.worldState();
 	console.log("Loaded bot");
 });
 
