@@ -13,5 +13,7 @@
   "resource",
   "traces",
   "aura",
-  "blueprint"]
+  "blueprint",
+  "detonite",
+  "fieldron"]
 }
