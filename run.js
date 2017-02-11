@@ -42,6 +42,7 @@ bot.once("ready", () => {
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	tasks.worldState();
+	tasks.acolyte();
 	console.log("Loaded bot");
 });
 
