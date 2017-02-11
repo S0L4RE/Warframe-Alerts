@@ -4,9 +4,15 @@ const BroadcastMessage = require("../broadcast/BroadcastMessage");
 const rss = new RSSFeed();
 let bot;
 
-let pc_found = true;
-let ps4_found = true;
+let pc_found = {};
+let ps4_found = {};
+/*
+treat like
+{
+"/Lotus/Types/Enemies/Acolytes/HeavyAcolyteAgent": true
 
+}
+ */
 module.exports = {
   rssFeed: (b) => {
     bot = b;
@@ -25,41 +31,57 @@ module.exports = {
       if (!persistent) return;
       for (let idx = 0; idx < persistent.length; idx++) {
         // console.log(`PC: checking ${JSON.stringify(persistent[idx],null,2)}`);
-        if (persistent[idx].Discovered && !pc_found) {
-          pc_found = true;
+        let found = pc_found[persistent[idx].AgentType]; // either true or falsr or null by default false so we run off discovered
+        if (found === undefined) found = true;
+        if (persistent[idx].Discovered && !found) {
+          pc_found[persistent[idx].AgentType] = true;
           let bm = new BroadcastMessage(bot);
           let msg = `\`\`\`diff\n`;
           msg += `- PC: ${persistent[idx].AgentType}\n`;
           msg += `+ [Location]: ${persistent[idx].LastDiscoveredLocation}\n`;
           msg += `+ [Health %]: ${persistent[idx].HealthPercent}\n`;
-          msg += `+ [Reward]: acolyte`
+          msg += `+ [Title]: acolyte`
           msg += `\`\`\``;
           bm.broadcast(msg);
-        } else if (!persistent[idx].Discovered) {
+        } else if (!persistent[idx].Discovered && found) {
+          let bm = new BroadcastMessage(bot);
           console.log("PC hid");
-          pc_found = false;
+          let msg = `\`\`\`diff\n`;
+          msg += `- PC: ${persistent[idx].AgentType}\n`;
+          msg += `+ HIDDEN +`;
+          msg += `\`\`\``;
+          bm.broadcast(msg);
+          pc_found[persistent[idx].AgentType] = false;
         }
       }
       persistent = WorldState.getPS4Ws().PersistentEnemies;
       if (!persistent) return;
       for (let idx = 0; idx < persistent.length; idx++) {
         // console.log(`PS4: checking ${JSON.stringify(persistent[idx],null,2)}`);
-        if (persistent[idx].Discovered && !ps4_found) {
-          ps4_found = true;
+        let found = ps4_found[persistent[idx].AgentType];
+        if (found === null) found = true;
+        if (persistent[idx].Discovered && !found) { // if hes found and we thought he was hidden then say so
+          ps4_found[persistent[idx].AgentType] = true;
           console.log("PS4 found");
           let bm = new BroadcastMessage(bot);
           let msg = `\`\`\`diff\n`;
           msg += `- PS4: ${persistent[idx].AgentType}\n`;
           msg += `+ [Location]: ${persistent[idx].LastDiscoveredLocation}\n`;
           msg += `+ [Health %]: ${persistent[idx].HealthPercent}\n`;
-          msg += `+ [Reward]: PS4colyte`
+          msg += `+ [Title]: PS4colyte`
           msg += `\`\`\``;
           bm.broadcast(msg);
-        } else if (!persistent[idx].Discovered) {
+        } else if (!persistent[idx].Discovered && found) { // if hes not found and we thought he was found, say hes hidden
+          let bm = new BroadcastMessage(bot);
           console.log("PS4 hid");
-          ps4_found = false;
+          let msg = `\`\`\`diff\n`;
+          msg += `- PS4: ${persistent[idx].AgentType}\n`;
+          msg += `+ HIDDEN +`;
+          msg += `\`\`\``;
+          bm.broadcast(msg);
+          ps4_found[persistent[idx].AgentType] = false;
         }
       }
-    }, 1 * 1000 * 60);
+    }, 1 * 1000 * 10);
   }
 }
