@@ -15,10 +15,11 @@ module.exports = {
   },
   worldState: () => {
     WorldState.updateWorldState();
-    setInterval(WorldState.updateWorldState, 1 * 1000 * 60);
+    setInterval(WorldState.updateWorldState, 9 * 1000 * 60);
   },
   acolyte: () => {
     setInterval(function(){
+      WorldState.updateWorldState();
       console.log("checking acolytes");
       let persistent = WorldState.getWs().PersistentEnemies;
       if (!persistent) return;
@@ -59,6 +60,6 @@ module.exports = {
           ps4_found = false;
         }
       }
-    }, 2 * 1000 * 60);
+    }, 1 * 1000 * 60);
   }
 }
