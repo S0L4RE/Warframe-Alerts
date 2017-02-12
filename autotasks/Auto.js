@@ -1,7 +1,9 @@
 const RSSFeed = require("../rss/RSSFeed");
 const WorldState = require("../ws/ws");
 const BroadcastMessage = require("../broadcast/BroadcastMessage");
-const rss = new RSSFeed();
+const pc_rss = new RSSFeed("http://content.warframe.com/dynamic/rss.php", "PC");
+const ps4_rss = new RSSFeed("http://content.ps4.warframe.com/dynamic/rss.php", "PS4");
+const xb1_rss = new RSSFeed("http://content.xb1.warframe.com/dynamic/rss.php", "XB1");
 let bot;
 
 let pc_found = {};
@@ -16,8 +18,14 @@ treat like
 module.exports = {
   rssFeed: (b) => {
     bot = b;
-    setTimeout(function(){rss.updateFeed(bot, false)}, 10000); // 10 second startup delay and no broadcast
-    setInterval(function(){rss.updateFeed(bot)}, 10 * 1000 * 60);
+    setTimeout(function(){pc_rss.updateFeed(bot, false);
+      ps4_rss.updateFeed(bot, false);
+      xb1_rss.updateFeed(bot, false);
+    }, 10000); // 10 second startup delay and no broadcast
+    setInterval(function(){pc_rss.updateFeed(bot);
+      ps4_rss.updateFeed(bot);
+      xb1_rss.updateFeed(bot);
+    }, 10 * 1000 * 60);
   },
   worldState: () => {
     WorldState.updateWorldState();
@@ -40,7 +48,7 @@ module.exports = {
           msg += `- PC: ${persistent[idx].AgentType}\n`;
           msg += `+ [Location]: ${persistent[idx].LastDiscoveredLocation}\n`;
           msg += `+ [Health %]: ${persistent[idx].HealthPercent}\n`;
-          msg += `+ [Title]: acolyte`
+          msg += `+ [PC_Title]: acolyte`
           msg += `\`\`\``;
           bm.broadcast(msg);
         } else if (!persistent[idx].Discovered && found) {
@@ -68,7 +76,7 @@ module.exports = {
           msg += `- PS4: ${persistent[idx].AgentType}\n`;
           msg += `+ [Location]: ${persistent[idx].LastDiscoveredLocation}\n`;
           msg += `+ [Health %]: ${persistent[idx].HealthPercent}\n`;
-          msg += `+ [Title]: PS4colyte`
+          msg += `+ [PS4_Title]: acolyte`
           msg += `\`\`\``;
           bm.broadcast(msg);
         } else if (!persistent[idx].Discovered && found) { // if hes not found and we thought he was found, say hes hidden

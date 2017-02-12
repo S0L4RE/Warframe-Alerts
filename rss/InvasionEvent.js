@@ -5,8 +5,9 @@ const ws = require("../ws/ws");
 const BroadcastMessage = require("../broadcast/BroadcastMessage");
 
 class InvasionEvent extends RSSEvent{
-  constructor(guid, author, title, pubDate) {
+  constructor(guid, author, title, pubDate, type) {
     super(guid, author, title.replace("PHORID SPAWN ", ""), pubDate);
+    this.platform_type = type; // type will be PS4, XB1, or PC
   }
 
   /**
@@ -16,7 +17,7 @@ class InvasionEvent extends RSSEvent{
   broadcast(bot, data = {interval: 11, event: this, func: this.update}) {
     let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
-    let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
+    let content = `\`\`\`diff\n- [${this.type}] -\n+ [${this.platform_type}_Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
     // timestamp broadcast
     bm.broadcast(new Date(Date.now()).toUTCString() + content);
   }
@@ -36,6 +37,12 @@ class InvasionEvent extends RSSEvent{
     // rewards are always before -
     // this is an invasions so always vs
     let invasions = ws.getWs().Invasions;
+    if (this.platform_type === "PS4") {
+      invasions = ws.getPS4Ws().Invasions;
+    }
+    else if (this.platform_type === "XB1") {
+      invasions = ws.getXB1Ws().Invasions;;
+    }
     let obj = bm.event;
     let width = 80;
     let content = "```diff\n";

@@ -10,6 +10,9 @@ module.exports = {
   getPS4Ws: ()=> {
     return ps4_world_state;
   },
+  getXB1Ws: ()=> {
+    return ps4_world_state;
+  },
   /**
    * update the WorldState information from the WorldState
    */
@@ -26,6 +29,13 @@ module.exports = {
       if (response.statusCode != 200) return console.error(response);
       ps4_world_state = JSON.parse(body);
       console.log(`Updated ps4 ws information.`);
+    });
+    // xb1 ws http://content.xb1.warframe.com/dynamic/worldState.php
+    request({uri: "http://content.xb1.warframe.com/dynamic/worldState.php"}, (err, response, body) => {
+      if (err) return console.error(err);
+      if (response.statusCode != 200) return console.error(response);
+      ps4_world_state = JSON.parse(body);
+      console.log(`Updated xb1 ws information.`);
     });
   }
 }

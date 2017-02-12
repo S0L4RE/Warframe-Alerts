@@ -107,7 +107,7 @@ class BroadcastMessage {
             .catch((e) => {
               console.error(e);
             })
-        }, Math.random() * 10000);
+        }, Math.random() * 30000); // 30 second delay to prevent spam
       }
     }
     if (bm.startTimeout()) console.log(`Started Timeout ${bm.event.guid}, ${bm.timeout_delay}`);
@@ -124,6 +124,7 @@ class BroadcastMessage {
     let mentions = [];
     // i forgot .length :oooo
     for (let idx = 0; idx < roles.length; idx++) {
+      // find a role that matches this name
       let x = guild.roles.find((role) => {
         let lname = role.name.toLowerCase();
         let lsearch = roles[idx].toLowerCase();
@@ -132,9 +133,18 @@ class BroadcastMessage {
       });
       // whoops
       // still doesnt work :thinking:
-      // wait its because i was passing a number probably but then it should have throw an error? idk
-      let regx = new RegExp("\\[Reward\\]:.*?"+roles[idx], "ig");
-      let regx2 = new RegExp("\\[Title\\]:.*?"+roles[idx], "ig"); // for invasions where i dont change tht title
+      // wait its because i was passing a number probably but then it should have throw an error? idkl
+      let prefix = "PC_";
+      let rolename = roles[idx];
+      if (roles[idx].startsWith("ps4")) {
+        rolename = rolename.split("ps4")[1];
+        prefix = "PS4_";
+      } else if (roles[idx].startsWith("xb1")) {
+        rolename = rolename.split("xb1")[1];
+        prefix = "XB1_";
+      }
+      let regx = new RegExp("\\["+prefix+"Reward\\]:.*?"+rolename, "ig");
+      let regx2 = new RegExp("\\["+prefix+"Title\\]:.*?"+rolename, "ig"); // for invasions where i dont change tht title
       if (x && (regx.test(content) || regx2.test(content))) {
         mentions.push(x);
       }
