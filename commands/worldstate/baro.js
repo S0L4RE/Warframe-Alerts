@@ -11,7 +11,7 @@
  ─ horiontal line
  │ vertical line
 */
-
+/*
 const logo = "\
 \n\
       ___     _              _\n\
@@ -23,7 +23,8 @@ const logo = "\
      |___/|_/__|__,_| .__/ .__/\___/_|_||_\\__|\n\
                     |_|  |_|                  \n\
 ";
-
+*/
+const logo = ""; // rip logo too big for small screen users
 const stringThings = require("../../util/stringThings");
 const ws = require("../../ws/ws");
 
