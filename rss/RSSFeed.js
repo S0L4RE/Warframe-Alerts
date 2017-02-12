@@ -53,10 +53,6 @@ class RSSFeed {
    * @param {boolean} broadcast whether or not to broadcast
    */
   updateFeed(bot, broadcast = true) {
-    if (!broadcast) {
-      let bm = require("../broadcast/BroadcastMessage.js");
-      new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
-    }
     request({uri: this.updateURL}, (err, response, body) => {
       if (err) return console.error(err);
       if (response.statusCode != 200) return console.error(response);
