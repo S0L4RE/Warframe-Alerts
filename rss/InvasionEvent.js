@@ -17,7 +17,7 @@ class InvasionEvent extends RSSEvent{
   broadcast(bot, data = {interval: 11, event: this, func: this.update}) {
     let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
-    let content = `\`\`\`diff\n- [${this.type}] -\n+ [${this.platform_type}_Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
+    let content = `\`\`\`diff\n- [${this.platform_type} = ${this.type}] -\n+ [${this.platform_type}_Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
     // timestamp broadcast
     bm.broadcast(new Date(Date.now()).toUTCString() + content);
   }
@@ -49,7 +49,7 @@ class InvasionEvent extends RSSEvent{
     let location = obj.title.split(" - ");
     let factions = location[0].split(" VS. ");
     location = location[1];
-    content += `+ [${obj.type}]`
+    content += `+ [${obj.platform_type} = ${obj.type}]`
     content += "\n";
     content += `+ [Location]: ${location}`;
     content += "\n";

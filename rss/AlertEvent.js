@@ -20,7 +20,7 @@ class AlertEvent extends RSSEvent{
     // last is the duration
     // everything else is rewards
     // add the type (alert), description, and location
-    let content = `\`\`\`diff\n- [${this.type}] -\n+ [Desc]: ${this.description}\n+ [Location]: ${title[title.length - 2]}\n`;
+    let content = `\`\`\`diff\n- [${this.platform_type} = ${this.type}] -\n+ [Desc]: ${this.description}\n+ [Location]: ${title[title.length - 2]}\n`;
     // add the rewards
     for (let idx = 0; idx < title.length - 2; idx++) {
       content += `+ [${this.platform_type}_Reward]: ${title[idx]}\n`;
