@@ -75,6 +75,7 @@ module.exports = {
       deets = `${deets_beginning}┌${"─".repeat(longestItemNameLength)}┬──────────┬──────────────┐\n${deets}`;
       deets += `└${"─".repeat(longestItemNameLength)}┴──────────┴──────────────┘\`\`\``;
     } else {
+      deets = deets_beginning;
       deets += `\`\`\``;
     }
     message.reply(deets);
