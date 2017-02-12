@@ -24,7 +24,7 @@ module.exports = {
     // let timeLeftSeconds = timeLeftTotalSeconds - (timeLeftHours * 3600) - (timeLeftMinutes * 60);
     let sortieBoss = removeUnderscorePrefixes(sorties.Boss);
     let missions = sorties.Variants;
-    let deets = `\`\`\`haskell\n${" ".repeat(18)}boss:     ${sortieBoss}\n`; // nice spacing!!
+    let deets = `\`\`\`haskell\nboss: ${sortieBoss}, ${timeLeftHours}h ${timeLeftMinutes}m remaining\n`; // nice spacing!!
     // 50-60, 65-80, 80-100 what kind of shitty pattern is this?
     let levels = ["50-60", "65-80", "80-100"];
     for (let idx = 0; idx < missions.length; idx++) {
@@ -33,7 +33,7 @@ module.exports = {
       deets += `mission type: ${stringThings.padRight(removeUnderscorePrefixes(missions[idx].missionType), 20)} \n`;
       // deets += `${removeUnderscorePrefixes(missions[idx].node)} \n`
     }
-    deets += `${timeLeftHours}h ${timeLeftMinutes}m remaining\`\`\``;
+    deets += `\`\`\``;
     message.reply(deets);
   }
 }
