@@ -4,7 +4,12 @@ const parseString = require("xml2js").parseString;
 const request = require("request");
 
 class RSSFeed {
-  constructor() {
+  // ok make several different RSS feeds that will update their own things
+  // this SHOULD handle ps4, xb1
+  // really i should just make the url based on the type but whateVER
+  constructor(url = "http://content.warframe.com/dynamic/rss.php", type = "PC") {
+    this.updateURL = url;
+    this.type = type;
     this.events = [];
   }
 
@@ -48,11 +53,7 @@ class RSSFeed {
    * @param {boolean} broadcast whether or not to broadcast
    */
   updateFeed(bot, broadcast = true) {
-    if (!broadcast) {
-      let bm = require("../broadcast/BroadcastMessage.js");
-      new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
-    }
-    request({uri: "http://content.warframe.com/dynamic/rss.php"}, (err, response, body) => {
+    request({uri: this.updateURL}, (err, response, body) => {
       if (err) return console.error(err);
       if (response.statusCode != 200) return console.error(response);
       parseString(body, (err, result) => {
@@ -70,9 +71,9 @@ class RSSFeed {
           let newEvent;
           if (event.author[0] === "Alert") { // whats with the arrays? idk
             newEvent = new AlertEvent(event.guid[0], event.author[0], event.title[0], event.pubDate[0],
-              event.description[0], event["wf:faction"][0], event["wf:expiry"][0]);
+              event.description[0], event["wf:faction"][0], event["wf:expiry"][0], this.type);
           } else {
-            newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], event.pubDate[0]);
+            newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], event.pubDate[0], this.type);
           }
           newFeed.addEvent(newEvent);
           if (this.addEvent(newEvent) && broadcast) { // returns false if its already in the feed!

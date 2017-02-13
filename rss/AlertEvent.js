@@ -2,11 +2,12 @@ const RSSEvent = require("./RSSEvent");
 const BroadcastMessage = require("../broadcast/BroadcastMessage");
 
 class AlertEvent extends RSSEvent{
-  constructor(guid, author, title, pubDate, description, wffaction, wfexpiry) {
+  constructor(guid, author, title, pubDate, description, wffaction, wfexpiry, type) {
     super(guid, author, title, pubDate);
     this.description = description;
     this.faction = wffaction;
     this.expiry = wfexpiry;
+    this.platform_type = type; // type will be PS4, XB1, or PC
   }
 
   /**
@@ -19,10 +20,10 @@ class AlertEvent extends RSSEvent{
     // last is the duration
     // everything else is rewards
     // add the type (alert), description, and location
-    let content = `\`\`\`diff\n- [${this.type}] -\n+ [Desc]: ${this.description}\n+ [Location]: ${title[title.length - 2]}\n`;
+    let content = `\`\`\`diff\n- [${this.platform_type} = ${this.type}] -\n+ [Desc]: ${this.description}\n+ [Location]: ${title[title.length - 2]}\n`;
     // add the rewards
     for (let idx = 0; idx < title.length - 2; idx++) {
-      content += `+ [Reward]: ${title[idx]}\n`;
+      content += `+ [${this.platform_type}_Reward]: ${title[idx]}\n`;
     }
     // add the time left
     content += `+ [Duration]: ${title[title.length - 1]}\`\`\``;

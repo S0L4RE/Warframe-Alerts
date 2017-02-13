@@ -5,8 +5,9 @@ const ws = require("../ws/ws");
 const BroadcastMessage = require("../broadcast/BroadcastMessage");
 
 class InvasionEvent extends RSSEvent{
-  constructor(guid, author, title, pubDate) {
+  constructor(guid, author, title, pubDate, type) {
     super(guid, author, title.replace("PHORID SPAWN ", ""), pubDate);
+    this.platform_type = type; // type will be PS4, XB1, or PC
   }
 
   /**
@@ -16,7 +17,7 @@ class InvasionEvent extends RSSEvent{
   broadcast(bot, data = {interval: 11, event: this, func: this.update}) {
     let bm = new BroadcastMessage(bot, data);
     // TODO update broadcast message
-    let content = `\`\`\`diff\n+ [GUID]: ${this.guid}\n- [${this.type}] -\n+ [Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
+    let content = `\`\`\`diff\n- [${this.platform_type} = ${this.type}] -\n+ [${this.platform_type}_Title]: ${this.title}\n+ [Date]: ${this.date}\n\`\`\``;
     // timestamp broadcast
     bm.broadcast(new Date(Date.now()).toUTCString() + content);
   }
@@ -35,14 +36,26 @@ class InvasionEvent extends RSSEvent{
     // looks like location is always after -
     // rewards are always before -
     // this is an invasions so always vs
+    //
+    // so the non pc worldstates store the guid in
+    // $_id.$id instead of $_id.$oid wow nice
     let invasions = ws.getWs().Invasions;
+    let nested_id = "$oid";
+    if (bm.event.platform_type === "PS4") {
+      invasions = ws.getPS4Ws().Invasions;
+      nested_id = "$id";
+    }
+    else if (bm.event.platform_type === "XB1") {
+      invasions = ws.getXB1Ws().Invasions;
+      nested_id = "$id";
+    }
     let obj = bm.event;
     let width = 80;
     let content = "```diff\n";
     let location = obj.title.split(" - ");
     let factions = location[0].split(" VS. ");
     location = location[1];
-    content += `+ [${obj.type}]`
+    content += `+ [${obj.platform_type} = ${obj.type}]`
     content += "\n";
     content += `+ [Location]: ${location}`;
     content += "\n";
@@ -52,7 +65,7 @@ class InvasionEvent extends RSSEvent{
     content += `--- ${factions[0]}${" ".repeat(Math.abs(width - factions[0].length - second_length - 8))}${factions[1] ? factions[1]:""} ---`
     content += "\n";
     for (let idx = 0; idx < invasions.length; idx++) {
-      if (invasions[idx]["_id"]["$oid"] === obj.guid) {
+      if (invasions[idx]["_id"][nested_id] === obj.guid) {
         let info = invasions[idx];
         if (info.Completed) break; // if its completed, delete message and stop interval
         let pct = (info.Goal - info.Count) / (info.Goal * 2);
