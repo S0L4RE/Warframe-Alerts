@@ -36,12 +36,18 @@ class InvasionEvent extends RSSEvent{
     // looks like location is always after -
     // rewards are always before -
     // this is an invasions so always vs
+    //
+    // so the non pc worldstates store the guid in
+    // $_id.$id instead of $_id.$oid wow nice
     let invasions = ws.getWs().Invasions;
+    let nested_id = "$oid";
     if (bm.event.platform_type === "PS4") {
       invasions = ws.getPS4Ws().Invasions;
+      nested_id = "$id";
     }
     else if (bm.event.platform_type === "XB1") {
-      invasions = ws.getXB1Ws().Invasions;;
+      invasions = ws.getXB1Ws().Invasions;
+      nested_id = "$id";
     }
     let obj = bm.event;
     let width = 80;
@@ -59,7 +65,7 @@ class InvasionEvent extends RSSEvent{
     content += `--- ${factions[0]}${" ".repeat(Math.abs(width - factions[0].length - second_length - 8))}${factions[1] ? factions[1]:""} ---`
     content += "\n";
     for (let idx = 0; idx < invasions.length; idx++) {
-      if (invasions[idx]["_id"]["$oid"] === obj.guid) {
+      if (invasions[idx]["_id"][nested_id] === obj.guid) {
         let info = invasions[idx];
         if (info.Completed) break; // if its completed, delete message and stop interval
         let pct = (info.Goal - info.Count) / (info.Goal * 2);
