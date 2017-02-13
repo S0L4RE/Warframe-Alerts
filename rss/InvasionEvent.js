@@ -37,10 +37,10 @@ class InvasionEvent extends RSSEvent{
     // rewards are always before -
     // this is an invasions so always vs
     let invasions = ws.getWs().Invasions;
-    if (this.platform_type === "PS4") {
+    if (bm.event.platform_type === "PS4") {
       invasions = ws.getPS4Ws().Invasions;
     }
-    else if (this.platform_type === "XB1") {
+    else if (bm.event.platform_type === "XB1") {
       invasions = ws.getXB1Ws().Invasions;;
     }
     let obj = bm.event;
