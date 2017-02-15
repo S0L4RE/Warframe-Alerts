@@ -38,6 +38,19 @@ module.exports = {
   example: "baro",
   run: (bot, message, args, commands) => {
     let state = ws.getWs();
+    let platform = "PC";
+    if (args[0]) {
+      args[0] = args[0].toUpperCase()
+      if (args[0] === "PS4") {
+        return message.reply("I'll update this when DE fixes their inconsistent world state formatting");
+        platform = "PS4";
+        state = ws.getPS4Ws();
+      } else if (args[0] === "XB1") {
+        platform = "XB1";
+        return message.reply("I'll update this when DE fixes their inconsistent world state formatting");
+        state = ws.getXB1Ws();
+      }
+    }
     let currentTime = state.Time;
     let baro = state.VoidTraders[0];
     let activation = baro.Activation["$date"]["$numberLong"];
@@ -59,7 +72,7 @@ module.exports = {
     let location = baro.Node;
     let items = baro.Manifest;
     let longestItemNameLength = 0;
-    let deets_beginning = `\`\`\`haskell\n${name} ${comego} ${location} in ${timeLeftHours}h ${timeLeftMinutes}m\n`; // nice spacing!!
+    let deets_beginning = `\`\`\`haskell\n${platform} = ${name} ${comego} ${location} in ${timeLeftHours}h ${timeLeftMinutes}m\n`; // nice spacing!!
     let deets = "";
     if (items && items.length > 0) { // just double checkin
       for (let idx = 0; idx < items.length; idx++) {

@@ -6,6 +6,7 @@ const config = require("./config");
 
 const recent_commanders = new Set();
 const bot = new Discord.Client(); // :eyes:
+let ready = false;
 
 /**
  * load commands
@@ -44,11 +45,13 @@ bot.once("ready", () => {
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	tasks.worldState();
-	tasks.acolyte();
+	// tasks.acolyte();
 	console.log("Loaded bot");
+	setTimeout(function(){ready = true;}, 5000); // give me 5 sec to start up :)
 });
 
 bot.on("message", message => {
+	if (!ready) return;
 	if (message.author.bot) return;
 	if (!message.guild) return;
 	if (message.content.startsWith(config.prefix)) {

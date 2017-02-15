@@ -15,6 +15,19 @@ module.exports = {
   example: "sorties",
   run: (bot, message, args, commands) => {
     let state = ws.getWs();
+    let platform = "PC";
+    if (args[0]) {
+      args[0] = args[0].toUpperCase()
+      if (args[0] === "PS4") {
+        return message.reply("I'll update this when DE fixes their inconsistent world state formatting");
+        platform = "PS4";
+        state = ws.getPS4Ws();
+      } else if (args[0] === "XB1") {
+        platform = "XB1";
+        return message.reply("I'll update this when DE fixes their inconsistent world state formatting");
+        state = ws.getXB1Ws();
+      }
+    }
     let currentTime = state.Time;
     let sorties = state.Sorties[0];
     let expire = sorties.Expiry["$date"]["$numberLong"];
@@ -24,7 +37,7 @@ module.exports = {
     // let timeLeftSeconds = timeLeftTotalSeconds - (timeLeftHours * 3600) - (timeLeftMinutes * 60);
     let sortieBoss = removeUnderscorePrefixes(sorties.Boss);
     let missions = sorties.Variants;
-    let deets = `\`\`\`haskell\nboss: ${sortieBoss}, ${timeLeftHours}h ${timeLeftMinutes}m remaining\n`; // nice spacing!!
+    let deets = `\`\`\`haskell\n${platform} = boss: ${sortieBoss}, ${timeLeftHours}h ${timeLeftMinutes}m remaining\n`; // nice spacing!!
     // 50-60, 65-80, 80-100 what kind of shitty pattern is this?
     let levels = ["50-60", "65-80", "80-100"];
     for (let idx = 0; idx < missions.length; idx++) {

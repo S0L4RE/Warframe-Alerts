@@ -18,7 +18,9 @@ function keep_await(info, message1, message2) {
 		// if (collected.first().content === "c") return message1.edit("You have cancelled the query"); // just let the isNaN catch
 		let num = parseInt(collected.first().content);
 		if (isNaN(num) || num >= info.length) return message1.edit("Invalid entry. Cancelled.");
-		message1.edit("```json\n" + JSON.stringify(info[num], null, 2) + "\n```")
+		// replacing stuff to try to lessen the char counts
+		let reply_info = JSON.stringify(info[num], null, 2).replace(/((un)?common|rare), /gi, "").replace(/, (MT|FC|NT)_.*?(?=\")/g, "");
+		message1.edit("```json\n" + reply_info.substr(0, 1987) + "\n```")
 			.then((msg) => {
 				keep_await(info, msg, message2);
 			})
@@ -36,12 +38,12 @@ function keep_await(info, message1, message2) {
  * @return {[type]} [description]
  */
 function loadFiles() {
-  fs.readdir("./commands/search/datamine/", (error, files) => { // seems to be async
+  fs.readdir("./datamine/", (error, files) => { // seems to be async
     if (error) console.log(error);
     let loaded_files = 0;
     files.forEach((file) => {
       if (file.substr(-4) === "json") {
-        jsons.set(file, require("./datamine/" + file));
+        jsons.set(file, require("../../datamine/" + file));
         loaded_files++;
         console.log("Loaded " + file);
       }
