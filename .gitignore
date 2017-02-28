@@ -1,4 +1,4 @@
 token.js
 run
 node_modules/
-datamine/
+datamine/*.json
