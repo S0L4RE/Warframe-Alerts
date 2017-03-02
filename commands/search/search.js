@@ -1,5 +1,5 @@
 const fs = require("fs");
-const jsons = new Map();
+let jsons = new Map();
 
 /**
  * a function that will constantly wait for input and update input depending on what it gets
@@ -16,11 +16,13 @@ function keep_await(info, message1, message2) {
  	})
 	.then((collected) => {
 		// if (collected.first().content === "c") return message1.edit("You have cancelled the query"); // just let the isNaN catch
-		let num = parseInt(collected.first().content);
-		if (isNaN(num) || num >= info.length) return message1.edit("Invalid entry. Cancelled.");
+		let recieved = collected.first();
+		let num = parseInt(recieved.content);
+		recieved.delete().catch(console.error); // need delete perms for this or it wont work
+		if (isNaN(num) || num >= info.length) return message2.reply("Invalid entry. Cancelled.");
 		// replacing stuff to try to lessen the char counts
 		let reply_info = JSON.stringify(info[num], null, 2).replace(/((un)?common|rare), /gi, "").replace(/, (MT|FC|NT)_.*?(?=\")/g, "");
-		message1.edit("```json\n" + reply_info.substr(0, 1987) + "\n```")
+		message1.edit("Entry: " + num + "```json\n" + reply_info.substr(0, 1987) + "\n```")
 			.then((msg) => {
 				keep_await(info, msg, message2);
 			})
@@ -29,7 +31,7 @@ function keep_await(info, message1, message2) {
 			});
  	})
  	.catch((e) => {
-		message1.edit("Sorry, time expired. Cancelled.");
+		message2.reply("Sorry, time expired. Cancelled.");
 	});
 }
 
@@ -43,20 +45,24 @@ function loadFiles() {
     let loaded_files = 0;
     files.forEach((file) => {
       if (file.substr(-4) === "json") {
+				delete require.cache[require.resolve("../../datamine/" + file)];
         jsons.set(file, require("../../datamine/" + file));
         loaded_files++;
         console.log("Loaded " + file);
       }
     });
     let loaded = [];
-          jsons.forEach((v, k) => loaded.push(k));
-          jsons.set("_KEYS", loaded);
+  	jsons.forEach((v, k) => loaded.push(k));
+    jsons.set("_KEYS", loaded);
   });
 }
 
 loadFiles();
 
 module.exports = {
+	update: () => {
+		loadFiles();
+	},
   name: "search",
 	desc: "search datamines (takes regex)",
   example: "search, search lang ^butt, search mis riven",
@@ -97,10 +103,14 @@ module.exports = {
     			ret.push({name: key, entry: tables[key]});
     		}
     	}
-      let arr = ret.map((obj,idx) => idx + ": " + obj.name);
+      // let arr = ret.map((obj, idx) => idx + ": " + obj.name);
+			if (ret.length === 0) return msg.edit(`Sorry no entries found in \`${f[0]}\` with the term \`${value}\``)
       msg.edit(`\`${ret.length}\` entrie(s) found in \`${f[0]}\` with the term \`${value}\`.` +
       ` Give a number to see the entry. Will cancel in 10 seconds or on invalid entry` +
-      `\`\`\`\n${JSON.stringify(arr, null, 2)}\`\`\``)
+      `\`\`\`haskell\n${JSON.stringify(ret.map((entry, idx) => {
+				let x = entry.name.split("/");
+				return `${idx}:  ${x[x.length - 1]}`; // only give the last thing after the slashes
+			}), null, 2).replace(/"/g, "")}\`\`\``)
         .then(() => {
           message.reply("`Entry will appear here`").then((msg) => {
             keep_await(ret, msg, message);

@@ -16,19 +16,19 @@ function walk(dir) {
 	dir += "/";
 	// console.log("dir " + dir);
 	fs.readdir(dir, (err, files) => {
-	  if(err) console.err(err);
-	  files.forEach(file => {
+		if(err) console.error(err);
+		files.forEach(file => {
 			fs.stat(dir + file, (err, stats) => {
 				if (stats && stats.isDirectory()) {
 					walk(dir + file)
 				} else {
 					if (file.substr(-2) === "js") {
 						let cmd = require(dir + file);
-			    	commands.set(cmd.name, cmd);
+						commands.set(cmd.name, cmd);
 					}
 				}
 			})
-	  });
+		});
 	});
 }
 walk("./commands");
@@ -41,13 +41,13 @@ function command_cooldown(user_id) {
 bot.once("ready", () => {
 	bot.user.setUsername("im not a shit bot");
 	let bm = require("./broadcast/BroadcastMessage.js");
-	new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+	// new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
 	bot.user.setGame(config.game);
-	tasks.rssFeed(bot);
+	// tasks.rssFeed(bot);
 	tasks.worldState();
 	// tasks.acolyte();
 	console.log("Loaded bot");
-	setTimeout(function(){ready = true;}, 5000); // give me 5 sec to start up :)
+	setTimeout(function(){ready = true;}, 2000); // give me 2 sec to start up :)
 });
 
 bot.on("message", message => {

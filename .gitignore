@@ -2,3 +2,4 @@ token.js
 run
 node_modules/
 datamine/*.json
+datamine/*.bak

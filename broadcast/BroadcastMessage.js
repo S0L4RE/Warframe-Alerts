@@ -25,7 +25,7 @@ class BroadcastMessage {
     if (!this.interval_delay || !this.event) return false;
     let bm = this;
     this.interval = setInterval(() => {
-      console.log(`Updating ${bm.event.guid}`);
+      console.log(`Updating ${bm.event.platform_type} ${bm.event.type} ${bm.event.guid}`);
       bm.event.update(bm);
     }, bm.interval_delay);
     return this.interval;

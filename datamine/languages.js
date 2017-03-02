@@ -1,6 +1,6 @@
 const request = require("request");
 const fs = require("fs");
-const file = "./languages.json";
+const file = "./datamine/languages.json";
 
 if (fs.existsSync(file))
   fs.createReadStream(file).pipe(fs.createWriteStream(file + ".bak"));

@@ -1,6 +1,6 @@
 const request = require("request");
 const fs = require("fs");
-const file = "./star_chart.json";
+const file = "./datamine/star_chart.json";
 let star_chart = {};
 
 if (fs.existsSync(file))

@@ -1,6 +1,6 @@
 const request = require("request");
 const fs = require("fs");
-const file = "./mission_decks.json";
+const file = "./datamine/mission_decks.json";
 
 if (fs.existsSync(file))
   fs.createReadStream(file).pipe(fs.createWriteStream(file + ".bak"));
