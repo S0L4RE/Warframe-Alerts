@@ -6,6 +6,7 @@ module.exports = {
   desc: "update datamine",
   example: "update",
   run: (bot, message, args) => {
+    if (message.author.id !== "84678516477534208") return message.reply("Sorry only reimu can use this command.");
     const dir = "./datamine";
     fs.readdir(dir, (err, files) => {
       if (err) console.error(err);
