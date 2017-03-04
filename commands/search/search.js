@@ -17,17 +17,23 @@ function keep_await(info, message1, message2) {
 	.then((collected) => {
 		// if (collected.first().content === "c") return message1.edit("You have cancelled the query"); // just let the isNaN catch
 		let recieved = collected.first();
-		let num = parseInt(recieved.content);
+		let num = parseInt(recieved.content.split(" ")[0]);
 		recieved.delete().catch(console.error); // need delete perms for this or it wont work
 		if (isNaN(num) || num >= info.length) return message2.reply("Invalid entry. Cancelled.");
 		// replacing stuff to try to lessen the char counts
-		let reply_info = JSON.stringify(info[num], null, 2).replace(/((un)?common|rare), /gi, "").replace(/, (MT|FC|NT)_.*?(?=\")/g, "");
-		message1.edit("Entry: " + num + "```json\n" + reply_info.substr(0, 1987) + "\n```")
+		let temp = JSON.parse(JSON.stringify(info[num]));
+		if (recieved.content.split(" ")[1] && recieved.content.split(" ")[1].toLowerCase() === "--nonames") temp.entry.names = [`Hidden`];
+		if (recieved.content.split(" ")[1] && recieved.content.split(" ")[1].toLowerCase() === "--nolocs") temp.entry.Locations = [`Hidden`];
+		let reply_info = JSON.stringify(temp, null, 2).replace(/((un)?common|rare), /gi, "").replace(/, (MT|FC|NT)_.*?(?=\")/g, "");
+		message1.edit("Entry: " + num + "```json\n" + reply_info + "\n```")
 			.then((msg) => {
 				keep_await(info, msg, message2);
 			})
 			.catch((e) => {
-				message2.reply(e);
+				message2.reply("Probably too long. Try with `--nonames` or `--nolocs`").then((thismsg) => {
+					thismsg.delete(7500); // delete this
+				});
+				keep_await(info, message1, message2);
 			});
  	})
  	.catch((e) => {
@@ -67,13 +73,13 @@ module.exports = {
 	desc: "search datamines (takes regex)",
   example: "search, search lang ^butt, search mis riven",
   run: (bot, message, args) => {
-		if (args.length === 0) return message.reply(`Loaded files are ${jsons.get("_KEYS")}.`);
+		if (args.length === 0) return message.reply(`Loaded files are \`${jsons.get("_KEYS").join("`, `")}\`.`);
     let key = args[0]; // the file name
     let value = args.slice(1).join(" ") || ""; // the search term
     let f = jsons.get("_KEYS").filter((e) => {
       return e.toLowerCase().startsWith(key.toLowerCase());
     });
-    if (f.length < 1) return message.reply(`Couldn't match the file \`${key}\`. Loaded files are ${jsons.get("_KEYS")}.`);
+    if (f.length < 1) return message.reply(`Couldn't match the file \`${key}\`. Loaded files are \`${jsons.get("_KEYS").join("`, `")}\`.`);
   	console.log(`Searching for ${value} in ${f[0]}`);
   	let ret = [];
   	let tables = jsons.get(f[0]);
@@ -85,8 +91,9 @@ module.exports = {
   			if (typeof obj[key] === "object") {
   				deep_search(obj[key], topkey);
   			}
-  			if (typeof obj[key] === "string" && (obj[key].toLowerCase().includes(value) || exp.test(obj[key], "i"))) {
+  			else if (typeof obj[key] === "string" && (obj[key].toLowerCase().includes(value) || exp.test(obj[key], "i"))) {
   				ret.push({name: topkey, entry: tables[topkey]}); // push entire object
+					return; // avoid copies
   			}
   		}
   	}
@@ -95,18 +102,21 @@ module.exports = {
     	for (let key in tables) { // key is the topmost object here
     		if (key.toLowerCase() === value.toLowerCase()) {
     			ret.push({name: key, entry: tables[key]});
+					return; // avoid copies
     		}
     		else if (typeof tables[key] === "object") {
     			deep_search(tables[key], key);
     		}
     		else if (typeof tables[key] === "string" && (tables[key].toLowerCase().includes(value) || exp.test(tables[key], "i"))) {
     			ret.push({name: key, entry: tables[key]});
+					return; // avoid copies
     		}
     	}
       // let arr = ret.map((obj, idx) => idx + ": " + obj.name);
 			if (ret.length === 0) return msg.edit(`Sorry no entries found in \`${f[0]}\` with the term \`${value}\``)
-      msg.edit(`\`${ret.length}\` entrie(s) found in \`${f[0]}\` with the term \`${value}\`.` +
-      ` Give a number to see the entry. Will cancel in 10 seconds or on invalid entry` +
+      msg.edit(`\`${ret.length}\` entrie(s) found in \`${f[0]}\` with the term \`${value}\`.\n` +
+      `Give a \`number\` to see the entry. Use with \`--nonames\` to show without names or \`--nolocs\` to show ` +
+			`without mission locations. \nWill cancel in 10 seconds or on invalid entry` +
       `\`\`\`haskell\n${JSON.stringify(ret.map((entry, idx) => {
 				let x = entry.name.split("/");
 				return `${idx}:  ${x[x.length - 1]}`; // only give the last thing after the slashes

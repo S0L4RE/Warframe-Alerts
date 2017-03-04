@@ -43,7 +43,7 @@ bot.once("ready", () => {
 	let bm = require("./broadcast/BroadcastMessage.js");
 	// new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
 	bot.user.setGame(config.game);
-	// tasks.rssFeed(bot);
+	tasks.rssFeed(bot);
 	tasks.worldState();
 	// tasks.acolyte();
 	console.log("Loaded bot");
