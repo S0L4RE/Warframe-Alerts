@@ -26,6 +26,7 @@ const logo = "\
 */
 const logo = ""; // rip logo too big for small screen users
 const stringThings = require("../../util/stringThings");
+const arrayThings = require("../../util/arrayThings");
 const ws = require("../../ws/ws");
 
 function removeSlashPrefixes(str) {
@@ -74,6 +75,20 @@ module.exports = {
     let longestItemNameLength = 0;
     let deets_beginning = `\`\`\`haskell\n${platform} = ${name} ${comego} ${location} in ${timeLeftHours}h ${timeLeftMinutes}m\n`; // nice spacing!!
     let deets = "";
+    let item_price_array = [];
+    // trying to make a 2d array of the items without reference here
+    // and then use array2dtable to convert it
+    // item name, ducat price, credit price
+    for (let i = 0; i < items.length; i++) {
+      item_price_array.push([removeSlashPrefixes(items[idx].ItemType), stringThings.padRight(items[idx].PrimePrice + "", 3) + " Ducats", stringThings.padRight(items[idx].RegularPrice + "", 6) + " Credits"]);
+    }
+    deets_beginning += arrayThings.array2dtable(item_price_array);
+    deets_beginning += "```";
+    message.reply(deets_beginning);
+    // hypothetically this should be the table of items
+    // all it needs is the codeblocks and some extra text so
+    // end attempt
+    /*
     if (items && items.length > 0) { // just double checkin
       for (let idx = 0; idx < items.length; idx++) {
         let itemname = removeSlashPrefixes(items[idx].ItemType);
@@ -92,5 +107,6 @@ module.exports = {
       deets += `\`\`\``;
     }
     message.reply(deets);
+    */
   }
 }
