@@ -79,11 +79,13 @@ module.exports = {
     // trying to make a 2d array of the items without reference here
     // and then use array2dtable to convert it
     // item name, ducat price, credit price
+    if (items && items.length > 0) {
     for (let i = 0; i < items.length; i++) {
-      item_price_array.push([removeSlashPrefixes(items[idx].ItemType), stringThings.padRight(items[idx].PrimePrice + "", 3) + " Ducats", stringThings.padRight(items[idx].RegularPrice + "", 6) + " Credits"]);
+        item_price_array.push([removeSlashPrefixes(items[idx].ItemType), stringThings.padRight(items[idx].PrimePrice + "", 3) + " Ducats", stringThings.padRight(items[idx].RegularPrice + "", 6) + " Credits"]);
+      }
+      deets_beginning += arrayThings.array2dtable(item_price_array);
+      deets_beginning += "```";
     }
-    deets_beginning += arrayThings.array2dtable(item_price_array);
-    deets_beginning += "```";
     message.reply(deets_beginning);
     // hypothetically this should be the table of items
     // all it needs is the codeblocks and some extra text so
