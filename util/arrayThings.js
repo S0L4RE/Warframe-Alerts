@@ -30,7 +30,7 @@ module.exports = {
     for (let i = 0; i < column_lengths.length - 1; i++) {
       yourtable += "─".repeat(column_lengths[i]) + "┬";
     }
-    yourtable += "─".repeat(column_lengths[column_lengths - 1]) + "┐"; // the top row
+    yourtable += "─".repeat(column_lengths[column_lengths.length - 1]) + "┐"; // the top row
     for( let i = 0; i < row_num; i++) {
       yourtable += "\n";
       for (let j = 0; j < max_row_length - 1; j++) {
@@ -42,7 +42,7 @@ module.exports = {
     for (let i = 0; i < column_lengths.length - 1; i++) {
       yourtable += "─".repeat(column_lengths[i]) + "┴";
     }
-    yourtable += "─".repeat(column_lengths[column_lengths - 1]) + "┘"; // the bottom row
+    yourtable += "─".repeat(column_lengths[column_lengths.length - 1]) + "┘"; // the bottom row
     return yourtable;
   }
 }
