@@ -80,7 +80,7 @@ module.exports = {
     // and then use array2dtable to convert it
     // item name, ducat price, credit price
     if (items && items.length > 0) {
-      for (let i = 0; i < items.length; i++) {
+      for (let idx = 0; idx < items.length; idx++) {
         item_price_array.push([removeSlashPrefixes(items[idx].ItemType), stringThings.padRight(items[idx].PrimePrice + "", 3) + " Ducats", stringThings.padRight(items[idx].RegularPrice + "", 6) + " Credits"]);
       }
       deets_beginning += arrayThings.array2dtable(item_price_array);
