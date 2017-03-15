@@ -12,7 +12,8 @@ module.exports = {
         let role4 = [];
         for (let j = 0; j < 5 && i + j < roles.length; j++) {
           // if (roles[i + j].startsWith("xb1") || roles[i + j].startsWith("ps4")) continue;
-          role4.push(roles[i + j]);
+          if (message.guild.roles.find((r) => r.name.toLowerCase() === roles[i+ j].toLowerCase()))
+            role4.push(roles[i + j]);
         }
         if (role4.length > 0)
           ret.push(role4);
