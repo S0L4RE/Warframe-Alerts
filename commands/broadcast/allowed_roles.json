@@ -16,8 +16,7 @@
   "blueprint",
   "detonite",
   "fieldron",
-  "endo",
-  "acolyte",
+  "mutagen",
 
   "xb1forma",
   "xb1reactor",
@@ -36,8 +35,7 @@
   "xb1blueprint",
   "xb1detonite",
   "xb1fieldron",
-  "xb1endo",
-  "xb1acolyte",
+  "xb1mutagen",
 
   "ps4forma",
   "ps4reactor",
@@ -56,6 +54,5 @@
   "ps4blueprint",
   "ps4detonite",
   "ps4fieldron",
-  "ps4endo",
-  "ps4acolyte"]
+  "ps4mutagen"]
 }

@@ -1,4 +1,4 @@
-const stringThings = require("../../util/stringThings");
+const arrayThings = require("../../util/arrayThings");
 
 module.exports = {
   name: "help",
@@ -6,12 +6,12 @@ module.exports = {
   example: "help",
   run: (bot, message, args, commands) => {
     // commands is a map
-    let help_message = "Add the prefix yourself \n";
+    let help_message = [["Command", "Description", "Example"],[]];
     commands.forEach((cmd) => {
       if (!cmd.name) return;
-      help_message += (`  ${stringThings.padRight(cmd.name, 10)}${stringThings.padRight(cmd.desc, 35)}${cmd.example}\n`);
+      help_message.push([cmd.name, cmd.desc, cmd.example]);
     })
-    // help_message += "Put the prefix in yourself\n" + help_message;
-    message.reply(`\`\`\`\n${help_message}\`\`\``);
+    message.reply("```fix\n" + arrayThings.array2dtable(help_message) + "```").then((msg) => {
+    });
   }
 }

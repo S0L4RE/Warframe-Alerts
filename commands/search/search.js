@@ -73,13 +73,13 @@ module.exports = {
 	desc: "search datamines (takes regex)",
   example: "search, search lang ^butt, search mis riven",
   run: (bot, message, args) => {
-		if (args.length === 0) return message.reply(`Loaded files are \`${jsons.get("_KEYS").join("`, `").replace("`_KEYS`", "")}\`.`);
+		if (args.length === 0) return message.reply(`Loaded files are \`${jsons.get("_KEYS").join("`, `").replace(", `_KEYS`", "")}\`.`);
     let key = args[0]; // the file name
     let value = args.slice(1).join(" ") || ""; // the search term
     let f = jsons.get("_KEYS").filter((e) => {
       return e.toLowerCase().startsWith(key.toLowerCase());
     });
-    if (f.length < 1) return message.reply(`Couldn't match the file \`${key}\`. Loaded files are \`${jsons.get("_KEYS").join("`, `").replace("`_KEYS`", "")}\`.`);
+    if (f.length < 1) return message.reply(`Couldn't match the file \`${key}\`. Loaded files are \`${jsons.get("_KEYS").join("`, `").replace(", `_KEYS`", "")}\`.`);
   	console.log(`Searching for ${value} in ${f[0]}`);
   	let ret = [];
   	let tables = jsons.get(f[0]);
