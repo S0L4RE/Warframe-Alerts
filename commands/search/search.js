@@ -102,14 +102,12 @@ module.exports = {
     	for (let key in tables) { // key is the topmost object here
     		if (key.toLowerCase() === value.toLowerCase()) {
     			ret.push({name: key, entry: tables[key]});
-					return; // avoid copies
     		}
     		else if (typeof tables[key] === "object") {
     			deep_search(tables[key], key);
     		}
     		else if (typeof tables[key] === "string" && (tables[key].toLowerCase().includes(value) || exp.test(tables[key], "i"))) {
     			ret.push({name: key, entry: tables[key]});
-					return; // avoid copies
     		}
     	}
       // let arr = ret.map((obj, idx) => idx + ": " + obj.name);
