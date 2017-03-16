@@ -25,7 +25,7 @@ module.exports = {
     setInterval(function(){pc_rss.updateFeed(bot);
       ps4_rss.updateFeed(bot);
       xb1_rss.updateFeed(bot);
-    }, 10 * 1000 * 60);
+    }, 5 * 1000 * 60);
   },
   worldState: () => {
     WorldState.updateWorldState();

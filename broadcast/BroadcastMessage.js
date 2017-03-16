@@ -73,7 +73,7 @@ class BroadcastMessage {
     // look for an WF Alerts channel and broadcast to it
     bot.guilds.forEach((guild) => {
       let mentions = BroadcastMessage.getMentions(guild, content);
-      let channel = guild.channels.find("name", "wf_alerts");
+      let channel = guild.channels.find("name", bm.event.platform_type.toLowerCase() + "_wf_alerts");
       if (channel) {
         setTimeout(() => {
           channel.sendMessage(content + mentions)
