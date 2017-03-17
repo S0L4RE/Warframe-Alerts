@@ -4,7 +4,7 @@ const arrayThings = require("../../util/arrayThings");
 module.exports = {
   name: "notify",
   desc: "join or leave roles",
-  example: "notify, notify j forma, notify l kavat, notify forma",
+  example: "notify, notify j forma, notify l kavat forma",
   run: (bot, message, args) => {
     if (args.length === 0) {
       let ret = [];
