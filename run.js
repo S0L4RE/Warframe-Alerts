@@ -41,7 +41,9 @@ function command_cooldown(user_id) {
 bot.once("ready", () => {
 	bot.user.setUsername("im not a shit bot");
 	let bm = require("./broadcast/BroadcastMessage.js");
-	// new bm(bot).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+	new bm(bot, {event: {platform_type: "pc"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+	new bm(bot, {event: {platform_type: "xb1"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+	new bm(bot, {event: {platform_type: "ps4"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	tasks.worldState();
