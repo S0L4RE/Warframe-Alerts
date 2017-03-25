@@ -38,12 +38,20 @@ function command_cooldown(user_id) {
 	setTimeout(() => {recent_commanders.delete(user_id)}, config.cooldown)
 }
 
-bot.once("ready", () => {
+bot.on("guildCreate", (guild) => {
+	bot.channels.get("292006672732520478").send(`Just joined ${guild.name}!`);
+})
+
+bot.on("guildDelete", (guild) => {
+	bot.channels.get("292006672732520478").send(`Just got the boot from ${guild.name}!`);
+})
+
+bot.on("ready", () => {
 	bot.user.setUsername("im not a shit bot");
 	let bm = require("./broadcast/BroadcastMessage.js");
-	new bm(bot, {event: {platform_type: "pc"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
-	new bm(bot, {event: {platform_type: "xb1"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
-	new bm(bot, {event: {platform_type: "ps4"}}).broadcast("**Just restarted bot, ignore alerts and other things above this**");
+	new bm(bot, {event: {platform_type: "pc"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
+	new bm(bot, {event: {platform_type: "xb1"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
+	new bm(bot, {event: {platform_type: "ps4"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	tasks.worldState();
@@ -78,6 +86,7 @@ bot.on("message", message => {
 			}
 		}
 		else if(commands.has(command)) {
+			console.log(new Date(), message.author.id, message.author.username, command, args);
 			command_cooldown(message.author.id);
     	commands.get(command).run(bot, message, args, commands);
   	} else {

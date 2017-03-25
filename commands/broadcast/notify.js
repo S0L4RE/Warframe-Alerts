@@ -18,6 +18,9 @@ module.exports = {
         if (role4.length > 0)
           ret.push(role4);
       }
+      if (ret.length == 0) {
+        return message.reply("There are no roles that this bot can assign in the server!");
+      }
       return message.reply("Allowed Roles:```js\n(notice that roles for other platforms just have the plaform name before them)\n" + arrayThings.array2dtable(ret) + "```");
     }
     let gRoles = message.guild.roles;
@@ -31,8 +34,9 @@ module.exports = {
     });
     if (args[0] === "l") {
       type = "Left";
+      matching_roles = matching_roles.filter((role) => gMember.roles.has(role.id));
       gMember.removeRoles(matching_roles).then(() => {
-        message.reply(`${type} ${matching_roles.array().map((role) => role.name)}.`)
+        message.reply(`${type} \`${matching_roles.array().map((role) => role.name).join("`, `")}\`.`) // bring this out front
       }).catch((e) => {
         console.error(e);
         message.reply(`Sorry, we hit an error`);
@@ -49,8 +53,9 @@ module.exports = {
       // wait i can just do addroles.....
       // join by default
       // just look at the args because even if the first one is j then you can't join the role j
+      matching_roles = matching_roles.filter((role) => !gMember.roles.has(role.id));
       gMember.addRoles(matching_roles).then(() => {
-        message.reply(`${type} ${matching_roles.array().map((role) => role.name)}.`)
+        message.reply(`${type} \`${matching_roles.array().map((role) => role.name).join("`, `")}\`.`) // bring this out front
       }).catch((e) => {
         console.error(e);
         message.reply(`Sorry, we hit an error`);

@@ -18,7 +18,7 @@ module.exports = {
       "of roles being created to create all roles. A list of created roles can " +
       "be accessed by using the ,notify command without any arguments.```"
       )
-      .addField("Other comments", "The bot should delete alerts/update invasions when they expire " +
+      .addField("Other comments", "The bot should delete alerts/update invasions when they expire. " +
       "However, sometimes the server goes down and the messages wont be deleted. Try using a purge command " +
       "from another bot if they get too annoying.")
       .addField("Necessary Permissions", "Manage Roles\nManage Channels", true)
