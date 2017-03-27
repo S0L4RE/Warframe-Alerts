@@ -11,6 +11,7 @@ module.exports = {
       filter = args;
     }
     if (message.member.hasPermission("MANAGE_ROLES_OR_PERMISSIONS") && message.guild.member(bot.user).hasPermission("MANAGE_ROLES_OR_PERMISSIONS")) {
+      let rolecount = 1;
       for (let idx = 0; idx < roles.length; idx++) {
         let x = message.guild.roles.find((role) => {
           let lname = role.name.toLowerCase();
@@ -25,7 +26,7 @@ module.exports = {
           return roles[idx].startsWith(ele);
         })) { // role doesn't exist
           addedRoles.push(roles[idx]);
-          setTimeout(function(){message.guild.createRole({name: roles[idx], mentionable: true})}, 5000 * idx);
+          setTimeout(function(){message.guild.createRole({name: roles[idx], mentionable: true}).then(r=>r.setPermissions([]))}, 5000 * rolecount++);
         }
       }
       message.reply("Creating roles `" + addedRoles.join("`, `") + "`");
