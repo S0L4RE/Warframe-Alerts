@@ -39,19 +39,23 @@ function command_cooldown(user_id) {
 }
 
 bot.on("guildCreate", (guild) => {
-	bot.channels.get("292006672732520478").send(`Just joined ${guild.name}!`);
+	bot.channels.get("295908551535099905").send(`Just joined ${guild.name}!`);
 })
 
 bot.on("guildDelete", (guild) => {
-	bot.channels.get("292006672732520478").send(`Just got the boot from ${guild.name}!`);
+	bot.channels.get("295908551535099905").send(`Just got the boot from ${guild.name}!`);
 })
 
-bot.on("ready", () => {
-	bot.user.setUsername("im not a shit bot");
+bot.on("disconnect", () => {
+	bot.channels.get("295908551535099905").send(`Just got disconnected!`);
+	process.exit();
+})
+
+bot.once("ready", () => {
 	let bm = require("./broadcast/BroadcastMessage.js");
-	new bm(bot, {event: {platform_type: "pc"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
-	new bm(bot, {event: {platform_type: "xb1"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
-	new bm(bot, {event: {platform_type: "ps4"}}).broadcast("**Just restarted bot, alerts and invasions above this may have already expired**");
+	new bm(bot, {event: {platform_type: "pc"}}).broadcast("**Bot has restarted, alerts and invasions above this may have already expired**");
+	new bm(bot, {event: {platform_type: "xb1"}}).broadcast("**Bot has restarted, alerts and invasions above this may have already expired**");
+	new bm(bot, {event: {platform_type: "ps4"}}).broadcast("**Bot has restarted, alerts and invasions above this may have already expired**");
 	bot.user.setGame(config.game);
 	tasks.rssFeed(bot);
 	tasks.worldState();
@@ -71,7 +75,6 @@ bot.on("message", message => {
 		let command = args[0].slice(config.prefix.length);
 		args = args.slice(1);
 
-		// eval command
 		if (command === "eval" && message.author.id === "84678516477534208") {
 			try {
 				let code = args.join(" ");
@@ -86,12 +89,14 @@ bot.on("message", message => {
 			}
 		}
 		else if(commands.has(command)) {
-			console.log(new Date(), message.author.id, message.author.username, command, args);
+			console.log(new Date(), message.guild.id, message.author.id, message.author.username, command, args);
 			command_cooldown(message.author.id);
-    	commands.get(command).run(bot, message, args, commands);
-  	} else {
-			// message.reply("Can't find that command buddy.");
-		}
+			try {
+    		commands.get(command).run(bot, message, args, commands);
+			} catch(e) {
+				message.reply("Something really bad happened, please notify `reimu#3856`: " + e);
+			}
+  	}
 	}
 });
 

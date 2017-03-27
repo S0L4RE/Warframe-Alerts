@@ -50,7 +50,6 @@ class BroadcastMessage {
     if (bm.func === "delete") {
       this.timeout = setTimeout(() => {
         bm.message.forEach((msg) => {msg.delete().then((msg) => {
-          console.log("Deleted a timeout message.");
         }).catch((e) => {
           console.error(e);
         })})

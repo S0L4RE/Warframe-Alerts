@@ -17,6 +17,7 @@
   "detonite",
   "fieldron",
   "mutagen",
+  "synthula",
 
   "xb1forma",
   "xb1reactor",
@@ -36,6 +37,7 @@
   "xb1detonite",
   "xb1fieldron",
   "xb1mutagen",
+  "xb1synthula",
 
   "ps4forma",
   "ps4reactor",
@@ -54,5 +56,6 @@
   "ps4blueprint",
   "ps4detonite",
   "ps4fieldron",
-  "ps4mutagen"]
+  "ps4mutagen",
+  "ps4synthula"]
 }

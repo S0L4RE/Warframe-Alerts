@@ -81,7 +81,6 @@ module.exports = {
     // item name, ducat price, credit price
     if (items && items.length > 0) {
       for (let idx = 0; idx < items.length; idx++) {
-
         item_price_array.push([removeSlashPrefixes(items[idx].ItemType), stringThings.padRight(items[idx].PrimePrice + "", 4) + " Ducats", stringThings.padRight(items[idx].RegularPrice + "", 7) + " Credits"]);
       }
       deets_beginning += arrayThings.array2dtable(item_price_array);

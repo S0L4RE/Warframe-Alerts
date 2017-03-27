@@ -25,6 +25,7 @@ module.exports = {
     setInterval(function(){pc_rss.updateFeed(bot);
       ps4_rss.updateFeed(bot);
       xb1_rss.updateFeed(bot);
+      console.log("Updated ws information");
     }, 5 * 1000 * 60);
   },
   worldState: () => {
