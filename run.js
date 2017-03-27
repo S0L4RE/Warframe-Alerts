@@ -71,9 +71,7 @@ bot.on("message", message => {
 	if (message.content.startsWith(config.prefix)) {
 		if (recent_commanders.has(message.author.id))	return message.reply("Wait a bit for another command");
 
-		let args = message.content.split(" ");
-		let command = args[0].slice(config.prefix.length);
-		args = args.slice(1);
+		const [command, ...args] = message.content.slice(prefix.length).split(" ");
 
 		if (command === "eval" && message.author.id === "84678516477534208") {
 			try {
