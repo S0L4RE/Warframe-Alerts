@@ -4,10 +4,11 @@ const InvasionBroadcaster = require("./InvasionBroadcaster.js");
 
 class EventManager {
   constructor(client, type) {
+    this.client = client;
     if (!EventManager.broadcaster)
-      EventManager.broadcaster = new MessageBroadcaster(client); // shoud be static
+      EventManager.broadcaster = new MessageBroadcaster(this.client); // shoud be static
     if (!EventManager.iBroadcaster)
-      EventManager.iBroadcaster = new InvasionBroadcaster(client);
+      EventManager.iBroadcaster = new InvasionBroadcaster(this.client);
     this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
     this.feed.updateFeed(false); // change to false when releasing
   }
