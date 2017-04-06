@@ -41,14 +41,14 @@ class InvasionBroadcaster {
       const matched = currentInvasions[idx];
       const status = matched.Count;
       const max = matched.Goal;
-      const width = 50;
+      const width = 80;
       const progress = width * (status + max) / (max * 2) << 0;
       const event = this.invasions[i][1];
       let content1 = /* " ".repeat((width / 2 << 0) - (event.type.length / 2)) + */ event.type.toLowerCase();
       let content2 = event.location;
       let rewardLine = "";
       if (event.factions.length === 1) {
-        rewardLine = `-${' '.repeat(width - event.factions[0].length - 2)}${event.factions[0]}-`;
+        rewardLine = `-${' '.repeat(width / 2 - event.factions[0].length / 2 - 2)}${event.factions[0]}-`;
       } else {
         rewardLine = `-${event.factions[0]}${' '.repeat(width - event.factions[0].length - event.factions[1].length - 2)}${event.factions[1]}-`;
       }

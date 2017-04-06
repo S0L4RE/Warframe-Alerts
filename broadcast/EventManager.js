@@ -34,11 +34,11 @@ class EventManager {
         for (let i = 0; i < deletion.messages.length; i++) {
           const chan = em.client.channels.get(deletion.messages[i][0]);
           if (!chan) {
-            // this means something broke so I think reinsert and waiting for the
-            // next cycle is the best thing
+            // if this is somehow an incorrect id keep going
+            // because there will be other channels to handle
+            //
             continue;
           }
-          // should loop here i think
           chan.fetchMessage(deletion.messages[i][1]).then((msg) => {
             msg.delete();
           })
