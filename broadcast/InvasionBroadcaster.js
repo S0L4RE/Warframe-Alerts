@@ -44,7 +44,7 @@ class InvasionBroadcaster {
       const width = 50;
       const progress = width * (status + max) / (max * 2) << 0;
       const event = this.invasions[i][1];
-      let content1 = " ".repeat((width / 2 << 0) - (event.type.length / 2)) + event.type.toLowerCase();
+      let content1 = /* " ".repeat((width / 2 << 0) - (event.type.length / 2)) + */ event.type.toLowerCase();
       let content2 = event.location;
       let rewardLine = "";
       if (event.factions.length === 1) {
