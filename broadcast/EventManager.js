@@ -23,7 +23,17 @@ class EventManager {
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
       console.log("Updating invasions");
-      EventManager.iBroadcaster.update();
+      const removed = EventManager.iBroadcaster.update();
+      for (let i = 0; i < removed.length; i++) {
+        const expiredMessages = removed[i].messages;
+        for (const [channel, id] of expiredMessages) {
+          try {
+            em.client.channels.get(channel).fetchMessage(id).then((msg) => {
+              msg.delete();
+            })
+          } catch(console.error)
+        }
+      }
     }, 5 * 60e3);
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
@@ -31,17 +41,12 @@ class EventManager {
       while (EventManager.broadcaster.heap.peek().expiration < Date.now()) {
         const deletion = EventManager.broadcaster.heap.remove();
         // iterate through messages
-        for (let i = 0; i < deletion.messages.length; i++) {
-          const chan = em.client.channels.get(deletion.messages[i][0]);
-          if (!chan) {
-            // if this is somehow an incorrect id keep going
-            // because there will be other channels to handle
-            //
-            continue;
+        for (const [channel, id] of deletion.messages) {
+          try {
+            em.client.channels.get(channel).fetchMessage(id).then((msg) => {
+              msg.delete();
+            })
           }
-          chan.fetchMessage(deletion.messages[i][1]).then((msg) => {
-            msg.delete();
-          })
         }
       }
     }, 5 * 60e3);

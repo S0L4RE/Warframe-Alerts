@@ -28,13 +28,17 @@ class InvasionBroadcaster {
     WorldState.update();
     // yeah wont actually update it in time because callbacks
     // but no one will ever know!!!!
+    let expired = [];
     const currentInvasions = WorldState.getWs["pc"]().Invasions;
     const currentGUIDS = currentInvasions.map((i) => i["_id"]["$oid"]);
     for (let i = 0; i < this.invasions.length; i++) {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
       // if this invasion doesnt exist on the world state
       if (idx < 0 || currentInvasions[idx].Completed) {
-        this.invasions.splice(i, 1); // remove it
+        const removable = this.invasions.splice(i, 1);
+        if (currentInvasions[idx].Completed) { // delete messages if expired
+          expired.push(remoavable);
+        }
         i--;
         continue;
       }
@@ -63,6 +67,7 @@ ${progressLine}
         );
       })
     }
+    return expired;
   }
 }
 
