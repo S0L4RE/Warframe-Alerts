@@ -37,6 +37,7 @@ class EventHeap {
   }
 
   remove() {
+    const del = this.data[0];
     this.data[0] = this.data[--this.length];
     if (this.data[0] !== undefined) {
       let i = 0;
@@ -50,6 +51,7 @@ class EventHeap {
         i = c;
       }
     }
+    return del;
   }
 
   peek() {

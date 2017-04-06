@@ -9,20 +9,21 @@ class AlertEvent extends RSSEvent {
     this.platform_type = type;
     title = title.split(" - ");
     this.dur = title[title.length - 1];
+    this.location = title[title.length - 2];
+    this.rewards = [];
+    for (let idx = 0; idx < title.length - 2; idx++) {
+      this.rewards.push(title[idx]);
+    }
   }
 
   toString() {
-    let title = this.title.split(" - ");
-    let content = `\`\`\`diff\n-!- [${this.type}] -!-
+    return `\`\`\`diff\n-!- [${this.type}] -!-
 + ${this.description}
-+ on ${title[title.length - 2]}
-*** [Rewards] ***\n`;
-    for (let idx = 0; idx < title.length - 2; idx++) {
-      content += `+ ${title[idx]}\n`;
-    }
-    content += `*** [Duration] ***
-+ ${title[title.length - 1]}\`\`\``;
-    return content;
++ on ${this.location}
+*** [Rewards] ***
++ ${this.rewards.join("\n+ ")}
+*** [Duration] ***
++ ${this.dur.replace("m", " minutes")}\`\`\``;
   }
 }
 

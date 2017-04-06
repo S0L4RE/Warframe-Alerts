@@ -1,9 +1,10 @@
 const parseString = require("xml2js").parseString;
 const superagent = require("superagent");
 const AlertEvent = require("../events/AlertEvent.js");
+const InvasionEvent = require("../events/InvasionEvent.js");
 
 class RSSFeed {
-  constructor(type = "pc", broadcaster) {
+  constructor(type = "pc", broadcaster, iBroadcaster) {
     if (type === "pc") {
       this.updateURL = "http://content.warframe.com/dynamic/rss.php";
     } else if (type === "ps4") {
@@ -16,6 +17,11 @@ class RSSFeed {
     this.type = type;
     this.events = new Set();
     this.broadcaster = broadcaster;
+    this.invasionBroadcaster = iBroadcaster;
+  }
+
+  iBroadcast(event) {
+    this.invasionBroadcaster.broadcast(event);
   }
 
   broadcast(event) {
@@ -58,10 +64,11 @@ class RSSFeed {
           if (event.author[0] === "Alert") {
             newEvent = new AlertEvent(event.guid[0], event.author[0], event.title[0],
               Date.now(), event.description[0], event["wf:faction"][0], event["wf:expiry"][0], this.type);
+            this.broadcast(newEvent);
           } else { // outbreak or invasion
-            // newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], Date.now(), this.type);
+            newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], Date.now(), this.type);
+            this.iBroadcast(newEvent);
           }
-          if (broadcast && newEvent !== undefined) this.broadcast(newEvent);
         }
       })
     });
