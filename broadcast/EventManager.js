@@ -31,7 +31,9 @@ class EventManager {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             })
-          } catch(console.error)
+          } catch(e) {
+            console.error(e);
+          }
         }
       }
     }, 5 * 60e3);
@@ -46,6 +48,8 @@ class EventManager {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             })
+          } catch(e) {
+            console.error(e);
           }
         }
       }

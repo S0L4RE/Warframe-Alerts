@@ -9,6 +9,8 @@ class MessageBroadcaster {
   }
 
   broadcast(event) {
+    // maybe instead of each guild just search the client.channel collection
+    // 
     const pMessages = [];
     this.client.guilds.forEach((guild) => {
       const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
