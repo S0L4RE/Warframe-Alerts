@@ -29,10 +29,20 @@ class EventManager {
     this.cleanTimeout = setInterval(() => {
       console.log("Checking heap");
       while (EventManager.broadcaster.heap.peek().expiration < Date.now()) {
-        const deletion = EventManager.broadcaster.heap.remove().messages;
-        em.client.channels.get(deletion[0]).fetchMessage(deletion[1]).then((msg) => {
-          msg.delete();
-        })
+        const deletion = EventManager.broadcaster.heap.remove();
+        // iterate through messages
+        for (let i = 0; i < deletion.messages.length; i++) {
+          const chan = em.client.channels.get(deletion.messages[i][0]);
+          if (!chan) {
+            // this means something broke so I think reinsert and waiting for the
+            // next cycle is the best thing
+            continue;
+          }
+          // should loop here i think
+          chan.fetchMessage(deletion.messages[i][1]).then((msg) => {
+            msg.delete();
+          })
+        }
       }
     }, 5 * 60e3);
   }

@@ -64,10 +64,10 @@ class RSSFeed {
           if (event.author[0] === "Alert") {
             newEvent = new AlertEvent(event.guid[0], event.author[0], event.title[0],
               Date.now(), event.description[0], event["wf:faction"][0], event["wf:expiry"][0], this.type);
-            this.broadcast(newEvent);
+            if (broadcast) this.broadcast(newEvent);
           } else { // outbreak or invasion
             newEvent = new InvasionEvent(event.guid[0], event.author[0], event.title[0], Date.now(), this.type);
-            this.iBroadcast(newEvent);
+            if (broadcast) this.iBroadcast(newEvent);
           }
         }
       })
