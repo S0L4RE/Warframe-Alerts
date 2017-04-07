@@ -37,7 +37,7 @@ class InvasionBroadcaster {
       if (idx < 0 || currentInvasions[idx].Completed) {
         const removable = this.invasions.splice(i, 1);
         if (currentInvasions[idx].Completed) { // delete messages if expired
-          expired.push(remoavable);
+          expired.push(removable);
         }
         i--;
         continue;
