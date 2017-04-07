@@ -52,20 +52,32 @@ class InvasionBroadcaster {
       let content2 = event.location;
       let rewardLine = "";
       if (event.factions.length === 1) {
-        rewardLine = `-${' '.repeat(width / 2 - event.factions[0].length / 2 - 2)}${event.factions[0]}-`;
+        rewardLine = `-${' '.repeat(width / 2 - event.factions[0].length / 2 - 2)}${event.factions[0]}${' '.repeat(width / 2 - event.factions[0].length / 2)}-`;
       } else {
         rewardLine = `-${event.factions[0]}${' '.repeat(width - event.factions[0].length - event.factions[1].length - 2)}${event.factions[1]}-`;
       }
       let progressLine = `${"O".repeat(Math.abs(width - progress - 1))} ${"0".repeat(Math.abs(progress))}`;
-      this.client.channels.get(this.invasions[i][0][0][0]).fetchMessage(this.invasions[i][0][0][1]).then((msg) => {
-        msg.edit(`\`\`\`haskell
+      // loop here maybe
+      /*
+      invasions = [
+        [ [ [channel, id], [channel, id] ], event]
+      ]
+       */
+      for (const [channel, id] of this.invasions[i][0]) {
+        try {
+          this.client.channels.get(channel).fetchMessage(id).then((msg) => {
+            msg.edit(`\`\`\`haskell
 ${content1}
 ${content2}
 ${rewardLine}
 ${progressLine}
 \`\`\``
-        );
-      })
+            );
+          })
+        } catch(e) {
+          console.error(e);
+        }
+      }
     }
     return expired;
   }
