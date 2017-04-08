@@ -25,7 +25,7 @@ class EventManager {
       console.log("Updating invasions");
       const removed = EventManager.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
-        const expiredMessages = removed[i][0];
+        const expiredMessages = removed[i][0][0];
         for (const [channel, id] of expiredMessages) {
           try {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
