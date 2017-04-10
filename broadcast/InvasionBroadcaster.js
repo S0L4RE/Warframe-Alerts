@@ -22,7 +22,7 @@ class InvasionBroadcaster {
     })
   }
 
-  update() {
+  update(type) {
     // read worldstate and update all invasion statuses
     // things that arent updated are removed from the map
     // well i mean you can just make a new map based on world state
@@ -31,7 +31,7 @@ class InvasionBroadcaster {
     // yeah wont actually update it in time because callbacks
     // but no one will ever know!!!!
     let expired = [];
-    const currentInvasions = WorldState.getWs["pc"]().Invasions;
+    const currentInvasions = WorldState.getWs[type]().Invasions;
     const currentGUIDS = currentInvasions.map((i) => i["_id"]["$oid"]);
     for (let i = 0; i < this.invasions.length; i++) {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
