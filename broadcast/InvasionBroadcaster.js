@@ -53,10 +53,10 @@ class InvasionBroadcaster {
       let content1 = /* " ".repeat((width / 2 << 0) - (event.type.length / 2)) + */ event.type.toLowerCase();
       let content2 = event.location;
       let rewardLine = "";
-      if (event.factions.length === 1) {
-        rewardLine = `-${' '.repeat(width / 2 - event.factions[0].length / 2 - 2)}${event.factions[0]}${' '.repeat(width / 2 - event.factions[0].length / 2)}-`;
+      if (event.rewards.length === 1) {
+        rewardLine = `-${' '.repeat(width / 2 - event.rewards[0].length / 2 - 2)}${event.rewards[0]}${' '.repeat(width / 2 - event.rewards[0].length / 2)}-`;
       } else {
-        rewardLine = `-${event.factions[0]}${' '.repeat(width - event.factions[0].length - event.factions[1].length - 2)}${event.factions[1]}-`;
+        rewardLine = `-${event.rewards[0]}${' '.repeat(width - event.rewards[0].length - event.rewards[1].length - 2)}${event.rewards[1]}-`;
       }
       let progressLine = `${"O".repeat(Math.abs(width - progress - 1))} ${"0".repeat(Math.abs(progress))}`;
       // loop here maybe
