@@ -11,7 +11,6 @@ class EventManager {
       EventManager.iBroadcaster = new InvasionBroadcaster(this.client);
     this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
     this.feed.updateFeed(true); // change to false when releasing
-    this.type = type;
   }
 
   watch() {
@@ -24,7 +23,7 @@ class EventManager {
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
       console.log("Updating invasions");
-      const removed = EventManager.iBroadcaster.update(em.type);
+      const removed = EventManager.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0][0];
         for (const [channel, id] of expiredMessages) {

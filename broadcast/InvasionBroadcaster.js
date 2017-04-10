@@ -22,7 +22,7 @@ class InvasionBroadcaster {
     })
   }
 
-  update(type) {
+  update() {
     // read worldstate and update all invasion statuses
     // things that arent updated are removed from the map
     // well i mean you can just make a new map based on world state
@@ -31,7 +31,9 @@ class InvasionBroadcaster {
     // yeah wont actually update it in time because callbacks
     // but no one will ever know!!!!
     let expired = [];
-    const currentInvasions = WorldState.getWs[type]().Invasions;
+    // ok so the real idea is 1 invasion broadcaster for all platforms
+    // so concat all invasion arrays to make a "master" array
+    const currentInvasions = WorldState.getWs["pc"]().Invasions.concat(WorldState.getWs["xb1"]().Invasions, WorldState.getWs["ps4"]().Invasions);
     const currentGUIDS = currentInvasions.map((i) => i["_id"]["$oid"]);
     for (let i = 0; i < this.invasions.length; i++) {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
