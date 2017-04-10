@@ -1,6 +1,7 @@
 const { RichEmbed } = require("discord.js");
 const EventHeap = require("./EventHeap.js");
 const EventHeapObj = require("./EventHeapObj.js");
+const matchRoles = require("./RoleFinder.js").matchRoles;
 
 class MessageBroadcaster {
   constructor(bot) {
@@ -10,12 +11,13 @@ class MessageBroadcaster {
 
   broadcast(event) {
     // maybe instead of each guild just search the client.channel collection
-    // 
+    //
     const pMessages = [];
     this.client.guilds.forEach((guild) => {
+      const mentions = matchRoles(event, guild);
       const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
       if (!channel) return;
-      pMessages.push(channel.sendEmbed(new RichEmbed().setTimestamp().setFooter(event.guid).setDescription(event.toString())));
+      pMessages.push(channel.send(mentions.join(" "), {embed: new RichEmbed().setTimestamp().setFooter(event.guid).setDescription(event.toString())}));
     })
     Promise.all(pMessages).then((messages) => {
       messages = messages.map((m) => [m.channel.id, m.id]); // need chanenl to fetch and remove

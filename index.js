@@ -1,16 +1,22 @@
-const fs = require("fs");
-const { token } = require("./token")
-const { dbottoken } = require("./token")
-const tasks = require("./autotasks/Auto");
+// load libs and classes
 const Discord = require("discord.js");
-const config = require("./config");
+const fs = require("fs");
+const { token } = require("./token.js");
+const { dbottoken } = require("./token.js");
+const tasks = require("./autotasks/Auto.js");
+const config = require("./config.json");
 
+// actual client
 const bot = new Discord.Client();
 
+// some random vars
 let ready = false;
 const recent_commanders = new Set();
 const commands = new Map();
+const ignore = ["broadcast", "worldstate"]; // command subfolders to ignore
+let logChannel, errorCode = 0;
 
+// load commands
 function walk(dir) {
   dir += "/";
   fs.readdir(dir, (err, files) => {
@@ -18,6 +24,7 @@ function walk(dir) {
     files.forEach(file => {
       fs.stat(dir + file, (err, stats) => {
         if (stats && stats.isDirectory()) {
+          if (ignore.includes(file)) return;
           walk(dir + file)
         } else if (file.substr(-2) === "js") {
           let cmd = require(dir + file);
@@ -28,6 +35,7 @@ function walk(dir) {
     })
   })
 }
+console.log("=== Loading commands ===");
 walk("./commands");
 
 function command_cooldown(user_id) {
@@ -38,7 +46,7 @@ function command_cooldown(user_id) {
 }
 
 bot.on("guildCreate", (guild) => {
-  bot.channels.get("295908551535099905").send(`Just joined ${guild.name}! Now in ${bot.guilds.size} guilds!`);
+  logChannel.send(`Just joined ${guild.name}! Now in ${bot.guilds.size} guilds!`);
   let server_count = bot.guilds.size;
   superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
     .set('Authorization', dbottoken)
@@ -53,23 +61,20 @@ bot.on("guildCreate", (guild) => {
 })
 
 bot.on("guildDelete", (guild) => {
-  bot.channels.get("295908551535099905").send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
+  logChannel.send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
 })
 
 bot.on("disconnect", (event) => {
-  console.log(event);
-  if (event.code === 1000) {
-    console.log("Disconnected: code 1000");
-    process.exit();
-  }
+  console.log(`[${event.code}] ${event}`);
+  errorCode = event.code;
 })
 
 bot.once("ready", () => {
+  logChannel = bot.channels.get("295908551535099905");
+  logChannel.send(`Just connected! Disconnected earlier with code ${errorCode}`)
   bot.user.setGame(config.game);
-  tasks.rssFeed(bot);
-  tasks.worldState();
-  console.log("Loaded bot");
-  setTimeout(function() {
+  tasks.eventFeed(bot);
+  setTimeout(() => {
     ready = true;
   }, 2000); // give me 2 sec to start up :)
 });

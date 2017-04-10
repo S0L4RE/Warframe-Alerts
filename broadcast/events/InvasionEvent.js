@@ -7,9 +7,9 @@ class InvasionEvent extends RSSEvent{
     title = title.split(" - ");
     this.location = title[title.length - 1];
     title = title[0].split(" VS. ");
-    this.factions = [];
+    this.rewards = [];
     for (let idx = 0; idx < title.length; idx++) {
-      this.factions.push(title[idx]);
+      this.rewards.push(title[idx]);
     }
     this.platform_type = type; // type will be PS4, XB1, or PC
   }
@@ -18,7 +18,7 @@ class InvasionEvent extends RSSEvent{
     return `\`\`\`haskell
 inv [Invasion]
 ${this.location}
-${this.factions.join("\n")}
+${this.rewards.join("\n")}
 \`\`\``
   }
 }

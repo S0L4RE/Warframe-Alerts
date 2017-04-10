@@ -10,7 +10,7 @@ class EventManager {
     if (!EventManager.iBroadcaster)
       EventManager.iBroadcaster = new InvasionBroadcaster(this.client);
     this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
-    this.feed.updateFeed(false); // change to false when releasing
+    this.feed.updateFeed(true); // change to false when releasing
   }
 
   watch() {

@@ -1,4 +1,5 @@
 const WorldState = require("../worldstate/Worldstate.js");
+const matchRoles = require("./RoleFinder.js").matchRoles;
 WorldState.update();
 
 class InvasionBroadcaster {
@@ -10,9 +11,10 @@ class InvasionBroadcaster {
   broadcast(event) {
     const pMessages = [];
     this.client.guilds.forEach((guild) => {
+      const mentions = matchRoles(event, guild);
       const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
       if (!channel) return;
-      pMessages.push(channel.send(event.toString()));
+      pMessages.push(channel.send(mentions.join(" ") + event.toString()));
     })
     Promise.all(pMessages).then((messages) => {
       messages = messages.map((m) => [m.channel.id, m.id]);
@@ -34,7 +36,7 @@ class InvasionBroadcaster {
     for (let i = 0; i < this.invasions.length; i++) {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
       // if this invasion doesnt exist on the world state
-      if (idx < 0 || currentInvasions[idx].Completed) {
+      if (idx < 0 || (currentInvasions[idx] && currentInvasions[idx].Completed)) {
         const removable = this.invasions.splice(i, 1);
         if (currentInvasions[idx].Completed) { // delete messages if expired
           expired.push(removable);
@@ -65,8 +67,10 @@ class InvasionBroadcaster {
        */
       for (const [channel, id] of this.invasions[i][0]) {
         try {
-          this.client.channels.get(channel).fetchMessage(id).then((msg) => {
-            msg.edit(`\`\`\`haskell
+          const chan = this.client.channels.get(channel);
+          const mentions = matchRoles(event, chan.guild);
+          chan.fetchMessage(id).then((msg) => {
+            msg.edit(mentions.join(" ") + `\`\`\`haskell
 ${content1}
 ${content2}
 ${rewardLine}

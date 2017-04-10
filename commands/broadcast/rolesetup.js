@@ -3,7 +3,7 @@ const roles = require("./allowed_roles.json").roles;
 module.exports = {
   name: "rolesetup",
   desc: "set up the alert roles",
-  example: "rolesetup, rolesetup pc, rolesetup ps4",
+  example: "rolesetup pc, rolesetup ps4 xb1",
   run: (bot, message, args) => {
     let addedRoles = [];
     let filter = ["pc", "xb1", "ps4"];
