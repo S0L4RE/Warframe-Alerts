@@ -1,7 +1,8 @@
 class EventHeapObj {
-  constructor(messages = [], expiration = 0) {
+  constructor(messages = [], expiration = 0, guid) {
     this.messages = messages;
     this.expiration = expiration;
+    this.guid = guid;
   }
 
   compareTo(another) {

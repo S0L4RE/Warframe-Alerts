@@ -10,7 +10,7 @@ class EventManager {
     if (!EventManager.iBroadcaster)
       EventManager.iBroadcaster = new InvasionBroadcaster(this.client);
     this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
-    this.feed.updateFeed(true); // change to false when releasing
+    this.feed.updateFeed(false); // change to false when releasing
   }
 
   watch() {
@@ -25,9 +25,10 @@ class EventManager {
       console.log("Updating invasions");
       const removed = EventManager.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
-        const expiredMessages = removed[i][0][0];
-        for (const [channel, id] of expiredMessages) {
+        const expiredMessages = removed[i][0];
+        for (const [[channel, id], guid] of expiredMessages) {
           try {
+            this.feed.events.delete(guid);
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             })
@@ -45,6 +46,7 @@ class EventManager {
         // iterate through messages
         for (const [channel, id] of deletion.messages) {
           try {
+            this.feed.events.delete(deletion.guid);
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             })

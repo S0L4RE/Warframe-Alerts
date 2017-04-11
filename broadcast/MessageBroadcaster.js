@@ -22,7 +22,7 @@ class MessageBroadcaster {
     Promise.all(pMessages).then((messages) => {
       messages = messages.map((m) => [m.channel.id, m.id]); // need chanenl to fetch and remove
       // messages is now an array of all message ids
-      this.heap.insert(new EventHeapObj(messages, event.date + parseInt(event.dur.replace("m", "") * 60e3)));
+      this.heap.insert(new EventHeapObj(messages, event.date + parseInt(event.dur.replace("m", "") * 60e3, event.guid)));
     })
   }
 }
