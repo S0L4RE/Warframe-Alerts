@@ -1,16 +1,17 @@
-const roles = require("../../broadcast/allowed_roles.json").roles;
-const Arr2Tbl = require("../../util/arrayThings").array2dtable;
+const roles = require("./allowed_roles.json").roles;
+const arrayThings = require("../../util/arrayThings");
 
 module.exports = {
   name: "notify",
   desc: "join or leave roles",
-  example: "notify j forma, notify l kavat forma",
+  example: "notify, notify j forma, notify l kavat forma",
   run: (bot, message, args) => {
     if (args.length === 0) {
       let ret = [];
       for (let i = 0; i < roles.length; i += 5) {
         let role4 = [];
         for (let j = 0; j < 5 && i + j < roles.length; j++) {
+          // if (roles[i + j].startsWith("xb1") || roles[i + j].startsWith("ps4")) continue;
           if (message.guild.roles.find((r) => r.name.toLowerCase() === roles[i+ j].toLowerCase()))
             role4.push(roles[i + j]);
         }
@@ -20,7 +21,7 @@ module.exports = {
       if (ret.length == 0) {
         return message.reply("There are no roles that this bot can assign in the server!");
       }
-      return message.channel.send("Allowed Roles:```js\n" + Arr2Tbl(ret) + "```");
+      return message.reply("Allowed Roles:```js\n(notice that roles for other platforms just have the plaform name before them)\n" + arrayThings.array2dtable(ret) + "```");
     }
     let gRoles = message.guild.roles;
     let gMember = message.member;
@@ -40,6 +41,14 @@ module.exports = {
         console.error(e);
         message.reply(`Sorry, we hit an error`);
       })
+      /*
+      matching_roles.forEach((role) => {
+        gMember.removeRole(role)
+        .then((role) => {
+          jlRoles.push(role.name);
+        }).catch((e) => {})
+      })
+      */
     } else {
       // wait i can just do addroles.....
       // join by default
@@ -51,6 +60,14 @@ module.exports = {
         console.error(e);
         message.reply(`Sorry, we hit an error`);
       })
+      /*
+      matching_roles.forEach((role) => {
+        gMember.addRole(role)
+        .then((role) => {
+          jlRoles.push(role.name);
+        }).catch((e) => {})
+      })
+      */
     }
   }
 }
