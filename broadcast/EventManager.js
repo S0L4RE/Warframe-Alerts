@@ -41,7 +41,7 @@ class EventManager {
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
       console.log("Checking heap");
-      while (EventManager.broadcaster.heap.peek().expiration < Date.now()) {
+      while (EventManager.broadcaster.heap.peek() && EventManager.broadcaster.heap.peek().expiration < Date.now()) {
         const deletion = EventManager.broadcaster.heap.remove();
         // iterate through messages
         for (const [channel, id] of deletion.messages) {
