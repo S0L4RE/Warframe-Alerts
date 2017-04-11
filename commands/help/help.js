@@ -8,7 +8,7 @@ module.exports = {
     // commands is a map
     let help_message = [["Command", "Description", "Example"],[]];
     commands.forEach((cmd) => {
-      if (!cmd.name || cmd.ignore) return;
+      if (!cmd.name) return;
       help_message.push([cmd.name, cmd.desc, cmd.example]);
     })
     message.reply("```fix\n" + arrayThings.array2dtable(help_message) + "```").then((msg) => {
