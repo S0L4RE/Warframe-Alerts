@@ -1,5 +1,6 @@
 // load libs and classes
 const Discord = require("discord.js");
+const superagent = require("superagent");
 const fs = require("fs");
 const { token } = require("./token.js");
 const { dbottoken } = require("./token.js");
