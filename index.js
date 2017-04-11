@@ -14,7 +14,7 @@ const bot = new Discord.Client();
 let ready = false;
 const recent_commanders = new Set();
 const commands = new Map();
-const ignore = ["worldstate"]; // command subfolders to ignore
+const ignore = ["search", "worldstate"]; // command subfolders to ignore
 let logChannel, errorCode = 0;
 
 // load commands
@@ -91,7 +91,7 @@ bot.on("message", message => {
       command_cooldown(message.author.id);
       try {
         commands.get(command).run(bot, message, args, commands);
-      } catch (e) {
+      } catch(e) {
         message.reply("Something really bad happened, please notify `reimu#3856`: " + e);
       }
     } else if (command === "eval" && message.author.id === "84678516477534208") {
@@ -102,15 +102,11 @@ bot.on("message", message => {
         message.reply(ev).catch((e) => {
           message.reply("probably too long");
         });
-      } catch (e) {
+      } catch(e) {
         message.reply(e);
       }
     }
   }
-});
-
-process.on("unhandledRejection", uR => {
-  console.error(uR);
 });
 
 bot.login(token);

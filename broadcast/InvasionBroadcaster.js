@@ -9,14 +9,19 @@ class InvasionBroadcaster {
   }
 
   broadcast(event) {
-    const pMessages = [];
+    let pMessages = [];
     this.client.guilds.forEach((guild) => {
       const mentions = matchRoles(event, guild);
       const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
       if (!channel) return;
       pMessages.push(channel.send(mentions.join(" ") + event.toString()));
     })
+    // handle errors and stuff
+    pMessages = pMessages.map((p) => {
+      return p.then((msg) => msg).catch(() => "BIGERR");
+    })
     Promise.all(pMessages).then((messages) => {
+      messages = messages.filter((v) => v !== "BIGERR");
       messages = messages.map((m) => [m.channel.id, m.id]);
       this.invasions.push([messages, event]);
     })

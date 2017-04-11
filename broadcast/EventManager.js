@@ -19,7 +19,7 @@ class EventManager {
     this.timeout = setInterval(() => {
       console.log("Updated RSS Feed");
       em.feed.updateFeed()
-    }, 5 * 60e3);
+    }, 3 * 60e3);
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
       console.log("Updating invasions");
@@ -37,7 +37,7 @@ class EventManager {
           }
         }
       }
-    }, 5 * 60e3);
+    }, 3 * 60e3);
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
       console.log("Checking heap");
@@ -55,7 +55,7 @@ class EventManager {
           }
         }
       }
-    }, 5 * 60e3);
+    }, 3 * 60e3);
   }
 }
 

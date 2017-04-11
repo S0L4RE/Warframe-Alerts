@@ -1,4 +1,4 @@
-const request = require("request");
+const superagent = require("superagent");
 const fs = require("fs");
 const file = "./datamine/star_chart.json";
 let star_chart = {};

@@ -11,8 +11,9 @@ module.exports = {
       "information to your Discord Server!```")
       .addField("Changelog", `\`\`\`Changed presentation layout
 Removed commands to narrow the bot's focus
-      \`\`\``)
-      .addField("Questions?", "Contact reimu#3856")
+Increased update speed
+Color code alerts based on number of rewards\`\`\``)
+      .addField("Questions?", "Contact reimu#3856\nDirect Messages > Friends > Add Friend")
       .setFooter("* - give or take 5 minutes. This is still a work in progress, expect some changes!")
     )
   }
