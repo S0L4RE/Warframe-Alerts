@@ -3,7 +3,6 @@ const main = require("./search.js");
 
 module.exports = {
   name: "update",
-  ignore: true,
   desc: "update datamine",
   example: "update",
   run: (bot, message, args) => {
