@@ -67,6 +67,7 @@ bot.on("guildDelete", (guild) => {
 
 bot.on("disconnect", (event) => {
   console.log(`[${event.code}] ${event}`);
+  if (event.code === 1006) process.exit();
   errorCode = event.code;
 })
 
