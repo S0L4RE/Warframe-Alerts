@@ -15,17 +15,17 @@ module.exports = {
    */
   update: () => {
     superagent.get("http://content.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.error(err);
+      if (err) return console.log(error.status || error.response);
       worldState = JSON.parse(content.text);
     })
     // ps4 ws http://content.ps4.warframe.com/dynamic/worldState.php
     superagent.get("http://content.ps4.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.error(err);
+      if (err) return console.log(error.status || error.response);
       ps4WorldState = JSON.parse(content.text);
     })
     // xb1 ws http://content.xb1.warframe.com/dynamic/worldState.php
     superagent.get("http://content.xb1.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.error(err);
+      if (err) return console.log(error.status || error.response);
       xb1WorldState = JSON.parse(content.text);
     })
   }
