@@ -57,12 +57,29 @@ bot.on("guildCreate", (guild) => {
     })
     .end(error => {
       console.log(`Updated bot server count to ${bot.guilds.size}`);
-      if (error) console.error(error.status || error.response);
+      if (error) console.log(error.status || error.response);
     });
 })
 
+/*
+process.on("uncaughtException", (err) => {
+  // save current invasions and alerts to file i guess
+})
+
+*/
 bot.on("guildDelete", (guild) => {
   logChannel.send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
+  let server_count = bot.guilds.size;
+  superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
+    .set('Authorization', dbottoken)
+    .type('application/json')
+    .send({
+      server_count
+    })
+    .end(error => {
+      console.log(`Updated bot server count to ${bot.guilds.size}`);
+      if (error) console.log(error.status || error.response);
+    });
 })
 
 bot.on("disconnect", (event) => {
@@ -90,7 +107,7 @@ bot.on("message", message => {
 
     const [command, ...args] = message.content.slice(config.prefix.length).split(" ");
     if (commands.has(command)) {
-      console.log(new Date(), message.guild.id, message.author.id, message.author.username, command, args);
+      console.log(new Date(), message.guild.name, message.channel.name, message.author.username, command, args);
       command_cooldown(message.author.id);
       try {
         commands.get(command).run(bot, message, args, commands);

@@ -30,9 +30,9 @@ class RSSFeed {
 
   updateFeed(broadcast = true) {
     superagent.get(this.updateURL).type("xml").buffer().end((err, content) => {
-      if (err) return console.error(err);
+      if (err) return console.log(err);
       parseString(content.text, (err, result) => {
-        if (err) return console.error(err);
+        if (err) return console.log(err);
         const events = result.rss.channel[0].item;
         // events is an array of event information
         // for alerts its like this

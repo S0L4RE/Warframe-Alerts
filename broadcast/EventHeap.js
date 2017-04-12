@@ -22,7 +22,6 @@ class EventHeap {
   }
 
   insert(ehObj) {
-    if (!(ehObj instanceof EventHeapObj)) throw new Error("wrong type");
     this.data[this.length] = ehObj; // stick it at the end
     let curr = this.length;
     let par = ((curr - 1) / 2) >> 0;

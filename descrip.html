@@ -1,0 +1,104 @@
+<div class="box">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          About:
+        </h1>
+        This bot automatically posts messages for the game Warframe. It will handle events for the platforms <code>pc, xb1, ps4</code>.
+        It can also create and mention roles when an alert or invasion with a certain reward appears.
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="box">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Setup:
+        </h1>
+        Setup is simple. Create the channels in your server that you want messages for. The channels just have to be named a certain way:
+        <code>(platform)_wf_alerts</code>. For example, if you want pc alerts, you would create the channel <code>pc_wf_alerts</code>. If you want
+        xb1 alerts, you create the channel <code>xb1_wf_alerts</code>. You may have multiple channels with different names. If there are multiple channels
+        with the same name, the bot will only post to one of them. The bot will automatically detect if the channel exists.
+        <br><br>
+        You may also setup roles for the bot to mention. There is a set of predefined rewards that the bot will handle. You can create these roles with the
+        <code>notifysetup</code> command. For example, if you want to add roles for pc, you just have to do <code>,notifysetup pc</code> command. If you
+        want roles for multiple platforms, pass multiple arguments like this: <code>,notifysetup pc xb1</code>.
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="box">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Commands:
+        </h1>
+        [argument] = required argument<br>
+        {argument} = optional argument<br>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Description/th>
+              <th>Arguments</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>notifysetup</th>
+              <td>Adds roles that the bot will mention when related alerts appear.</td>
+              <td>[platform] {platform, platform...}</td>
+              <td>notifysetup pc, notifysetup xb1 ps4</td>
+            </tr>
+            <tr>
+              <th>cleanchannel</th>
+              <td>Removes up to 100 messages before the message with the provided id. Only works on channels related to this bot.</td>
+              <td>[id]</td>
+              <td>cleanchannel 301467132300886016</td>
+            </tr>
+            <tr>
+              <th>notify</th>
+              <td>View, join, or leave roles that are related to this bot's functions.</td>
+              <td>[j/l] [role] {role, role...}</td>
+              <td>notify j kavat, notify l kubrow nitain reactor</td>
+            </tr>
+            <tr>
+              <th>about</th>
+              <td>A basic about and changelog page.</td>
+              <td>none</td>
+              <td>about</td>
+            </tr>
+            <tr>
+              <th>help</th>
+              <td>A basic help message.</td>
+              <td>none</td>
+              <td>help</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="box">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          General Comments:
+        </h1>
+        Feel free to give me any suggestions. I have recently change the bot a lot and have updated the invitation permissions to reflect
+        said change. If there is a large update, I may change add (updated) to the bot's nickname to inform users that there has been
+        an update. Thank you for using my bot!
+      </div>
+    </div>
+  </section>
+</div>
