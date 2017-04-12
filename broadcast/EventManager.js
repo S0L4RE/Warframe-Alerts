@@ -24,7 +24,7 @@ class EventManager {
       const removed = EventManager.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0];
-        const guid = remove[i][1];
+        const guid = removed[i][1];
         em.feed.events.delete(guid);
         for (const [[channel, id]] of expiredMessages) {
           try {
