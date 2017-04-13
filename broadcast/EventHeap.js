@@ -19,6 +19,8 @@ class EventHeap {
   constructor(data = []) {
     this.data = data;
     this.length = this.data.length;
+    // so we can use compareTo after loading
+    this.data = this.data.map((data) => new EventHeapObj(data.messages, data.expiration));
     console.log(`Loaded EventHeap with ${this.data.length} events!`);
   }
 
