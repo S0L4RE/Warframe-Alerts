@@ -90,13 +90,17 @@ bot.on("disconnect", (event) => {
 
 bot.once("ready", () => {
   logChannel = bot.channels.get("295908551535099905");
-  logChannel.send(`Just connected! Disconnected earlier with code ${errorCode}`)
+  logChannel.send(`Shieetttt looks like I just restarted.`);
   bot.user.setGame(config.game);
   tasks.eventFeed(bot);
   setTimeout(() => {
     ready = true;
   }, 2000); // give me 2 sec to start up :)
-});
+  bot.on("ready", () => {
+    logChannel = bot.channels.get("295908551535099905");
+    logChannel.send(`Just connected! Disconnected earlier with code ${errorCode}`);
+  });
+})
 
 bot.on("message", message => {
   if (message.author.bot || !message.guild || !ready) return;
