@@ -4,9 +4,9 @@ const EventHeapObj = require("./EventHeapObj.js");
 const matchRoles = require("./RoleFinder.js").matchRoles;
 
 class MessageBroadcaster {
-  constructor(bot) {
+  constructor(bot, alerts = []) {
     this.client = bot;
-    this.heap = new EventHeap();
+    this.heap = new EventHeap(alerts);
   }
 
   broadcast(event) {

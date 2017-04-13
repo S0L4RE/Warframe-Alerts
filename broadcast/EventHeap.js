@@ -16,9 +16,10 @@
 const EventHeapObj = require("./EventHeapObj.js");
 
 class EventHeap {
-  constructor() {
-    this.data = [];
-    this.length = 0;
+  constructor(data = []) {
+    this.data = data;
+    this.length = this.data.length;
+    console.log(`Loaded EventHeap with ${this.data.length} events!`);
   }
 
   insert(ehObj) {

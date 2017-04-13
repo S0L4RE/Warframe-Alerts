@@ -3,9 +3,10 @@ const matchRoles = require("./RoleFinder.js").matchRoles;
 WorldState.update();
 
 class InvasionBroadcaster {
-  constructor(bot) {
+  constructor(bot, invasions = []) {
     this.client = bot;
-    this.invasions = [];
+    this.invasions = invasions;
+    console.log(`Loaded InvasionBroadcaster with ${this.invasions.length} events!`);
   }
 
   broadcast(event) {
