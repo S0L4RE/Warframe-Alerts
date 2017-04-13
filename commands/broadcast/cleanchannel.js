@@ -3,7 +3,7 @@ module.exports = {
   desc: "remove msgs before a msg",
   example: "cleanchannel 301156134457180160",
   run: (bot, message, args) => {
-    if (message.member.hasPermission("ADMINISTRATOR") && ["pc_wf_alerts", "xb1_wf_alerts", "ps4_xb1_alerts"].includes(message.channel.names)) {
+    if (message.member.hasPermission("ADMINISTRATOR") && ["pc_wf_alerts", "xb1_wf_alerts", "ps4_xb1_alerts"].includes(message.channel.name)) {
       if (args.length < 1) {
         return message.reply("Provide the id of the message you want to delete stuff before.");
       }
