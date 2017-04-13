@@ -45,7 +45,7 @@ class InvasionBroadcaster {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
       // if this invasion doesnt exist on the world state
       if (idx < 0 || currentInvasions[idx].Completed) {
-        const removable = this.invasions.splice(i, 1);
+        const [removable] = this.invasions.splice(i, 1);
         if (idx >= 0 && currentInvasions[idx].Completed) { // delete messages if expired
           expired.push(removable);
         }
