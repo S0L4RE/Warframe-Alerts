@@ -40,7 +40,7 @@ class EventManager {
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0];
         em.feed.events.delete(removed[i][1].guid);
-        for (const [[channel, id]] of expiredMessages) {
+        for (const [channel, id] of expiredMessages) {
           try {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
