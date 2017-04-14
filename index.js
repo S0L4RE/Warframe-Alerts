@@ -102,7 +102,7 @@ bot.once("ready", () => {
   tasks.eventFeed(bot);
   setTimeout(() => {
     ready = true;
-  }, 1); // give me 2 sec to start up :)
+  }, 2000); // give me 2 sec to start up :)
   bot.on("ready", () => {
     logChannel = bot.channels.get("295908551535099905");
     logChannel.send(`Just connected! Disconnected earlier with code ${errorCode}`);
