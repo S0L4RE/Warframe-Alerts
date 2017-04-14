@@ -1,3 +1,6 @@
+const { invasions, alerts } = require("./events.json");
+const fs = require("fs");
+
 const RSSFeed = require("./feed/RSSFeed.js");
 const MessageBroadcaster = require("./MessageBroadcaster.js");
 const InvasionBroadcaster = require("./InvasionBroadcaster.js");
@@ -6,34 +9,46 @@ class EventManager {
   constructor(client, type) {
     this.client = client;
     if (!EventManager.broadcaster)
-      EventManager.broadcaster = new MessageBroadcaster(this.client); // shoud be static
+      EventManager.broadcaster = new MessageBroadcaster(this.client, alerts); // shoud be static
     if (!EventManager.iBroadcaster)
-      EventManager.iBroadcaster = new InvasionBroadcaster(this.client);
+      EventManager.iBroadcaster = new InvasionBroadcaster(this.client, invasions);
     this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
+    this.type = type;
     this.feed.updateFeed(false); // change to false when releasing
+    if (!EventManager.fileUpdate) {
+      EventManager.fileUpdate = setInterval(() => {
+        const eventstuff = {
+          invasions: EventManager.iBroadcaster.invasions,
+          alerts: EventManager.broadcaster.heap.data
+        }
+        fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
+          if (err) return console.log(err);
+        })
+      }, 5 * 60e3);
+    }
   }
 
   watch() {
     const em = this;
     // 5 minutes to check the feed
     this.timeout = setInterval(() => {
-      em.feed.updateFeed()
+      em.feed.updateFeed();
     }, 3 * 60e3);
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
       const removed = EventManager.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0];
-        const guid = removed[i][1].guid;
-        em.feed.events.delete(guid);
-        console.log(expiredMessages);
-        for (const [[channel, id]] of expiredMessages) {
+        em.feed.events.delete(removed[i][1].guid);
+        for (const [channel, id] of expiredMessages) {
           try {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
+            }).catch((err) => {
+              console.error("couldn't find message id: ", id);
             })
           } catch(e) {
-            console.log(e);
+            console.error("couldn't find channel: ", channel);
           }
         }
       }
@@ -48,9 +63,11 @@ class EventManager {
           try {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
+            }).catch((err) => {
+              console.error("couldn't find message id: ", id);
             })
           } catch(e) {
-            console.log(e);
+            console.error("couldn't find channel: ", channel);
           }
         }
       }

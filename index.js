@@ -1,3 +1,10 @@
+/*
+ let x = console.error;
+ console.error = function() {
+   x.apply(console, [Date.now(), ...arguments]);
+ };
+*/
+
 // load libs and classes
 const Discord = require("discord.js");
 const superagent = require("superagent");

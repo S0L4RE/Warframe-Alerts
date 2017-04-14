@@ -3,9 +3,10 @@ const matchRoles = require("./RoleFinder.js").matchRoles;
 WorldState.update();
 
 class InvasionBroadcaster {
-  constructor(bot) {
+  constructor(bot, invasions = []) {
     this.client = bot;
-    this.invasions = [];
+    this.invasions = invasions;
+    console.log(`Loaded InvasionBroadcaster with ${this.invasions.length} events!`);
   }
 
   broadcast(event) {
@@ -44,7 +45,7 @@ class InvasionBroadcaster {
       const idx = currentGUIDS.indexOf(this.invasions[i][1].guid);
       // if this invasion doesnt exist on the world state
       if (idx < 0 || currentInvasions[idx].Completed) {
-        const removable = this.invasions.splice(i, 1);
+        const [removable] = this.invasions.splice(i, 1);
         if (idx >= 0 && currentInvasions[idx].Completed) { // delete messages if expired
           expired.push(removable);
         }
