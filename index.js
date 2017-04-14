@@ -21,7 +21,7 @@ const bot = new Discord.Client();
 let ready = false;
 const recent_commanders = new Set();
 const commands = new Map();
-const ignore = ["search", "worldstate"]; // command subfolders to ignore
+const ignore = ["search"]; // command subfolders to ignore
 let logChannel, errorCode = 0;
 
 // load commands
@@ -97,12 +97,12 @@ bot.on("disconnect", (event) => {
 
 bot.once("ready", () => {
   logChannel = bot.channels.get("295908551535099905");
-  logChannel.send(`Shieetttt looks like I just restarted.`);
+  // logChannel.send(`Shieetttt looks like I just restarted.`);
   bot.user.setGame(config.game);
   tasks.eventFeed(bot);
   setTimeout(() => {
     ready = true;
-  }, 2000); // give me 2 sec to start up :)
+  }, 1); // give me 2 sec to start up :)
   bot.on("ready", () => {
     logChannel = bot.channels.get("295908551535099905");
     logChannel.send(`Just connected! Disconnected earlier with code ${errorCode}`);

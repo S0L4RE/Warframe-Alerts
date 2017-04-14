@@ -33,7 +33,7 @@ class EventManager {
     // 5 minutes to check the feed
     this.timeout = setInterval(() => {
       em.feed.updateFeed();
-    }, 3 * 60e3);
+    }, 5 * 60e3);
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
       const removed = EventManager.iBroadcaster.update();
@@ -52,7 +52,7 @@ class EventManager {
           }
         }
       }
-    }, 3 * 60e3);
+    }, 5 * 60e3);
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
       while (EventManager.broadcaster.heap.peek() && EventManager.broadcaster.heap.peek().expiration < Date.now()) {
@@ -71,7 +71,7 @@ class EventManager {
           }
         }
       }
-    }, 3 * 60e3);
+    }, 5 * 60e3);
   }
 }
 
