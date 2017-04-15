@@ -54,18 +54,26 @@ function command_cooldown(user_id) {
 }
 
 bot.on("guildCreate", (guild) => {
-  logChannel.send(`Just joined ${guild.name}! Now in ${bot.guilds.size} guilds!`);
-  let server_count = bot.guilds.size;
-  superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
-    .set('Authorization', dbottoken)
-    .type('application/json')
-    .send({
-      server_count
-    })
-    .end(error => {
-      console.log(`Updated bot server count to ${bot.guilds.size}`);
-      if (error) console.log(error.status || error.response);
-    });
+  guild.fetchMembers((guild) => {
+    const botcount = guild.members.filter((m) => m.user.bot).size;
+    const totalcount = guild.members.size;
+    if (botcount / totalcount >= 0.9) {
+      logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount}% bots!`);
+    } else {
+      logChannel.send(`Just joined ${guild.name} owned by ${guild.owner || "unknown dude"}! Now in ${bot.guilds.size} guilds!`);
+      let server_count = bot.guilds.size;
+      superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
+        .set('Authorization', dbottoken)
+        .type('application/json')
+        .send({
+          server_count
+        })
+        .end(error => {
+          console.log(`Updated bot server count to ${bot.guilds.size}`);
+          if (error) console.log(error.status || error.response);
+        });
+    }
+  })
 })
 
 /*
