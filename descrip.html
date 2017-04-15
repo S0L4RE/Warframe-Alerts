@@ -62,6 +62,8 @@
         </h1>
         [argument] = required argument<br>
         {argument} = optional argument<br>
+        Platform is of the types <code>ps4</code>, <code>xb1</code>, or <code>pc</code>. By default if no platform is provided pc will be implied probably. <br>
+        Role is the name of the role.
         <table class="table">
           <thead>
             <tr>
@@ -79,6 +81,12 @@
               <td>notifysetup pc, notifysetup xb1 ps4</td>
             </tr>
             <tr>
+              <th>notify</th>
+              <td>View, join, or leave roles that are related to this bot's functions.</td>
+              <td>[j/l] [role] {role, role...}</td>
+              <td>notify j kavat, notify l kubrow nitain reactor</td>
+            </tr>
+            <tr>
               <th>baro</th>
               <td>Gives some information about baro kiteer's status.</td>
               <td>{platform}</td>
@@ -91,10 +99,10 @@
               <td>sorties, sorties ps4, sorties xb1</td>
             </tr>
             <tr>
-              <th>notify</th>
-              <td>View, join, or leave roles that are related to this bot's functions.</td>
-              <td>[j/l] [role] {role, role...}</td>
-              <td>notify j kavat, notify l kubrow nitain reactor</td>
+              <th>ws</th>
+              <td>Highly versatile worldstate query command. Please use to figure out how to use it :)</td>
+              <td>none</td>
+              <td>ws</td>
             </tr>
             <tr>
               <th>about</th>
