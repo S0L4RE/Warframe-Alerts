@@ -59,6 +59,7 @@ bot.on("guildCreate", (guild) => {
     const totalcount = guild.members.size;
     if (botcount / totalcount >= 0.9) {
       logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount}% bots!`);
+      guild.leave(); // actually leave
     } else {
       logChannel.send(`Just joined ${guild.name} owned by ${guild.owner || "unknown dude"}! Now in ${bot.guilds.size} guilds!`);
       let server_count = bot.guilds.size;
@@ -105,7 +106,7 @@ bot.on("disconnect", (event) => {
 
 bot.once("ready", () => {
   logChannel = bot.channels.get("295908551535099905");
-  // logChannel.send(`Shieetttt looks like I just restarted.`);
+  logChannel.send(`Shieetttt looks like I just restarted.`);
   bot.user.setGame(config.game);
   tasks.eventFeed(bot);
   setTimeout(() => {
