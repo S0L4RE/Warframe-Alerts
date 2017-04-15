@@ -1,9 +1,14 @@
-/*
- let x = console.error;
- console.error = function() {
-   x.apply(console, [Date.now(), ...arguments]);
- };
-*/
+(function() {
+  let x = console.log;
+  console.log = function() {
+   x.apply(console, [new Date().toUTCString(), ...arguments]);
+  };
+
+  x = console.error;
+  console.error = function() {
+   x.apply(console, [new Date().toUTCString(), ...arguments]);
+  };
+})()
 
 // load libs and classes
 const Discord = require("discord.js");
@@ -56,9 +61,9 @@ function command_cooldown(user_id) {
 bot.on("guildCreate", (guild) => {
   const botcount = guild.members.filter((m) => m.user.bot).size;
   const totalcount = guild.members.size;
-  console.log(`${guild.name} is ${botcount / totalcount}% bots.`);
+  console.log(`${guild.name} is ${botcount / totalcount * 100 << 0}% bots.`);
   if (botcount / totalcount >= 0.9) {
-    logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount}% bots!`);
+    logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount * 100 << 0}% bots!`);
     guild.leave(); // actually leave
   } else {
     logChannel.send(`Just joined ${guild.name} owned by ${guild.owner || "unknown dude"}! Now in ${bot.guilds.size} guilds!`);
@@ -76,12 +81,14 @@ bot.on("guildCreate", (guild) => {
   }
 })
 
-/*
-process.on("uncaughtException", (err) => {
-  // save current invasions and alerts to file i guess
-})
+let logJunk = false;
 
-*/
+bot.on("unhandledRejection", err => {
+  if (logJunk) {
+    console.error(err);
+  }
+});
+
 bot.on("guildDelete", (guild) => {
   logChannel.send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
   let server_count = bot.guilds.size;
@@ -105,11 +112,16 @@ bot.on("disconnect", (event) => {
 
 bot.once("ready", () => {
   logChannel = bot.channels.get("295908551535099905");
-  logChannel.send(`Shieetttt looks like I just restarted.`);
+  try {
+    logChannel.send(`Shieetttt looks like I just restarted.`);
+  } catch(e) {
+    console.log("really bad junk happened");
+  }
   bot.user.setGame(config.game);
   tasks.eventFeed(bot);
   setTimeout(() => {
     ready = true;
+    console.log("Ready");
   }, 2000); // give me 2 sec to start up :)
   bot.on("ready", () => {
     logChannel = bot.channels.get("295908551535099905");
