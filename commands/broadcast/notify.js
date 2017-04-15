@@ -7,15 +7,18 @@ module.exports = {
   example: "notify j forma, notify l kavat forma",
   run: (bot, message, args) => {
     if (args.length === 0) {
+      const platforms = ["xb1", "ps4", ""];
       let ret = [];
-      for (let i = 0; i < roles.length; i += 5) {
-        let role4 = [];
-        for (let j = 0; j < 5 && i + j < roles.length; j++) {
-          if (message.guild.roles.find((r) => r.name.toLowerCase() === roles[i+ j].toLowerCase()))
-            role4.push(roles[i + j]);
+      for (platform of platforms) {
+        for (let i = 0; i < roles.length; i += 5) {
+          let role4 = [];
+          for (let j = 0; j < 5 && i + j < roles.length; j++) {
+              if (message.guild.roles.find((r) => r.name.toLowerCase() === platform + roles[i+ j].toLowerCase()))
+                role4.push(platform + roles[i + j]);
+          }
+          if (role4.length > 0)
+            ret.push(role4);
         }
-        if (role4.length > 0)
-          ret.push(role4);
       }
       if (ret.length == 0) {
         return message.reply("There are no roles that this bot can assign in the server!");
