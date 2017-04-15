@@ -1,6 +1,7 @@
 const ws = require("../../worldstate/Worldstate.js");
 
 function getKeys(worldstate, spacing, string, char1, initchar) {
+  if (!worldstate) return;
   let keys = Object.keys(worldstate);
   for (let j = 0; j < keys.length; j++) {
     if (j === keys.length - 1) char1 = "└";
@@ -33,10 +34,16 @@ module.exports = {
     } catch(e) {
       return message.reply("Sorry, that's not a valid platform. Try `pc` `xb1` or `ps4`.");
     }
+    try {
+      getKeys(state, 0, "  ", "├")
+    } catch(e) {
+      console.log(e);
+    }
     message.reply("```haskell\n" +
     "This will let you browse through the worldstate. Just say a key and number \
-and it will be zoomed into if it can be displayed. You have 20 seconds to respond. \n\
-Examples: \nDailyDeals 1 \nLibraryInfo LastCompletedTargetType \n\n" +
+and it will be zoomed into if it can be displayed. You have 20 seconds to respond. \
+Last updated " + ((Date.now() - state.Time * 1000) / 3600 << 0) + " minutes ago.\n\n\
+Examples (CASE SENSITIVE): \nDailyDeals 1 \nLibraryInfo LastCompletedTargetType \n\n" +
     "Worldstate\n" + getKeys(state, 0, "  ", "├") + "```").then((msg) => {
       message.channel.awaitMessages((m) => m.author.id === message.author.id, {
         max: 1,
@@ -49,8 +56,9 @@ Examples: \nDailyDeals 1 \nLibraryInfo LastCompletedTargetType \n\n" +
           if (parseInt(thing)) thing = parseInt(thing) - 1;
           state2 = state2[thing];
         }
-        msg.edit("```json\n" + JSON.stringify(state2, null, 2) + "```").catch((err) => {
-          msg.edit("Sorry that's a little too long");
+        const content = "```json\n" + JSON.stringify(state2, null, 2) + "```";
+        msg.edit(content).catch((err) => {
+          msg.edit("Sorry that's a little too long. Here are the first 1500 characters.\n" + content.substr(0, 1500) + "```");
         });
       }).catch((err) => {
         message.channel.send("Something went wrong! " + err);
