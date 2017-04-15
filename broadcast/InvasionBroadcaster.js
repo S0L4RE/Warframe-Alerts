@@ -85,9 +85,11 @@ ${rewardLine}
 ${progressLine}
 \`\`\``
             );
+          }).catch((err) => {
+            console.error("(ud) couldn't find message id: ", channel, id);
           })
         } catch(e) {
-          console.log(e);
+          console.error("(ud) couldn't find channel: ", channel);
         }
       }
     }

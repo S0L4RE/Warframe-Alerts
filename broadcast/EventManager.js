@@ -45,7 +45,7 @@ class EventManager {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             }).catch((err) => {
-              console.error("couldn't find message id: ", id);
+              console.error("couldn't find message id: ", channel, id);
             })
           } catch(e) {
             console.error("couldn't find channel: ", channel);
@@ -64,7 +64,7 @@ class EventManager {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             }).catch((err) => {
-              console.error("couldn't find message id: ", id);
+              console.error("couldn't find message id: ", channel, id);
             })
           } catch(e) {
             console.error("couldn't find channel: ", channel);
