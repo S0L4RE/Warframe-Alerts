@@ -66,7 +66,7 @@ module.exports = {
 
     const eachline = logo.split("\n"); //
     const name = baro.Character, location = baro.Node, items = baro.Manifest;
-    let deets_beginning = `\`\`\`haskell\n${name} ${comego} ${location} in ${timeLeftHours}h ${timeLeftMinutes}m ${timeLeftSeconds}s\n`; // nice spacing!!
+    let deets_beginning = `\`\`\`haskell\n${platform} | ${name} ${comego} ${location} in ${timeLeftHours}h ${timeLeftMinutes}m ${timeLeftSeconds}s\n`; // nice spacing!!
     let item_price_array = [];
     if (items && items.length > 0) {
       for (let idx = 0; idx < items.length; idx++) {

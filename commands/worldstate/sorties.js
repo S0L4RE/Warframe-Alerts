@@ -34,7 +34,7 @@ module.exports = {
     // let timeLeftSeconds = timeLeftTotalSeconds - (timeLeftHours * 3600) - (timeLeftMinutes * 60);
     const sortieBoss = removeUnderscorePrefixes(sorties.Boss);
     const missions = sorties.Variants;
-    let deets = `\`\`\`haskell\n${platform} = boss: ${sortieBoss}, ${timeLeftHours}h ${timeLeftMinutes}m remaining\n`; // nice spacing!!
+    let deets = `\`\`\`haskell\n${platform} | boss: ${sortieBoss}, ${timeLeftHours}h ${timeLeftMinutes}m ${timeLeftSeconds}s remaining\n`; // nice spacing!!
     // 50-60, 65-80, 80-100 what kind of shitty pattern is this?
     const levels = ["50-60", "65-80", "80-100"];
     for (let idx = 0; idx < missions.length; idx++) {
