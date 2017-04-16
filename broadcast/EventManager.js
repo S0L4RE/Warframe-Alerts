@@ -15,7 +15,7 @@ class EventManager {
       "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
       "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
     }
-    this.update(false);
+    // this.update(false);
   }
 
   update(br) {
@@ -30,28 +30,14 @@ class EventManager {
       invasions: this.iBroadcaster.invasions,
       alerts: this.broadcaster.heap.data
     }
-    console.log("wrote stuff to file.", eventstuff.invasions.length, eventstuff.alerts.length);
+    console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
     fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
       if (err) return console.log(err);
     })
   }
 
-  watch() {
-    const em = this;
-    // 6 minutes to check the feed
-    this.timeout = setInterval(() => {
-      this.update(true).then((shouldIUpdate) => {
-        // if at least 1 true update
-        Promise.all(shouldIUpdate).then((results) => {
-          if (results.some((a) => a)) {
-            this.save();
-          }
-        })
-      });
-    }, 6 * 60e3);
-
-    // 8 minutes to update the invasion statuses
-    this.invasionTimeout = setInterval(() => {
+  checkInvasions() {
+    return new Promise((resolve) => {
       this.iBroadcaster.update().then((removed) => {
         for (let i = 0; i < removed.length; i++) {
           const expiredMessages = removed[i][0];
@@ -68,12 +54,13 @@ class EventManager {
             }
           }
         }
-        if (removed.length > 0) this.save();
+        resolve(removed.length > 0);
       })
-    }, 8 * 60e3);
+    })
+  }
 
-    // 7 minutes to clean the alert heap
-    this.cleanTimeout = setInterval(() => {
+  checkAlerts() {
+    return new Promise((resolve) => {
       let removed = false;
       while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
         const deletion = this.broadcaster.heap.remove();
@@ -92,8 +79,29 @@ class EventManager {
           }
         }
       }
-      if (removed) this.save();
-    }, 7 * 60e3);
+      resolve(removed);
+    })
+  }
+
+  checkFeed() {
+    return new Promise((resolve) => {
+      this.update(true).then((shouldIUpdate) => {
+        // if at least 1 true update
+        Promise.all(shouldIUpdate).then((results) => {
+          resolve(results.some((a) => a));
+        })
+      })
+    })
+  }
+
+  watch() {
+    this.timeout = setInterval(() => {
+      Promise.all([this.checkFeed(), this.checkAlerts(), this.checkInvasions()]).then((shouldIUpdates) => {
+        if (shouldIUpdates.some((a) => a)) { // if at least 1 true
+          this.save();
+        }
+      })
+    }, 0.5 * 60e3);
   }
 }
 

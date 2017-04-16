@@ -84,11 +84,11 @@ class InvasionBroadcaster {
               const mentions = matchRoles(event, chan.guild);
               chan.fetchMessage(id).then((msg) => {
                 msg.edit(mentions.join(" ") + `\`\`\`haskell
-    ${content1}
-    ${content2}
-    ${rewardLine}
-    ${progressLine}
-    \`\`\``
+${content1}
+${content2}
+${rewardLine}
+${progressLine}
+\`\`\``
                 );
               }).catch((err) => {
                 console.error("(ud) couldn't find message id: ", channel, id);
