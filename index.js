@@ -26,7 +26,7 @@ const bot = new Discord.Client();
 let ready = false;
 const recent_commanders = new Set();
 const commands = new Map();
-const ignore = ["search"]; // command subfolders to ignore
+const ignore = []; // command subfolders to ignore
 let logChannel, errorCode = 0;
 
 // load commands

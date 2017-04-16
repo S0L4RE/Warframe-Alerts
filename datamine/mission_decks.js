@@ -1,19 +1,20 @@
-const request = require("request");
+const superagent = require("superagent");
 const fs = require("fs");
 const file = "./datamine/mission_decks.json";
 
-if (fs.existsSync(file))
-  fs.createReadStream(file).pipe(fs.createWriteStream(file + ".bak"));
+module.exports = {
+  update: () => {
+    return new Promise((resolve) => {
+      if (fs.existsSync(file))
+        fs.createReadStream(file).pipe(fs.createWriteStream(file + ".bak"));
 
-request({
-  uri: "https://raw.githubusercontent.com/VoiDGlitch/WarframeData/master/JSON/MissionDecks.json",
-}, function(error, response, body) {
-  if (error) {
-    console.log("Err: " + error);
-    process.exit(0);
+      superagent.get("https://raw.githubusercontent.com/VoiDGlitch/WarframeData/master/JSON/MissionDecks.json").end((err, content) => {
+        if (err) return console.log(error.status || error.response);
+        fs.writeFile(file, JSON.stringify(JSON.parse(content.text)), (err) => {
+          if (err) resolve([file, false]);
+          else resolve([file, true]);
+        })
+      })
+    })
   }
-  fs.writeFile(file, JSON.stringify(JSON.parse(body), null, 2), (err) => {
-		if (err) console.log("error");
-		else console.log("good");
-	});
-});
+}
