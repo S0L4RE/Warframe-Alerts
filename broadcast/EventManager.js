@@ -38,7 +38,7 @@ class EventManager {
 
   watch() {
     const em = this;
-    // 5 minutes to check the feed
+    // 6 minutes to check the feed
     this.timeout = setInterval(() => {
       this.update(true).then((shouldIUpdate) => {
         // if at least 1 true update
@@ -48,30 +48,31 @@ class EventManager {
           }
         })
       });
-    }, 5 * 60e3);
+    }, 6 * 60e3);
 
-    // 5 minutes to update the invasion statuses
+    // 8 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
-      const removed = this.iBroadcaster.update();
-      for (let i = 0; i < removed.length; i++) {
-        const expiredMessages = removed[i][0];
-        Object.values(this.feeds).forEach((feed) => feed.events.delete(removed[i][1].guid));
-        for (const [channel, id] of expiredMessages) {
-          try {
-            this.client.channels.get(channel).fetchMessage(id).then((msg) => {
-              msg.delete();
-            }).catch((err) => {
-              console.error("couldn't find message id: ", channel, id);
-            })
-          } catch(e) {
-            console.error("couldn't find channel: ", channel);
+      this.iBroadcaster.update().then((removed) => {
+        for (let i = 0; i < removed.length; i++) {
+          const expiredMessages = removed[i][0];
+          Object.values(this.feeds).forEach((feed) => feed.events.delete(removed[i][1].guid));
+          for (const [channel, id] of expiredMessages) {
+            try {
+              this.client.channels.get(channel).fetchMessage(id).then((msg) => {
+                msg.delete();
+              }).catch((err) => {
+                console.error("couldn't find message id: ", channel, id);
+              })
+            } catch(e) {
+              console.error("couldn't find channel: ", channel);
+            }
           }
         }
-      }
-      if (removed.length > 0) this.save();
-    }, 15 * 60e3);
+        if (removed.length > 0) this.save();
+      })
+    }, 8 * 60e3);
 
-    // 5 minutes to clean the alert heap
+    // 7 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
       let removed = false;
       while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
@@ -92,7 +93,7 @@ class EventManager {
         }
       }
       if (removed) this.save();
-    }, 10 * 60e3);
+    }, 7 * 60e3);
   }
 }
 
