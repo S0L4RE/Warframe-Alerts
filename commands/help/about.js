@@ -9,10 +9,10 @@ module.exports = {
       .setTitle("Homepage")
       .addField("About", "```A bot that will provide realtime* alert/invasion\n" +
       "information to your Discord Server!```")
-      .addField("Changelog", `\`\`\`Re-add worldstate commands
+      .addField("Changelog", `\`\`\`Re-add search commands
 Increase update timer to 5 minutes.\`\`\``)
       .addField("Questions?", "Contact reimu#3856\nDirect Messages > Friends > Add Friend")
-      .setFooter("* - give or take 5 minutes. This is still a work in progress, expect some changes!")
+      .setFooter("* - give or take 5-10 minutes. This is still a work in progress, expect some changes!")
     )
   }
 }
