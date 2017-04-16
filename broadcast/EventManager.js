@@ -78,7 +78,7 @@ class EventManager {
         const deletion = this.broadcaster.heap.remove();
         removed = true;
         // iterate through messages
-        em.feed.events.delete(deletion.guid);
+        Object.values(this.feeds).forEach((feed) => feed.events.delete(deletion.guid));
         for (const [channel, id] of deletion.messages) {
           try {
             em.client.channels.get(channel).fetchMessage(id).then((msg) => {
