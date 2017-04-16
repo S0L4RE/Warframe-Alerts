@@ -42,7 +42,7 @@ module.exports = {
     message.reply("```haskell\n" +
     "This will let you browse through the worldstate. Just say a key and number \
 and it will be zoomed into if it can be displayed. You have 20 seconds to respond. \
-Last updated " + ((Date.now() - state.Time * 1000) / 3600 << 0) + " minutes ago.\n\n\
+Last updated " + ((Date.now() - state.Time * 1000) / 60000 << 0) + " minutes ago.\n\n\
 Examples (CASE SENSITIVE): \nDailyDeals 1 \nLibraryInfo LastCompletedTargetType \n\n" +
     "Worldstate\n" + getKeys(state, 0, "  ", "├") + "```").then((msg) => {
       message.channel.awaitMessages((m) => m.author.id === message.author.id, {
