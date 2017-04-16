@@ -62,7 +62,7 @@ bot.on("guildCreate", (guild) => {
   const botcount = guild.members.filter((m) => m.user.bot).size;
   const totalcount = guild.members.size;
   console.log(`${guild.name} is ${botcount / totalcount * 100 << 0}% bots.`);
-  if (botcount / totalcount >= 0.9) {
+  if (botcount / totalcount >= 0.8) {
     logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount * 100 << 0}% bots!`);
     guild.leave(); // actually leave
   } else {
