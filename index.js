@@ -4,9 +4,9 @@
    x.apply(console, [new Date().toUTCString(), ...arguments]);
   };
 
-  x = console.error;
+  let y = console.error;
   console.error = function() {
-   x.apply(console, [new Date().toUTCString(), ...arguments]);
+   y.apply(console, [new Date().toUTCString(), ...arguments]);
   };
 })()
 
