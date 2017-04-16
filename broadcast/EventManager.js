@@ -69,7 +69,7 @@ class EventManager {
         }
       }
       if (removed.length > 0) this.save();
-    }, 5 * 60e3);
+    }, 15 * 60e3);
 
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
@@ -92,7 +92,7 @@ class EventManager {
         }
       }
       if (removed) this.save();
-    }, 5 * 60e3);
+    }, 10 * 60e3);
   }
 }
 
