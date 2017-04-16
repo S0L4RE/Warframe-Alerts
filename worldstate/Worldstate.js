@@ -44,19 +44,33 @@ module.exports = {
    * update the WorldState information from the WorldState
    */
   update: () => {
-    superagent.get("http://content.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.log(error.status || error.response);
-      worldState = enhanceWS(JSON.parse(content.text));
-    })
-    // ps4 ws http://content.ps4.warframe.com/dynamic/worldState.php
-    superagent.get("http://content.ps4.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.log(error.status || error.response);
-      ps4WorldState = enhanceWS(JSON.parse(content.text));
-    })
-    // xb1 ws http://content.xb1.warframe.com/dynamic/worldState.php
-    superagent.get("http://content.xb1.warframe.com/dynamic/worldState.php").end((err, content) => {
-      if (err) return console.log(error.status || error.response);
-      xb1WorldState = enhanceWS(JSON.parse(content.text));
+    return new Promise((resolve) => {
+      let a = new Promise((resolve) => {
+        superagent.get("http://content.warframe.com/dynamic/worldState.php").end((err, content) => {
+          if (err) return console.log(error.status || error.response);
+          worldState = enhanceWS(JSON.parse(content.text));
+          resolve("Done PC");
+        })
+      })
+      // ps4 ws http://content.ps4.warframe.com/dynamic/worldState.php
+      let b = new Promise((resolve) => {
+        superagent.get("http://content.ps4.warframe.com/dynamic/worldState.php").end((err, content) => {
+          if (err) return console.log(error.status || error.response);
+          ps4WorldState = enhanceWS(JSON.parse(content.text));
+          resolve("Done PS4");
+        })
+      })
+      // xb1 ws http://content.xb1.warframe.com/dynamic/worldState.php
+      let c = new Promise((resolve) => {
+        superagent.get("http://content.xb1.warframe.com/dynamic/worldState.php").end((err, content) => {
+          if (err) return console.log(error.status || error.response);
+          xb1WorldState = enhanceWS(JSON.parse(content.text));
+          resolve("Done XB1");
+        })
+      })
+      Promise.all([a, b, c]).then(() => {
+        resolve("Done");
+      })
     })
   }
 }
