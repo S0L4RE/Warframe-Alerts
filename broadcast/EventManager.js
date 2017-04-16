@@ -6,37 +6,53 @@ const MessageBroadcaster = require("./MessageBroadcaster.js");
 const InvasionBroadcaster = require("./InvasionBroadcaster.js");
 
 class EventManager {
-  constructor(client, type) {
+  constructor(client) {
     this.client = client;
-    if (!EventManager.broadcaster)
-      EventManager.broadcaster = new MessageBroadcaster(this.client, alerts); // shoud be static
-    if (!EventManager.iBroadcaster)
-      EventManager.iBroadcaster = new InvasionBroadcaster(this.client, invasions);
-    this.feed = new RSSFeed(type, EventManager.broadcaster, EventManager.iBroadcaster);
-    this.type = type;
-    this.feed.updateFeed(false); // change to false when releasing
-    if (!EventManager.fileUpdate) {
-      EventManager.fileUpdate = setInterval(() => {
-        const eventstuff = {
-          invasions: EventManager.iBroadcaster.invasions,
-          alerts: EventManager.broadcaster.heap.data
-        }
-        fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
-          if (err) return console.log(err);
-        })
-      }, 5 * 60e3);
+    this.broadcaster = new MessageBroadcaster(this.client, alerts, this); // shoud be static
+    this.iBroadcaster = new InvasionBroadcaster(this.client, invasions, this);
+    this.feeds =  {
+      "pc": new RSSFeed("pc", this.broadcaster, this.iBroadcaster),
+      "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
+      "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
     }
+    this.update(false);
+  }
+
+  update(br) {
+    // an array of promises which resolves to
+    //   true: if feed has added something
+    //   false: if feed hasnt added something
+    return Promise.resolve(Object.values(this.feeds).map((feed) => feed.updateFeed(br)));
+  }
+
+  save() {
+    const eventstuff = {
+      invasions: this.iBroadcaster.invasions,
+      alerts: this.broadcaster.heap.data
+    }
+    console.log("wrote stuff to file.", eventstuff.invasions.length, eventstuff.alerts.length);
+    fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
+      if (err) return console.log(err);
+    })
   }
 
   watch() {
     const em = this;
     // 5 minutes to check the feed
     this.timeout = setInterval(() => {
-      em.feed.updateFeed();
+      em.update(true).then((shouldIUpdate) => {
+        // if at least 1 true update
+        Promise.all(shouldIUpdate).then((results) => {
+          if (results.some((a) => a)) {
+            this.save();
+          }
+        })
+      });
     }, 5 * 60e3);
+
     // 5 minutes to update the invasion statuses
     this.invasionTimeout = setInterval(() => {
-      const removed = EventManager.iBroadcaster.update();
+      const removed = this.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0];
         em.feed.events.delete(removed[i][1].guid);
@@ -52,11 +68,15 @@ class EventManager {
           }
         }
       }
+      if (removed.length > 0) this.save();
     }, 5 * 60e3);
+
     // 5 minutes to clean the alert heap
     this.cleanTimeout = setInterval(() => {
-      while (EventManager.broadcaster.heap.peek() && EventManager.broadcaster.heap.peek().expiration < Date.now()) {
-        const deletion = EventManager.broadcaster.heap.remove();
+      let removed = false;
+      while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
+        const deletion = this.broadcaster.heap.remove();
+        removed = true;
         // iterate through messages
         em.feed.events.delete(deletion.guid);
         for (const [channel, id] of deletion.messages) {
@@ -71,6 +91,7 @@ class EventManager {
           }
         }
       }
+      if (removed) this.save();
     }, 5 * 60e3);
   }
 }

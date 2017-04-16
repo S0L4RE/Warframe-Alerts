@@ -3,28 +3,33 @@ const matchRoles = require("./RoleFinder.js").matchRoles;
 WorldState.update();
 
 class InvasionBroadcaster {
-  constructor(bot, invasions = []) {
+  constructor(bot, invasions = [], manager) {
     this.client = bot;
     this.invasions = invasions;
+    this.manager = manager;
     console.log(`Loaded InvasionBroadcaster with ${this.invasions.length} events!`);
   }
 
   broadcast(event) {
-    let pMessages = [];
-    this.client.guilds.forEach((guild) => {
-      const mentions = matchRoles(event, guild);
-      const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
-      if (!channel) return;
-      pMessages.push(channel.send(mentions.join(" ") + event.toString()));
-    })
-    // handle errors and stuff
-    pMessages = pMessages.map((p) => {
-      return p.then((msg) => msg).catch(() => "BIGERR");
-    })
-    Promise.all(pMessages).then((messages) => {
-      messages = messages.filter((v) => v !== "BIGERR");
-      messages = messages.map((m) => [m.channel.id, m.id]);
-      this.invasions.push([messages, event]);
+    return new Promise((resolve) => {
+      let pMessages = [];
+      this.client.guilds.forEach((guild) => {
+        const mentions = matchRoles(event, guild);
+        const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
+        if (!channel) return;
+        pMessages.push(channel.send(mentions.join(" ") + event.toString()));
+      })
+      // handle errors and stuff
+      pMessages = pMessages.map((p) => {
+        return p.then((msg) => msg).catch(() => "BIGERR");
+      })
+      const ib = this;
+      Promise.all(pMessages).then((messages) => {
+        messages = messages.filter((v) => v !== "BIGERR");
+        messages = messages.map((m) => [m.channel.id, m.id]);
+        this.invasions.push([messages, event]);
+        resolve("Finished invasion broadcast");
+      })
     })
   }
 
