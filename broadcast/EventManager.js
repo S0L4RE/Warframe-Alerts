@@ -15,7 +15,7 @@ class EventManager {
       "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
       "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
     }
-    // this.update(false);
+    this.update(false);
   }
 
   update(br) {
@@ -101,7 +101,7 @@ class EventManager {
           this.save();
         }
       })
-    }, 0.5 * 60e3);
+    }, 5 * 60e3);
   }
 }
 
