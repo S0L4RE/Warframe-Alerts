@@ -40,7 +40,7 @@ class EventManager {
     const em = this;
     // 5 minutes to check the feed
     this.timeout = setInterval(() => {
-      em.update(true).then((shouldIUpdate) => {
+      this.update(true).then((shouldIUpdate) => {
         // if at least 1 true update
         Promise.all(shouldIUpdate).then((results) => {
           if (results.some((a) => a)) {
@@ -55,10 +55,10 @@ class EventManager {
       const removed = this.iBroadcaster.update();
       for (let i = 0; i < removed.length; i++) {
         const expiredMessages = removed[i][0];
-        em.feed.events.delete(removed[i][1].guid);
+        Object.values(this.feeds).forEach((feed) => feed.events.delete(removed[i][1].guid));
         for (const [channel, id] of expiredMessages) {
           try {
-            em.client.channels.get(channel).fetchMessage(id).then((msg) => {
+            this.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             }).catch((err) => {
               console.error("couldn't find message id: ", channel, id);
@@ -81,7 +81,7 @@ class EventManager {
         Object.values(this.feeds).forEach((feed) => feed.events.delete(deletion.guid));
         for (const [channel, id] of deletion.messages) {
           try {
-            em.client.channels.get(channel).fetchMessage(id).then((msg) => {
+            this.client.channels.get(channel).fetchMessage(id).then((msg) => {
               msg.delete();
             }).catch((err) => {
               console.error("couldn't find message id: ", channel, id);
