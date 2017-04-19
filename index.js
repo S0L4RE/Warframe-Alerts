@@ -69,17 +69,19 @@ It had ${botcount / totalcount * 100 << 0}% bots!`);
   } else {
     guild.fetchInvites().then((invites) => {
       logChannel.send(["```",
-`Joined: ${guild.name} (${guild.id})\tInvite: ${invites.first().code || "none"}`,
-`Owner: ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
-`Size: ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
-`Now in ${bot.guilds.size} guilds!`,
+`Joined: ${guild.name} (${guild.id})`
+`Invite: ${invites.first().code || "none"}`,
+`Owner:  ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
+`Size:   ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
+`Now in  ${bot.guilds.size} guilds!`,
 "```"]);
     }).catch((err) => {
       logChannel.send(["```",
-`Joined: ${guild.name} (${guild.id})\tInvite: "no perms"`,
-`Owner: ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
-`Size: ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
-`Now in ${bot.guilds.size} guilds!`,
+`Joined: ${guild.name} (${guild.id})`,
+`Invite: "no perms"`,
+`Owner:  ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
+`Size:   ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
+`Now in  ${bot.guilds.size} guilds!`,
 "```"]);
     })
     let server_count = bot.guilds.size;
