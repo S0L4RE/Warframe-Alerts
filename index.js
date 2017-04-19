@@ -63,10 +63,18 @@ bot.on("guildCreate", (guild) => {
   const totalcount = guild.members.size;
   console.log(`${guild.name} is ${botcount / totalcount * 100 << 0}% bots.`);
   if (botcount / totalcount >= 0.8) {
-    logChannel.send(`Just avoided ${guild.name} owned by ${guild.owner || "unknown dude"}! It had ${botcount / totalcount * 100 << 0}% bots!`);
+    logChannel.send(`Just avoided \`${guild.name}(${guild.id})\` owned by ${guild.owner} \`${guild.owner.user.username}#${guild.owner.user.discriminator}\`!
+It had ${botcount / totalcount * 100 << 0}% bots!`);
     guild.leave(); // actually leave
   } else {
-    logChannel.send(`Just joined ${guild.name} owned by ${guild.owner || "unknown dude"}! Now in ${bot.guilds.size} guilds!`);
+    guild.fetchInvites().then((invites) => {
+      logChannel.send(["```",
+`Joined: ${guild.name} (${guild.id})\tInvite: ${invites.first().code || "none"}`,
+`Owner: ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
+`Size: ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
+`Now in ${bot.guilds.size} guilds!`,
+"```"]);
+    });
     let server_count = bot.guilds.size;
     superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
       .set('Authorization', dbottoken)
@@ -90,7 +98,7 @@ bot.on("unhandledRejection", err => {
 });
 
 bot.on("guildDelete", (guild) => {
-  logChannel.send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
+  logChannel.send(`Just left \`${guild.name}\`! Now in ${bot.guilds.size} guilds!`);
   let server_count = bot.guilds.size;
   superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
     .set('Authorization', dbottoken)
@@ -148,11 +156,11 @@ bot.on("message", message => {
         let code = args.join(" ");
         let ev = eval(code);
         if (typeof ev !== "string") ev = require("util").inspect(ev);
-        message.reply(ev).catch((e) => {
-          message.reply("probably too long");
+        message.reply("```" + ev + "```").catch((e) => {
+          message.reply("```probably too long " + ev.length + ") ```");
         });
       } catch(e) {
-        message.reply(e);
+        message.reply("```" + e + "```");
       }
     }
   }

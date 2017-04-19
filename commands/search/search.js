@@ -11,7 +11,7 @@ let jsons = new Map();
 function keep_await(info, message1, message2) {
 	message1.channel.awaitMessages(response => response.author === message2.author, {
 		max: 1,
-		time: 10000,
+		time: 20000,
  		errors: ['time'] // comma here?
  	})
 	.then((collected) => {
@@ -114,7 +114,7 @@ module.exports = {
 			if (ret.length === 0) return msg.edit(`Sorry no entries found in \`${f[0]}\` with the term \`${value}\``)
       msg.edit(`\`${ret.length}\` entrie(s) found in \`${f[0]}\` with the term \`${value}\`.\n` +
       `Give a \`number\` to see the entry. Use with \`--nonames\` to show without names or \`--nolocs\` to show ` +
-			`without mission locations. \nWill cancel in 10 seconds or on invalid entry` +
+			`without mission locations. \nWill cancel in 20 seconds or on invalid entry` +
       `\`\`\`haskell\n${JSON.stringify(ret.map((entry, idx) => {
 				let x = entry.name.split("/");
 				return `${idx}:  ${x[x.length - 1]}`; // only give the last thing after the slashes
