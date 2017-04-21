@@ -26,7 +26,7 @@ module.exports = {
                   rarity: deets[1],
                   chance: deets[2],
                   bias: deets[3] ? deets[3].slice(5) : null};
-                  replace with string way for consistency
+                  // replace with string way for consistency
 
                 // return `${deets[0]}, ${deets[2]}, ${deets[3] ? deets[3].slice(5) : null}`;
               });
