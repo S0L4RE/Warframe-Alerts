@@ -1,9 +1,14 @@
-/*
- let x = console.error;
- console.error = function() {
-   x.apply(console, [Date.now(), ...arguments]);
- };
-*/
+(function() {
+  let x = console.log;
+  console.log = function() {
+   x.apply(console, [new Date().toUTCString(), ...arguments]);
+  };
+
+  let y = console.error;
+  console.error = function() {
+   y.apply(console, [new Date().toUTCString(), ...arguments]);
+  };
+})()
 
 // load libs and classes
 const Discord = require("discord.js");
@@ -21,7 +26,7 @@ const bot = new Discord.Client();
 let ready = false;
 const recent_commanders = new Set();
 const commands = new Map();
-const ignore = ["search", "worldstate"]; // command subfolders to ignore
+const ignore = []; // command subfolders to ignore
 let logChannel, errorCode = 0;
 
 // load commands
@@ -54,28 +59,55 @@ function command_cooldown(user_id) {
 }
 
 bot.on("guildCreate", (guild) => {
-  logChannel.send(`Just joined ${guild.name}! Now in ${bot.guilds.size} guilds!`);
-  let server_count = bot.guilds.size;
-  superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
-    .set('Authorization', dbottoken)
-    .type('application/json')
-    .send({
-      server_count
+  const botcount = guild.members.filter((m) => m.user.bot).size;
+  const totalcount = guild.members.size;
+  console.log(`${guild.name} is ${botcount / totalcount * 100 << 0}% bots.`);
+  if (botcount / totalcount >= 0.8) {
+    logChannel.send(`Just avoided \`${guild.name}(${guild.id})\` owned by ${guild.owner} \`${guild.owner.user.username}#${guild.owner.user.discriminator}\`!
+It had ${botcount / totalcount * 100 << 0}% bots!`);
+    guild.leave(); // actually leave
+  } else {
+    guild.fetchInvites().then((invites) => {
+      logChannel.send(["```",
+`Joined: ${guild.name} (${guild.id})`
+`Invite: ${invites.first().code || "none"}`,
+`Owner:  ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
+`Size:   ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
+`Now in  ${bot.guilds.size} guilds!`,
+"```"]);
+    }).catch((err) => {
+      logChannel.send(["```",
+`Joined: ${guild.name} (${guild.id})`,
+`Invite: "no perms"`,
+`Owner:  ${guild.owner.user.username}#${guild.owner.user.discriminator} ${guild.owner}`,
+`Size:   ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
+`Now in  ${bot.guilds.size} guilds!`,
+"```"]);
     })
-    .end(error => {
-      console.log(`Updated bot server count to ${bot.guilds.size}`);
-      if (error) console.log(error.status || error.response);
-    });
+    let server_count = bot.guilds.size;
+    superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
+      .set('Authorization', dbottoken)
+      .type('application/json')
+      .send({
+        server_count
+      })
+      .end(error => {
+        console.log(`Updated bot server count to ${bot.guilds.size}`);
+        if (error) console.log(error.status || error.response);
+      });
+  }
 })
 
-/*
-process.on("uncaughtException", (err) => {
-  // save current invasions and alerts to file i guess
-})
+let logJunk = false;
 
-*/
+bot.on("unhandledRejection", err => {
+  if (logJunk) {
+    console.error(err);
+  }
+});
+
 bot.on("guildDelete", (guild) => {
-  logChannel.send(`Just got the boot from ${guild.name}! Now in ${bot.guilds.size} guilds!`);
+  logChannel.send(`Just left \`${guild.name}\`! Now in ${bot.guilds.size} guilds!`);
   let server_count = bot.guilds.size;
   superagent.post(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`)
     .set('Authorization', dbottoken)
@@ -97,11 +129,16 @@ bot.on("disconnect", (event) => {
 
 bot.once("ready", () => {
   logChannel = bot.channels.get("295908551535099905");
-  logChannel.send(`Shieetttt looks like I just restarted.`);
+  try {
+    logChannel.send(`Shieetttt looks like I just restarted.`);
+  } catch(e) {
+    console.log("really bad junk happened");
+  }
   bot.user.setGame(config.game);
   tasks.eventFeed(bot);
   setTimeout(() => {
     ready = true;
+    console.log("Ready");
   }, 2000); // give me 2 sec to start up :)
   bot.on("ready", () => {
     logChannel = bot.channels.get("295908551535099905");
@@ -128,11 +165,11 @@ bot.on("message", message => {
         let code = args.join(" ");
         let ev = eval(code);
         if (typeof ev !== "string") ev = require("util").inspect(ev);
-        message.reply(ev).catch((e) => {
-          message.reply("probably too long");
+        message.reply("```" + ev + "```").catch((e) => {
+          message.reply("```probably too long " + ev.length + ") ```");
         });
       } catch(e) {
-        message.reply(e);
+        message.reply("```" + e + "```");
       }
     }
   }

@@ -33,7 +33,8 @@ Is this ok? Reply with \`yes\` in 10 seconds if this is ok. Anything else will c
           errors: ["time"]
         }).then((collected) => {
           const reply = collected.first();
-          if (reply.content.toLowerCase() !== "yes") throw new Error(); // go to catch
+          console.log("replied with: " + reply.content);
+          if (!reply.content.toLowerCase().startsWith("yes")) throw new Error(); // go to catch
           msg.edit(`Creating roles... This table will be updated as they are created.
 When everything is checked, it is done. Sorry for spacing. \`\`\`${Arr2Tbl(plannedRoles)}\`\`\``);
           let a = 0;

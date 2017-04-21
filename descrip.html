@@ -3,10 +3,31 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
+          Announcements:
+        </h1>
+        16 April - I think I have fixed the error where a few invasions don't get updated or deleted by using a lot of promises/async junk.
+        <br><br>
+        14 April - This bot will now automatically leave servers which have a bot:non bot ratio greater than or equal to 9:1 (90%+ bots). After
+        some viewing, this should only affect the bot farm servers this is in and not yours. If you have a special case, please let me know. I
+        am doing this because I currently only have 512mb ram to spare.
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="box">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
           About:
         </h1>
         This bot automatically posts messages for the game Warframe. It will handle events for the platforms <code>pc, xb1, ps4</code>.
-        It can also create and mention roles when an alert or invasion with a certain reward appears.
+        It can also create and mention roles when an alert or invasion with a certain reward appears. It will only post alerts as they
+        appear. That means when you initially set it up, there will be nothing until one occurrs. Invasions and alerts will be updated
+        over time and will be deleted when they expire.
+        <br><br>
+        If you would like to see the bot in action or want any support, feel free to <a href="https://discord.gg/Zct6VgD">join my server</a>.
       </div>
     </div>
   </section>
@@ -41,6 +62,8 @@
         </h1>
         [argument] = required argument<br>
         {argument} = optional argument<br>
+        Platform is of the types <code>ps4</code>, <code>xb1</code>, or <code>pc</code>. By default if no platform is provided pc will be implied probably. <br>
+        Role is the name of the role.
         <table class="table">
           <thead>
             <tr>
@@ -58,16 +81,34 @@
               <td>notifysetup pc, notifysetup xb1 ps4</td>
             </tr>
             <tr>
-              <th>cleanchannel</th>
-              <td>Removes up to 100 messages before the message with the provided id. Only works on channels related to this bot.</td>
-              <td>[id]</td>
-              <td>cleanchannel 301467132300886016</td>
-            </tr>
-            <tr>
               <th>notify</th>
               <td>View, join, or leave roles that are related to this bot's functions.</td>
               <td>[j/l] [role] {role, role...}</td>
               <td>notify j kavat, notify l kubrow nitain reactor</td>
+            </tr>
+            <tr>
+              <th>baro</th>
+              <td>Gives some information about baro kiteer's status.</td>
+              <td>{platform}</td>
+              <td>baro, baro pc, baro xb1</td>
+            </tr>
+            <tr>
+              <th>sorties</th>
+              <td>Gives some information about today's sorties</td>
+              <td>{platform}</td>
+              <td>sorties, sorties ps4, sorties xb1</td>
+            </tr>
+            <tr>
+              <th>ws</th>
+              <td>Highly versatile worldstate query command. Please use to figure out how to use it :)</td>
+              <td>{platform}</td>
+              <td>ws, ws pc, ws ps4</td>
+            </tr>
+            <tr>
+              <th>search</th>
+              <td>Search datamined files courtesy of VoiD_Glitch.</td>
+              <td>[file] [term]</td>
+              <td>search, search mis riven, search drop outcast, search star laome</td>
             </tr>
             <tr>
               <th>about</th>

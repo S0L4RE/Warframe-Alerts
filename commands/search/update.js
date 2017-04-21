@@ -8,19 +8,15 @@ module.exports = {
   example: "update",
   run: (bot, message, args) => {
     if (message.author.id !== "84678516477534208") return message.reply("Sorry only reimu can use this command.");
-    const dir = "./datamine";
-    fs.readdir(dir, (err, files) => {
-      if (err) console.error(err);
-      files.forEach((file) => {
-        if (file.substr(-2) === "js") {
-          delete require.cache[require.resolve("../../datamine/" + file)];
-          require("../../datamine/" + file);
+    message.reply("Updating files").then((msg) => {
+      require("../../datamine/updateAll.js").masterUpdate().then((results) => {
+        if (!results.some(r => !r[1])) { // no falses
+          msg.edit("Everything updated a-ok");
+        } else {
+          msg.edit(["```", ...results, "```"]);
         }
+        main.update();
       })
     })
-    setTimeout(main.update, 5000); // yeah...
-    message.reply("Updating files...").then(msg => {
-      setTimeout(() => {msg.edit("Files updated (hopefully).")}, 5000);
-    });
   }
 }
