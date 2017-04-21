@@ -153,7 +153,7 @@ bot.on("message", message => {
 
     const [command, ...args] = message.content.slice(config.prefix.length).split(" ");
     if (commands.has(command)) {
-      console.log(new Date(), message.guild.name, message.channel.name, message.author.username, command, args);
+      console.log(message.guild.name, message.channel.name, message.author.username, command, args);
       command_cooldown(message.author.id);
       try {
         commands.get(command).run(bot, message, args, commands);
