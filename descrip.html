@@ -1,19 +1,5 @@
-<div class="box">
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-          Announcements:
-        </h1>
-        16 April - I think I have fixed the error where a few invasions don't get updated or deleted by using a lot of promises/async junk.
-        <br><br>
-        14 April - This bot will now automatically leave servers which have a bot:non bot ratio greater than or equal to 9:1 (90%+ bots). After
-        some viewing, this should only affect the bot farm servers this is in and not yours. If you have a special case, please let me know. I
-        am doing this because I currently only have 512mb ram to spare.
-      </div>
-    </div>
-  </section>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="box">
   <section class="hero">
@@ -22,12 +8,30 @@
         <h1 class="title">
           About:
         </h1>
-        This bot automatically posts messages for the game Warframe. It will handle events for the platforms <code>pc, xb1, ps4</code>.
-        It can also create and mention roles when an alert or invasion with a certain reward appears. It will only post alerts as they
-        appear. That means when you initially set it up, there will be nothing until one occurrs. Invasions and alerts will be updated
-        over time and will be deleted when they expire.
-        <br><br>
-        If you would like to see the bot in action or want any support, feel free to <a href="https://discord.gg/Zct6VgD">join my server</a>.
+	      <div class="columns">
+          <div class="column">
+            This bot automatically posts messages for the game Warframe. It will handle events for the <code>pc</code>, <code>xb1</code>, and <code>ps4</code> versions
+            of the game. It can also create and mention roles when an alert or invasion with a certain reward appears. Messages will be sent as
+            events pop up throughout the game and will be deleted as the events expire. This guarantees that only active events will be displayed
+            in its channels. To the right is an example of how messages are formatted. The time stamp on the bottom of the message should correspond
+            to your local time.
+            <br><br>
+            If you are interested in testing the bot out or have any questions/suggestions before adding it to your own server, you can join my server
+            I set up through the invite link below. This includes things like adding roles the bot can create, the format of the messages, or even
+            just to use the bot without inviting it to your server because I have it set up on mine.
+            <br><br>
+            <a class="button is-primary" href="https://discord.gg/Zct6VgD">Demo/Support Server</a>
+            <br><br>
+            <i style="font-size:75%">
+              Note that this bot will leave servers with >80% bots. This is to save memory because I can't afford a good server.
+              Also if you plan on inviting it to a server with just you, consider joining the support server. Again, this is due to cheap server issues.
+            </i>
+          </div>
+          <div class="column">
+            <img style="border-radius:20px" src="https://i.imgur.com/OOZO0rJ.png">
+            <center>How messages look in Discord (dark theme).</center>
+          </div>
+		    </div>
       </div>
     </div>
   </section>
@@ -40,14 +44,22 @@
         <h1 class="title">
           Setup:
         </h1>
-        Setup is simple. Create the channels in your server that you want messages for. The channels just have to be named a certain way:
-        <code>(platform)_wf_alerts</code>. For example, if you want pc alerts, you would create the channel <code>pc_wf_alerts</code>. If you want
-        xb1 alerts, you create the channel <code>xb1_wf_alerts</code>. You may have multiple channels with different names. If there are multiple channels
-        with the same name, the bot will only post to one of them. The bot will automatically detect if the channel exists.
-        <br><br>
-        You may also setup roles for the bot to mention. There is a set of predefined rewards that the bot will handle. You can create these roles with the
-        <code>notifysetup</code> command. For example, if you want to add roles for pc, you just have to do <code>,notifysetup pc</code> command. If you
-        want roles for multiple platforms, pass multiple arguments like this: <code>,notifysetup pc xb1</code>.
+        <div class="columns">
+          <div class="column">
+            Setup is simple. Just create channels in your server that you want messages for. The channels just have to be named the following way
+            <br>
+            <center><code>(platform)_wf_alerts</code></center>
+            For example, if you wanted pc alerts, you would create the channel <code>pc_wf_alerts</code>. If you wanted xb1 alerts, you create the
+            channel <code>xb1_wf_alerts</code>. You may have multiple channels with different names. If there are multiple channels
+            with the same name, the bot will only post to one of them. The bot will automatically detect if the channel exists.
+          </div>
+          <div class="column">
+            You may also setup roles for the bot to mention. There is a set of predefined rewards that the bot will handle. You can create these roles with the
+            <code>notifysetup</code> command. For example, if you want to add roles for pc, you just have to do <code>,notifysetup pc</code> command. If you
+            want roles for multiple platforms, pass multiple arguments like this: <code>,notifysetup pc xb1</code>. This may take a while because I throttled the
+            command to only make a role every few seconds to avoid spamming the Discord API.
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -62,7 +74,7 @@
         </h1>
         [argument] = required argument<br>
         {argument} = optional argument<br>
-        Platform is of the types <code>ps4</code>, <code>xb1</code>, or <code>pc</code>. By default if no platform is provided pc will be implied probably. <br>
+        Platform is of the types <code>ps4</code>, <code>xb1</code>, or <code>pc</code>. In most cases, if no platform is provided, <code>pc</code> is assumed. <br>
         Role is the name of the role.
         <table class="table">
           <thead>
@@ -77,13 +89,13 @@
             <tr>
               <th>notifysetup</th>
               <td>Adds roles that the bot will mention when related alerts appear.</td>
-              <td>[platform] {platform, platform...}</td>
+              <td>{platform} {platform, platform...}</td>
               <td>notifysetup pc, notifysetup xb1 ps4</td>
             </tr>
             <tr>
               <th>notify</th>
               <td>View, join, or leave roles that are related to this bot's functions.</td>
-              <td>[j/l] [role] {role, role...}</td>
+              <td>{[j/l] [role]} {role, role...}</td>
               <td>notify j kavat, notify l kubrow nitain reactor</td>
             </tr>
             <tr>
@@ -94,21 +106,21 @@
             </tr>
             <tr>
               <th>sorties</th>
-              <td>Gives some information about today's sorties</td>
+              <td>Gives some information about today's sorties.</td>
               <td>{platform}</td>
               <td>sorties, sorties ps4, sorties xb1</td>
             </tr>
             <tr>
               <th>ws</th>
-              <td>Highly versatile worldstate query command. Please use to figure out how to use it :)</td>
+              <td>Highly versatile worldstate query command. Explains itself when used.</td>
               <td>{platform}</td>
               <td>ws, ws pc, ws ps4</td>
             </tr>
             <tr>
               <th>search</th>
               <td>Search datamined files courtesy of VoiD_Glitch.</td>
-              <td>[file] [term]</td>
-              <td>search, search mis riven, search drop outcast, search star laome</td>
+              <td>{[file] [term]}</td>
+              <td>search, search mis riven, search drop outcast</td>
             </tr>
             <tr>
               <th>about</th>
@@ -124,21 +136,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div class="box">
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-          General Comments:
-        </h1>
-        Feel free to give me any suggestions. I have recently change the bot a lot and have updated the invitation permissions to reflect
-        said change. If there is a large update, I may change add (updated) to the bot's nickname to inform users that there has been
-        an update. Thank you for using my bot!
       </div>
     </div>
   </section>

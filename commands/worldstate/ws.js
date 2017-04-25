@@ -51,9 +51,11 @@ Examples (CASE SENSITIVE): \nDailyDeals 1 \nLibraryInfo LastCompletedTargetType 
         errors: ["time"]
       }).then((collected) => {
         const junk = collected.first().content.split(" ");
+        console.log("searched for " + junk);
         let state2 = state;
         for (thing of junk) {
           if (parseInt(thing)) thing = parseInt(thing) - 1;
+          else thing = Object.keys(state2).filter(k => k.toLowerCase() === thing.toLowerCase())[0];
           state2 = state2[thing];
         }
         const content = "```json\n" + JSON.stringify(state2, null, 2) + "```";

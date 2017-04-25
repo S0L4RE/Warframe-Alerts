@@ -30,9 +30,9 @@ class EventManager {
       invasions: this.iBroadcaster.invasions,
       alerts: this.broadcaster.heap.data
     }
-    console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
+    // console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
     fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
-      if (err) return console.log(err);
+      if (err) return console.error(err);
     })
   }
 
