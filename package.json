@@ -4,7 +4,8 @@
   "description": "warframe discord bot redone",
   "main": "run.js",
   "dependencies": {
-    "discord.js": "^11.0.0",
+    "discord.js": "^11.1.0",
+    "superagent": "^3.5.2",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {},
