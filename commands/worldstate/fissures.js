@@ -42,7 +42,7 @@ module.exports = {
       const timeLeftMinutes = Math.floor((timeLeftTotalSeconds - (timeLeftHours * 3600)) / 60);
       const timeLeftSeconds = timeLeftTotalSeconds % 60 << 0;
       const star = stars[fissures[i].Node];
-      deets += `${stringThings.padRight(star.name, 18)} ${stringThings.padRight(removeUnderscorePrefixes(star.mission_type), 15)} ${stringThings.padRight(tierToRelic(fissures[i].Modifier), 7)} `;
+      deets += `${stringThings.padRight(star.name, 20)} ${stringThings.padRight(removeUnderscorePrefixes(star.mission_type), 15)} ${stringThings.padRight(tierToRelic(fissures[i].Modifier), 7)} `;
       deets += `${stringThings.padLeft(timeLeftHours, 4)}h ${stringThings.padLeft(timeLeftMinutes + "m", 3)} ${stringThings.padLeft(timeLeftSeconds + "s", 3)}\n`; // nice spacing!!
     }
     // 50-60, 65-80, 80-100 what kind of shitty pattern is this?
