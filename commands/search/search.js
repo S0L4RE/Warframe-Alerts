@@ -54,7 +54,7 @@ function loadFiles() {
 				delete require.cache[require.resolve("../../datamine/" + file)];
         jsons.set(file, require("../../datamine/" + file));
         loaded_files++;
-        console.log("Loaded " + file);
+        console.log("[FILE LOADED] " + file);
       }
     });
     let loaded = [];
