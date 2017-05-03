@@ -4,7 +4,7 @@ require("./util/timestamps.js");
 const Discord = require("discord.js");
 const { token } = require("./token.js");
 const { dbottoken } = require("./token.js");
-const config = Object.assign({}, require("./config.json"), dbottoken); // lul
+const config = Object.assign({}, require("./config.json"), {dbottoken, token}); // lul
 
 const bot = new Discord.Client();
 const recent_commanders = new Set();
