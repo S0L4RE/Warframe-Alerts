@@ -2,9 +2,7 @@ require("./util/timestamps.js");
 
 // load libs and classes
 const Discord = require("discord.js");
-const { token } = require("./token.js");
-const { dbottoken } = require("./token.js");
-const config = Object.assign({}, require("./config.json"), {dbottoken, token}); // lul
+const config = Object.assign({}, require("./config.json"), require("./token.js")); // lul
 
 const bot = new Discord.Client();
 const recent_commanders = new Set();
@@ -39,4 +37,4 @@ bot.on("message", async message => {
   }
 });
 
-bot.login(token);
+bot.login(config.token);

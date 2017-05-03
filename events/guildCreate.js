@@ -8,14 +8,14 @@ module.exports = (config, guild) => {
   if (botcount / totalcount >= 0.8) {
     log.send(["```",
 `Avoided: ${guild.name} (${guild.id})`,
-`Owner:   ${guild.owner.tag} ${guild.owner}`,
+`Owner:   ${guild.owner.user.tag} ${guild.owner}`,
 `Size:    ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
 "```"]);
     guild.leave(); // actually leave
   } else {
     log.send(["```",
 `Joined: ${guild.name} (${guild.id})`,
-`Owner:  ${guild.owner.tag} ${guild.owner}`,
+`Owner:  ${guild.owner.user.tag} ${guild.owner}`,
 `Size:   ${guild.memberCount}\tBots: ${guild.members.filter((m) => m.user.bot).size}`,
 `Now in ${bot.guilds.size} guilds!`,
 "```"]);
