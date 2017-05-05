@@ -73,7 +73,7 @@ class RSSFeed {
             }
           }
           Promise.all(myPromises).then((junk) => {
-            resolve(junk.length > 0);
+            resolve(junk);
           })
         })
       })

@@ -8,6 +8,7 @@ class MessageBroadcaster {
     this.client = bot;
     this.manager = manager;
     this.heap = new EventHeap(alerts);
+    console.log(`[EVENT HEAP LOAD] ${this.heap.length} events`);
   }
 
   broadcast(event) {

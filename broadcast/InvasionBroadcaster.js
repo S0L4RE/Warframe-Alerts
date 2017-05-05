@@ -7,7 +7,7 @@ class InvasionBroadcaster {
     this.client = bot;
     this.invasions = invasions;
     this.manager = manager;
-    console.log(`Loaded InvasionBroadcaster with ${this.invasions.length} events!`);
+    console.log(`[INVASION LIST LOAD] ${this.invasions.length} events`);
   }
 
   broadcast(event) {

@@ -25,7 +25,7 @@ bot.on("message", async message => {
 
     const [command, ...args] = message.content.slice(config.prefix.length).split(" ");
     if (commands.has(command)) {
-      console.log(message.guild.name, message.channel.name, message.author.username, command, args);
+      console.log("[COMMAND USAGE]", message.guild.name, message.channel.name, message.author.username, command, args);
       command_cooldown(message.author.id);
       try { commands.get(command).run(bot, message, args, commands); }
       catch(e) { message.reply("Something really bad happened, please notify `reimu#3856`: " + e); }

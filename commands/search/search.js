@@ -37,6 +37,7 @@ function keep_await(info, message1, message2) {
 			});
  	})
  	.catch((e) => {
+		console.log(e);
 		message2.reply("Sorry, time expired. Cancelled.");
 	});
 }

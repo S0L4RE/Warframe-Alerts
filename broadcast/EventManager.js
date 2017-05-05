@@ -31,6 +31,7 @@ class EventManager {
       alerts: this.broadcaster.heap.data
     }
     // console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
+    console.log("[FILE WRITE]", "[I]", eventstuff.invasions.length, "[A]", eventstuff.alerts.length);
     fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
       if (err) return console.error(err);
     })
@@ -54,6 +55,7 @@ class EventManager {
             }
           }
         }
+        console.log("[INVASIONS REMOVED]", removed.length);
         resolve(removed.length > 0);
       })
     })
@@ -61,10 +63,10 @@ class EventManager {
 
   checkAlerts() {
     return new Promise((resolve) => {
-      let removed = false;
+      let removed = 0;
       while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
         const deletion = this.broadcaster.heap.remove();
-        removed = true;
+        removed++;
         // iterate through messages
         Object.values(this.feeds).forEach((feed) => feed.events.delete(deletion.guid));
         for (const [channel, id] of deletion.messages) {
@@ -79,7 +81,8 @@ class EventManager {
           }
         }
       }
-      resolve(removed);
+      console.log("[ALERTS REMOVED]", removed);
+      resolve(removed > 0);
     })
   }
 
@@ -88,20 +91,22 @@ class EventManager {
       this.update(true).then((shouldIUpdate) => {
         // if at least 1 true update
         Promise.all(shouldIUpdate).then((results) => {
-          resolve(results.some((a) => a));
+          console.log("[UPDATE FEED]", results.map(r => r.length));
+          resolve(results.some((a) => a.length > 0));
         })
       })
     })
   }
 
-  watch() {
+  watch(time) {
     this.timeout = setInterval(() => {
       Promise.all([this.checkFeed(), this.checkAlerts(), this.checkInvasions()]).then((shouldIUpdates) => {
+        console.log("[WATCH RESULTS f,a,i]", shouldIUpdates);
         if (shouldIUpdates.some((a) => a)) { // if at least 1 true
           this.save();
         }
       })
-    }, 5 * 60e3);
+    }, time || 5 * 60e3);
   }
 }
 
