@@ -30,7 +30,7 @@ bot.on("message", async message => {
       try { commands.get(command).run(bot, message, args, commands); }
       catch(e) { message.reply("Something really bad happened, please notify `reimu#3856`: " + e); }
     } else if (command === "eval" && message.author.id === config.owner) {
-      try { content = await eval(message.content); }
+      try { content = await eval(args.join(" ")); }
       catch(e) { content = e; }
       finally { message.channel.send(["```js", require("util").inspect(content), "```"]); }
     }
