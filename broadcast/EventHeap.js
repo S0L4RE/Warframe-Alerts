@@ -40,6 +40,7 @@ class EventHeap {
   remove() {
     const del = this.data[0];
     this.data[0] = this.data[--this.length];
+    this.data.pop();
     if (this.data[0] !== undefined) {
       let i = 0;
       while (i <= (this.length / 2 - 1) >> 0) {
