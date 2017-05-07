@@ -31,7 +31,7 @@ class EventManager {
       alerts: this.broadcaster.heap.data
     }
     // console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
-    console.log("[FILE WRITE]", "[I]", eventstuff.invasions.length, "[A]", eventstuff.alerts.length);
+    // console.log("[FILE WRITE]", "[I]", eventstuff.invasions.length, "[A]", eventstuff.alerts.length);
     fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
       if (err) return console.error(err);
     })
@@ -55,7 +55,7 @@ class EventManager {
             }
           }
         }
-        console.log("[INVASIONS REMOVED]", removed.length);
+        // console.log("[INVASIONS REMOVED]", removed.length);
         resolve(removed.length > 0);
       })
     })
@@ -81,7 +81,7 @@ class EventManager {
           }
         }
       }
-      console.log("[ALERTS REMOVED]", removed);
+      // console.log("[ALERTS REMOVED]", removed);
       resolve(removed > 0);
     })
   }
@@ -91,7 +91,7 @@ class EventManager {
       this.update(true).then((shouldIUpdate) => {
         // if at least 1 true update
         Promise.all(shouldIUpdate).then((results) => {
-          console.log("[UPDATE FEED]", results.map(r => r.length));
+          // console.log("[UPDATE FEED]", results.map(r => r.length));
           resolve(results.some((a) => a.length > 0));
         })
       })
@@ -101,7 +101,7 @@ class EventManager {
   watch(time) {
     this.timeout = setInterval(() => {
       Promise.all([this.checkFeed(), this.checkAlerts(), this.checkInvasions()]).then((shouldIUpdates) => {
-        console.log("[WATCH RESULTS f,a,i]", shouldIUpdates);
+        // console.log("[WATCH RESULTS f,a,i]", shouldIUpdates);
         if (shouldIUpdates.some((a) => a)) { // if at least 1 true
           this.save();
         }
