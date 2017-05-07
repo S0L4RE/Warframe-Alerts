@@ -1,5 +1,5 @@
-const fs = require("fs");
 const main = require("./search.js");
+const arrayThings = require("../../util/arrayThings");
 
 module.exports = {
   name: "update",
