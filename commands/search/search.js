@@ -71,7 +71,7 @@ module.exports = {
 		loadFiles();
 	},
   name: "search",
-	desc: "search datamines",
+	desc: "search datamines (regex/string)",
   example: "search lang ^butt, search mi riven",
   run: (bot, message, args) => {
 		if (args.length === 0) return message.reply(`Loaded files are \`${jsons.get("_KEYS").join("`, `").replace(", `_KEYS`", "")}\`.`);
