@@ -4,3 +4,4 @@ node_modules/
 datamine/*.bak
 test.js
 events.json
+*.js~
