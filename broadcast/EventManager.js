@@ -38,7 +38,7 @@ class EventManager {
         for (let i = 0; i < removedInvasions.length; i++) {
             const expiredMessages = removedInvasions[i][0];
             // remove the guid located in the RSS feed
-            Object.values(this.feeds).forEach(feed => feed.events.delete(removed[i][1].guid));
+            Object.values(this.feeds).forEach(feed => feed.events.delete(removedInvasions[i][1].guid));
             for (const [channel, id] of expiredMessages) {
                 try {
                     const message = await this.client.channels.get(channel).fetchMessage(id);

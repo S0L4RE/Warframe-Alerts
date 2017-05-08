@@ -18,7 +18,7 @@ class MessageBroadcaster {
         else if (event.rewards.length > 2) color = 0xff0000;
         this.client.guilds.forEach(guild => {
             const mentions = matchRoles(event, guild);
-            const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
+            const channel = guild.channels.find(c => c.name === `${event.platform_type}_wf_alerts` && c.type === "text");
             if (!channel) return;
             try {
                 pMessages.push(channel.send(mentions.join(" "), {
