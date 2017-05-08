@@ -6,108 +6,81 @@ const MessageBroadcaster = require("./MessageBroadcaster.js");
 const InvasionBroadcaster = require("./InvasionBroadcaster.js");
 
 class EventManager {
-  constructor(client) {
-    this.client = client;
-    this.broadcaster = new MessageBroadcaster(this.client, alerts, this); // shoud be static
-    this.iBroadcaster = new InvasionBroadcaster(this.client, invasions, this);
-    this.feeds =  {
-      "pc": new RSSFeed("pc", this.broadcaster, this.iBroadcaster),
-      "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
-      "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
-    }
-    this.update(false);
-  }
-
-  update(br) {
-    // an array of promises which resolves to
-    //   true: if feed has added something
-    //   false: if feed hasnt added something
-    return Promise.resolve(Object.values(this.feeds).map((feed) => feed.updateFeed(br)));
-  }
-
-  save() {
-    const eventstuff = {
-      invasions: this.iBroadcaster.invasions,
-      alerts: this.broadcaster.heap.data
-    }
-    // console.log("wrote stuff to file.", "invasions: " + eventstuff.invasions.length, "alerts: " + eventstuff.alerts.length);
-    // console.log("[FILE WRITE]", "[I]", eventstuff.invasions.length, "[A]", eventstuff.alerts.length);
-    fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
-      if (err) return console.error(err);
-    })
-  }
-
-  checkInvasions() {
-    return new Promise((resolve) => {
-      this.iBroadcaster.update().then((removed) => {
-        for (let i = 0; i < removed.length; i++) {
-          const expiredMessages = removed[i][0];
-          Object.values(this.feeds).forEach((feed) => feed.events.delete(removed[i][1].guid));
-          for (const [channel, id] of expiredMessages) {
-            try {
-              this.client.channels.get(channel).fetchMessage(id).then((msg) => {
-                msg.delete();
-              }).catch((err) => {
-                console.error("couldn't find message id: ", channel, id);
-              })
-            } catch(e) {
-              console.error("couldn't find channel: ", channel);
-            }
-          }
+    constructor(client) {
+        this.client = client;
+        this.broadcaster = new MessageBroadcaster(this.client, alerts, this); // shoud be static
+        this.iBroadcaster = new InvasionBroadcaster(this.client, invasions, this);
+        this.feeds = {
+            "pc": new RSSFeed("pc", this.broadcaster, this.iBroadcaster),
+            "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
+            "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
         }
-        // console.log("[INVASIONS REMOVED]", removed.length);
-        resolve(removed.length > 0);
-      })
-    })
-  }
+        // this.update(false);
+    }
 
-  checkAlerts() {
-    return new Promise((resolve) => {
-      let removed = 0;
-      while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
-        const deletion = this.broadcaster.heap.remove();
-        removed++;
-        // iterate through messages
-        Object.values(this.feeds).forEach((feed) => feed.events.delete(deletion.guid));
-        for (const [channel, id] of deletion.messages) {
-          try {
-            this.client.channels.get(channel).fetchMessage(id).then((msg) => {
-              msg.delete();
-            }).catch((err) => {
-              console.error("couldn't find message id: ", channel, id);
-            })
-          } catch(e) {
-            console.error("couldn't find channel: ", channel);
-          }
+    update(br) {
+        // promises
+        return Object.values(this.feeds).map((feed) => feed.updateFeed(br));
+    }
+
+    save() {
+        const eventstuff = {
+            invasions: this.iBroadcaster.invasions,
+            alerts: this.broadcaster.heap.data
         }
-      }
-      // console.log("[ALERTS REMOVED]", removed);
-      resolve(removed > 0);
-    })
-  }
-
-  checkFeed() {
-    return new Promise((resolve) => {
-      this.update(true).then((shouldIUpdate) => {
-        // if at least 1 true update
-        Promise.all(shouldIUpdate).then((results) => {
-          // console.log("[UPDATE FEED]", results.map(r => r.length));
-          resolve(results.some((a) => a.length > 0));
+        fs.writeFile(`./broadcast/events.json`, JSON.stringify(eventstuff), (err) => {
+            if (err) return console.error(err);
         })
-      })
-    })
-  }
+    }
 
-  watch(time) {
-    this.timeout = setInterval(() => {
-      Promise.all([this.checkFeed(), this.checkAlerts(), this.checkInvasions()]).then((shouldIUpdates) => {
-        // console.log("[WATCH RESULTS f,a,i]", shouldIUpdates);
-        if (shouldIUpdates.some((a) => a)) { // if at least 1 true
-          this.save();
+    async checkInvasions() {
+        const removedInvasions = await this.iBroadcaster.update();
+        for (let i = 0; i < removedInvasions.length; i++) {
+            const expiredMessages = removedInvasions[i][0];
+            // remove the guid located in the RSS feed
+            Object.values(this.feeds).forEach(feed => feed.events.delete(removed[i][1].guid));
+            for (const [channel, id] of expiredMessages) {
+                try {
+                    const message = await this.client.channels.get(channel).fetchMessage(id);
+                    message.delete();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
         }
-      })
-    }, time || 5 * 60e3);
-  }
+        return removedInvasions.length > 0;
+    }
+
+    async checkAlerts() {
+        let removed = 0;
+        while (this.broadcaster.heap.peek() && this.broadcaster.heap.peek().expiration < Date.now()) {
+            removed++;
+            const deleted = this.broadcaster.heap.remove();
+            Object.values(this.feeds).forEach(feed => feed.events.delete(deleted.guid));
+            for (const [channel, id] of deletion.messages) {
+                try {
+                    const message = await this.client.channels.get(channel).fetchMessage(id);
+                    message.delete();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+        return removed > 0;
+    }
+
+
+    async checkFeed() {
+        const results = await Promise.all(this.update(true));
+        return results.some(a => a.length > 0);
+    }
+
+    watch(time) {
+        this.timeout = setInterval(async () => {
+            const results = await Promise.all([this.checkFeed(), this.checkAlerts(), this.checkInvasions()]);
+            if (results.some(a => a)) this.save();
+        }, time || 5 * 60e3);
+    }
 }
 
 module.exports = EventManager;
