@@ -22,7 +22,8 @@ class MessageBroadcaster {
         const mentions = matchRoles(event, guild);
         const channel = guild.channels.find("name", `${event.platform_type}_wf_alerts`);
         if (!channel) return;
-        pMessages.push(channel.send(mentions.join(" "), {embed: new RichEmbed().setColor(color).setTimestamp().setFooter(event.guid).setDescription(event.toString())}));
+        try { pMessages.push(channel.send(mentions.join(" "), {embed: new RichEmbed().setColor(color).setTimestamp().setFooter(event.guid).setDescription(event.toString())})); }
+        catch(e) { /* i dunno whts happening */ }
       })
       // handle errors and stuff
       pMessages = pMessages.map((p) => {
