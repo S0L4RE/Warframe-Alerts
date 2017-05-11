@@ -1,5 +1,5 @@
 token.js
-run
+Makefile
 node_modules/
 datamine/*.bak
 test.js

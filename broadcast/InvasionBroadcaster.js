@@ -7,6 +7,7 @@ class InvasionBroadcaster {
         this.invasions = invasions;
         this.manager = manager;
         console.log(`[INVASION LIST LOAD] ${this.invasions.length} events`);
+        WorldState.update();
     }
 
     async broadcast(event) {

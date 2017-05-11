@@ -15,7 +15,7 @@ class EventManager {
             "xb1": new RSSFeed("xb1", this.broadcaster, this.iBroadcaster),
             "ps4": new RSSFeed("ps4", this.broadcaster, this.iBroadcaster)
         }
-        // this.update(false);
+        this.update(false);
     }
 
     update(br) {
@@ -57,7 +57,7 @@ class EventManager {
             removed++;
             const deleted = this.broadcaster.heap.remove();
             Object.values(this.feeds).forEach(feed => feed.events.delete(deleted.guid));
-            for (const [channel, id] of deletion.messages) {
+            for (const [channel, id] of deleted.messages) {
                 try {
                     const message = await this.client.channels.get(channel).fetchMessage(id);
                     message.delete();
