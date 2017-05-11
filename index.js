@@ -18,6 +18,8 @@ function command_cooldown(user_id) {
   }, config.cooldown)
 }
 
+process.on("unhandledRejection", console.error)
+
 bot.on("message", async message => {
   if (message.author.bot || !message.guild) return;
   if (message.content.startsWith(config.prefix)) {

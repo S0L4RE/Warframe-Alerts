@@ -10,15 +10,20 @@ module.exports = {
     for (obj in decks) {
       for (key in decks[obj]) {
         if (key === "Locations") continue;
-        if (decks[obj][key].some(a => a.toLowerCase().includes(searchTerm))) {
-          rewards.push(...decks[obj].Locations.map(l => l.split(",").slice(0, 2).join(",")));
+        for (let i = 0; i < decks[obj][key].length; i++) {
+          const val = decks[obj][key][i];
+          if (val.toLowerCase().includes(searchTerm)) {
+            try { rewards.push(...decks[obj].Locations.map(l => l.split(",").slice(0, 2).join(",") + " - " + val.split(",")[0])); }
+            catch(e) { }
+            break;
+          }
         }
       }
     }
     message.channel.send(["```haskell",
-      `drops that include the term ${searchTerm.toUpperCase()} can be found at:`,
-      rewards.join("\n"),
-      "tip: Try ',search mission " + rewards[0] + "' for drop more info```"
+      `rewards that include the term ${searchTerm.toUpperCase()} can be found at:`,
+      rewards.length > 0 ? rewards.join("\n") : "NOWHERE",
+      "tip: Try ',search mis LOCATION' for more reward info```"
     ])
   }
 }
