@@ -26,7 +26,7 @@ class InvasionBroadcaster {
             return p.then(msg => msg).catch(() => "BIGERR919");
         })
         let results = await Promise.all(pMessages);
-        results.filter(v => v !== "BIGERR919");
+        results = results.filter(v => v !== "BIGERR919");
         results = results.map(m => [m.channel.id, m.id]);
         this.invasions.push([results, event]);
         return "FIN";
@@ -72,7 +72,7 @@ class InvasionBroadcaster {
                         "```"
                     ]);
                 } catch (e) {
-                    console.error(e);
+                    // console.error(e);
                 }
             }
         }

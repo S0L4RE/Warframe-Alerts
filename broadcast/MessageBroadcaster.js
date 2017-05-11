@@ -25,14 +25,14 @@ class MessageBroadcaster {
                     embed: new RichEmbed().setColor(color).setTimestamp().setFooter(event.guid).setDescription(event.toString())
                 }));
             } catch (e) {
-                console.error(e);
+                // console.error(e);
             }
         })
         pMessages = pMessages.map(p => {
             return p.then(msg => msg).catch(() => "BIGERR919");
         })
         let results = await Promise.all(pMessages);
-        results.filter(v => v !== "BIGERR919");
+        results = results.filter(v => v !== "BIGERR919");
         results = results.map(m => [m.channel.id, m.id]);
         this.heap.insert(new EventHeapObj(results, event.date + parseInt(event.dur.replace("m", "") * 60e3, event.guid)));
         return "FIN";
