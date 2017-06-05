@@ -37,6 +37,7 @@ function keep_await(info, message1, message2) {
 			});
  	})
  	.catch((e) => {
+		console.log(e);
 		message2.reply("Sorry, time expired. Cancelled.");
 	});
 }
@@ -54,7 +55,7 @@ function loadFiles() {
 				delete require.cache[require.resolve("../../datamine/" + file)];
         jsons.set(file, require("../../datamine/" + file));
         loaded_files++;
-        console.log("Loaded " + file);
+        console.log("[FILE LOADED] " + file);
       }
     });
     let loaded = [];
@@ -70,7 +71,7 @@ module.exports = {
 		loadFiles();
 	},
   name: "search",
-	desc: "search datamines",
+	desc: "search datamines (regex/string)",
   example: "search lang ^butt, search mi riven",
   run: (bot, message, args) => {
 		if (args.length === 0) return message.reply(`Loaded files are \`${jsons.get("_KEYS").join("`, `").replace(", `_KEYS`", "")}\`.`);

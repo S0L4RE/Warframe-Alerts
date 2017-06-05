@@ -3,8 +3,8 @@ const Arr2Tbl = require("../../util/arrayThings").array2dtable;
 
 module.exports = {
   name: "notify",
-  desc: "join or leave roles",
-  example: "notify j forma, notify l kavat forma",
+  desc: "join or leave roles (multiple)",
+  example: "notify j forma catalyst, notify l kavat",
   run: (bot, message, args) => {
     if (args.length === 0) {
       const platforms = ["xb1", "ps4", ""];

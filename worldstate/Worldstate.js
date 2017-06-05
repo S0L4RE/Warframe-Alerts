@@ -1,4 +1,5 @@
 const superagent = require("superagent");
+const lang = require("./lang.json");
 
 let worldState = {};
 let ps4WorldState = {};
@@ -6,7 +7,18 @@ let xb1WorldState = {};
 
 function enhanceWS(ws) {
   expireReadableTimes(ws, ws.Time * 1000);
+  goodStrings(ws);
   return ws;
+}
+
+function goodStrings(obj) {
+  for (key in obj) {
+    if (typeof obj[key] === "string") {
+      obj[key] = lang[obj[key]] ? lang[obj[key]] : obj[key];
+    } else if (typeof obj[key] === "object") {
+      goodStrings(obj[key]);
+    }
+  }
 }
 
 function expireReadableTimes(obj, wstime) {

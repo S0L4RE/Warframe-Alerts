@@ -1,7 +1,7 @@
 token.js
-run
+Makefile
 node_modules/
-datamine/*.json
 datamine/*.bak
 test.js
 events.json
+*.js~

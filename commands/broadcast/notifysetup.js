@@ -23,7 +23,7 @@ module.exports = {
         }
       }
       if (plannedRoles.length < 1) return message.channel.send(`There are no \`${platforms.join(" ")}\` roles I can create.`);
-      message.channel.sendMessage(`You have provided \`${platforms.join(" ")}\` as arguments. This will create the following roles:
+      message.channel.send(`You have provided \`${platforms.join(" ")}\` as arguments. This will create the following roles:
       \`\`\`${Arr2Tbl(plannedRoles)}\`\`\`
 Is this ok? Reply with \`yes\` in 10 seconds if this is ok. Anything else will cancel this command.
       `).then((msg) => {
