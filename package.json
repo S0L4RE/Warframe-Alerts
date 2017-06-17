@@ -1,7 +1,7 @@
 {
-  "name": "wf-bot-2.0",
+  "name": "S0LBot",
   "version": "2.0.0",
-  "description": "warframe discord bot redone",
+  "description": "S0lBot",
   "main": "run.js",
   "dependencies": {
     "discord.js": "^11.1.0",
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/rei2hu/wf-bot-2.0.git"
   },
-  "author": "",
+  "author": "SprocksGAMING",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rei2hu/wf-bot-2.0/issues"
